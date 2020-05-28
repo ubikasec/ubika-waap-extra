@@ -1,0 +1,150 @@
+variable "access_key" {
+}
+
+variable "secret_key" {
+}
+
+variable "region" {
+  default = "us-east-1"
+}
+
+variable "name_prefix" {
+  default = "RS WAF Cloud"
+}
+
+### Setup AWS provider
+
+provider "aws" {
+  access_key = var.access_key
+  secret_key = var.secret_key
+  region     = var.region
+  version    = "= 2.26"
+}
+
+### Setup a dedicated VPC
+
+# get all available availability zones
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+resource "aws_vpc" "vpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "${var.name_prefix} VPC"
+  }
+}
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.name_prefix} Internet Gateway"
+  }
+}
+
+# create a subnet per availability zone
+resource "aws_subnet" "subnet" {
+  count  = length(data.aws_availability_zones.available.names)
+  vpc_id = aws_vpc.vpc.id
+  # cidr_block              = "10.0.${count.index * 16}.0/20"
+  cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, length(data.aws_availability_zones.available.names), count.index)
+  map_public_ip_on_launch = true
+  # availability_zone       = element(split(",", var.azs), count.index)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  tags = {
+    Name = "${var.name_prefix} Subnet for ${data.aws_availability_zones.available.names[count.index]}"
+  }
+}
+
+resource "aws_route_table" "route_table" {
+  vpc_id = aws_vpc.vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+  tags = {
+    Name = "${var.name_prefix} Route Table"
+  }
+}
+
+resource "aws_route_table_association" "rta" {
+  count          = length(aws_subnet.subnet.*.id)
+  subnet_id      = aws_subnet.subnet[count.index].id
+  route_table_id = aws_route_table.route_table.id
+}
+
+### RS WAF
+
+# create an AWS ELB in network (TCP) mode for our URL
+# here, only one website in HTTP and HTTPS
+module "lb" {
+  source = "../../modules/aws/lb"
+
+  vpc_id     = aws_vpc.vpc.id
+  subnet_ids = aws_subnet.subnet.*.id
+
+  mapping = [
+    # HTTP (port 80) on the public side and 1080 in my tunnel configuration
+    {
+      name  = "HTTP-my-webapplication"
+      proto = "HTTP"
+      src   = 80
+      dest  = 1080
+    },
+    # HTTPS (port 443) on the public side and 1443 in my tunnel configuration
+    {
+      name  = "HTTPS-my-webapplication"
+      proto = "HTTPS"
+      src   = 443
+      dest  = 1443
+    },
+  ]
+
+  lb_name                    = "mylb" # name prefix in AWS for my AWS ELB objects (must be really short)
+  enable_deletion_protection = true   # protect this AWS ELB from accidental deletion
+}
+
+module "rswaf" {
+  source = "../../modules/aws/basic"
+
+  # AWS VPC and subnets ids where the WAF will be deployed
+  vpc_id     = aws_vpc.vpc.id
+  subnet_ids = aws_subnet.subnet.*.id
+
+  target_group_arns      = module.lb.target_group_arns # ARN of the AWS ELB target groups
+  additional_managed_sgs = module.lb.security_groups   # list of AWS security groups to add on each managed (require to allow public requests)
+
+  key_name = "mykey" # AWS ssh key name for all created instances
+
+  name_prefix = "My WAF Cluster" # a name prefix for resources created by this module
+
+  admin_location = "1.1.1.1/32" # limit access to the WAF administration from this subnet only
+
+  autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
+
+  product_version = "6.5.6" # product version to select instance images, changing it will recreate all instances
+
+  management_mode          = "byol"      # WAF licence type of the management instance ("payg" or "byol")
+  management_instance_type = "m5.xlarge" # management AWS instance type
+  management_disk_size     = 120         # size of the management disk in GiB (default to 120GiB)
+
+  managed_mode          = "byol"      # WAF licence type of the managed instances ("payg" or "byol")
+  managed_instance_type = "t2.medium" # managed AWS instance type
+  managed_disk_size     = 30          # size of the managed disk in GiB (default to 30GiB)
+
+  nb_managed = 2 # number of managed instances
+}
+
+output "Administration_host" {
+  value       = module.rswaf.management_public_ip
+  description = "Administration access to your WAF"
+}
+
+output "Administration_port" {
+  value = "3001"
+}
+
+output "Public_URL" {
+  value       = module.lb.public_url
+  description = "Public acces to your application"
+}
