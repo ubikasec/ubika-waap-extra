@@ -14,13 +14,13 @@ The Google Cloud Platform console must be used to follow this procedure:
 2. In the top left corner, click on the "Navigation menu" and then "Marketplace",
 
 3. Search for "R&S®Web Application Firewall" and select the image you want,
-![](./img/gcp/overview.png)
+![](./img/gcp/overview.PNG)
 4. Click "Launch on Compute Engine",
-![](./img/gcp/deploying.png)
+![](./img/gcp/deploying.PNG)
 5. Complete the fields,
 
 6. Launch,
-![](./img/gcp/deployed.png)
+![](./img/gcp/Deployed.PNG)
 7. Connect via SSH on port 22 with an user of an SSH key defined in (Compute Engine -> Metadata -> SSH Keys).
 
 ## Connection modes and credentials
