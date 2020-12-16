@@ -68,7 +68,7 @@ module "rswaf" {
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6-5-6-patch2-f767e70-b16507" # product version to select instance images, changing it will recreate all instances
+  product_version = "6-5-6-patch4-044158e-b18823" # product version to select instance images, changing it will recreate all instances
 
   management_mode            = "byol"          # WAF licence type of the management instance ("payg" or "byol")
   management_instance_type   = "n1-standard-4" # management instance type
