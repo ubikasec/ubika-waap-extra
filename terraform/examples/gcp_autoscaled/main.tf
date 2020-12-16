@@ -10,13 +10,13 @@ provider "google" {
   credentials = "${file(var.credentials)}"
   project     = var.project
   region      = "us-central1"
-  version     = "= 2.19"
+  version     = "= 3.46"
 }
 provider "google-beta" {
   credentials = "${file(var.credentials)}"
   project     = var.project
   region      = "us-central1"
-  version     = "= 2.19"
+  version     = "= 3.46"
 }
 
 ### Setup a dedicated VPC
@@ -84,7 +84,7 @@ module "rswaf" {
 
   autoscaled_product_version = "6.5.5"         # product version to select instance images for autoscaled instances
   autoscaled_instance_type   = "n1-standard-2" # managed instance type
-  autoscaled_disk_size       = 15              # size of the autoscaled instances disk in GiB (default to 15GiB)
+  autoscaled_disk_size       = 20              # size of the autoscaled instances disk in GiB (default to 20GiB)
   additional_autoscaled_tags = []              # list of tags to add to all autoscaled managed instances for firewall rules
   autoscaled_clone_source    = ""              # name of the managed instance that will be cloned by autoscaled instances, (an empty string wil disable the autoscaling part, require on cluster initialization)
 }

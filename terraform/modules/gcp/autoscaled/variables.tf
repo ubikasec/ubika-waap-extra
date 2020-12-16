@@ -6,7 +6,7 @@ variable "autoscaled_mode" {
 variable "autoscaled_instance_type" { default = "n1-standard-2" }
 variable "autoscaled_product_version" { default = "" }
 variable "additional_autoscaled_tags" { default = [] }
-variable "autoscaled_disk_size" { default = 15 }
+variable "autoscaled_disk_size" { default = 20 }
 
 variable "autoscaled_clone_source" { default = "managed-0" }
 

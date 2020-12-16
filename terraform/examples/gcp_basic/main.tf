@@ -8,7 +8,7 @@ provider "google" {
   credentials = "${file(var.credentials)}"
   project     = var.project
   region      = "us-central1"
-  version     = "= 2.19"
+  version     = "= 3.46"
 }
 
 ### Setup a dedicated VPC
