@@ -26,6 +26,8 @@ variable "admin_apiuid" { default = "" }
 variable "autoreg_admin_user" { default = "autoreg_admin" }
 variable "autoreg_admin_apiuid" { default = "" }
 
+variable "aws_cloudwatch_monitoring" { default = "false" }
+
 # Management instance
 variable "management_mode" {
   description = "Enter management instance license mode \"Bring Your Own License\" or \"PAYG\". Default is \"byol\"."

@@ -21,6 +21,8 @@ locals {
     autoreg_admin_apiuid = var.autoreg_admin_apiuid
     autoreg_admin_apikey = local.autoreg_admin_apikey
 
+    aws_cloudwatch_monitoring = var.aws_cloudwatch_monitoring
+
     management_instance_type = var.management_instance_type
     managed_instance_type    = var.managed_instance_type
 

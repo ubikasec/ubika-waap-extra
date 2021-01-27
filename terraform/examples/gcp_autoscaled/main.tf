@@ -34,6 +34,8 @@ module "lb" {
 
   vpc = google_compute_network.vpc.self_link
 
+  # healthcheck_path = "/"  # set a custom healthcheck path, defaults to a random path
+
   mapping = [
     # HTTP (port 80) on the public side, must be the same in my tunnel configuration
     {
@@ -68,7 +70,7 @@ module "rswaf" {
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6-5-6-patch4-044158e-b18823" # product version to select instance images, changing it will recreate all instances
+  product_version = "6-5-7-patch2-0593db70a-b19304" # product version to select instance images, changing it will recreate all instances
 
   management_mode            = "byol"          # WAF licence type of the management instance ("payg" or "byol")
   management_instance_type   = "n1-standard-4" # management instance type
@@ -82,7 +84,6 @@ module "rswaf" {
 
   nb_managed = 2 # number of managed instances
 
-  autoscaled_product_version = "6.5.5"         # product version to select instance images for autoscaled instances
   autoscaled_instance_type   = "n1-standard-2" # managed instance type
   autoscaled_disk_size       = 20              # size of the autoscaled instances disk in GiB (default to 20GiB)
   additional_autoscaled_tags = []              # list of tags to add to all autoscaled managed instances for firewall rules
@@ -113,4 +114,9 @@ output "Administration_port" {
 output "Public_URL" {
   value       = module.lb.public_url
   description = "Public acces to your application"
+}
+
+output "Healthcheck" {
+  value       = module.lb.healthcheck
+  description = "Healthcheck URL"
 }

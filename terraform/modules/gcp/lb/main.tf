@@ -1,13 +1,11 @@
-variable "vpc" {
-  description = ""
-}
+variable "vpc" {}
+variable "instances_names" { default = [] }
+variable "mapping" {}
+variable "healthcheck_path" { default = "" }
 
-variable "instances_names" {
-  description = ""
-  default     = []
-}
-
-variable "mapping" {
+resource "random_id" "healthcheck" {
+  prefix      = "lb-health-"
+  byte_length = 16
 }
 
 # load balancer
@@ -21,7 +19,8 @@ resource "google_compute_http_health_check" "health-check" {
   healthy_threshold   = 3
   unhealthy_threshold = 3
 
-  port = var.mapping[count.index].health_check
+  port         = var.mapping[count.index].health_check
+  request_path = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
 }
 
 resource "google_compute_target_pool" "target_pool" {
@@ -80,4 +79,9 @@ output "target_pools" {
 output "public_url" {
   value       = "http://${google_compute_address.lb_address.address}/"
   description = "Public acces to your application"
+}
+
+output "healthcheck" {
+  value       = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
+  description = "Loadbalancers healthchecks path"
 }

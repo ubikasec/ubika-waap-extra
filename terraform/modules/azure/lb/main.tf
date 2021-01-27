@@ -1,6 +1,12 @@
 variable "resource_group" {}
 variable "subnet" {}
 variable "mapping" {}
+variable "healthcheck_path" { default = "" }
+
+resource "random_id" "healthcheck" {
+  prefix      = "lb-health-"
+  byte_length = 16
+}
 
 # Load Balancer
 resource "random_string" "fqdn" {
@@ -46,7 +52,7 @@ resource "azurerm_lb_probe" "lb_probe" {
   name                = "lb_probe-${var.mapping[count.index].dest}"
   port                = var.mapping[count.index].dest
   protocol            = var.mapping[count.index].proto
-  request_path        = "/"
+  request_path        = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
 }
 
 resource "azurerm_lb_rule" "lb_rule" {
@@ -71,3 +77,7 @@ output "public_url" {
   description = "Public acces to your application"
 }
 
+output "healthcheck" {
+  value       = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
+  description = "Loadbalancers healthchecks path"
+}

@@ -60,6 +60,8 @@ module "lb" {
   resource_group = azurerm_resource_group.rg
   subnet         = azurerm_subnet.subnet
 
+  # healthcheck_path = "/" # set a custom healthcheck path, defaults to a random path
+
   mapping = var.lb_mapping
 }
 
@@ -81,7 +83,7 @@ module "rswaf" {
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6.5.604" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.5.702" # product version to select instance images, changing it will recreate all instances
 
   management_mode          = "byol"          # WAF licence type of the management instance ("payg" or "byol")
   management_instance_type = "Standard_B4ms" # management AWS instance type
@@ -132,4 +134,9 @@ output "Administration_port" {
 output "Public_URL" {
   value       = module.lb.public_url
   description = "Public acces to your application"
+}
+
+output "Healthcheck" {
+  value       = module.lb.healthcheck
+  description = "Healthcheck URL"
 }

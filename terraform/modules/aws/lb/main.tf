@@ -1,22 +1,14 @@
-variable "vpc_id" {
-  description = ""
-}
+variable "vpc_id" {}
+variable "subnet_ids" {}
+variable "mapping" {}
+variable "healthcheck_path" { default = "" }
+variable "lb_name" { default = "rswaf" }
+variable "enable_deletion_protection" { default = true }
 
-variable "subnet_ids" {
-  description = ""
+resource "random_id" "healthcheck" {
+  prefix      = "${var.lb_name}-health-"
+  byte_length = 16
 }
-
-variable "mapping" {
-}
-
-variable "lb_name" {
-  default = "rswaf"
-}
-
-variable "enable_deletion_protection" {
-  default = true
-}
-
 
 # load balancer
 
@@ -54,6 +46,7 @@ resource "aws_lb_target_group" "lb" {
     interval            = "10"
     protocol            = var.mapping[count.index].proto
     port                = var.mapping[count.index].dest
+    path                = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
     healthy_threshold   = "3"
     unhealthy_threshold = "3"
   }
@@ -106,3 +99,7 @@ output "public_url" {
   description = "Public acces to your application"
 }
 
+output "healthcheck" {
+  value       = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
+  description = "Loadbalancers healthchecks path"
+}

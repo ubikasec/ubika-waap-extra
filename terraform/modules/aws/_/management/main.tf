@@ -1,10 +1,5 @@
-variable "context" {
-  description = ""
-}
-
-variable "additional_sgs" {
-}
-
+variable "context" {}
+variable "additional_sgs" {}
 
 data "aws_vpc" "vpc" {
   id = var.context.vpc_id
@@ -70,20 +65,69 @@ resource "aws_instance" "management" {
     volume_size           = var.context.disk_size.management
   }
   user_data = jsonencode({
-    instance_role        = "management"
-    instance_name        = "management"
-    admin_user           = "${var.context.admin_user}"
-    admin_password       = "${var.context.admin_pwd}"
-    admin_apiuid         = "${var.context.admin_apiuid}"
-    admin_multiuser      = true
-    enable_autoreg_admin = true
-    autoreg_admin_apiuid = "${var.context.autoreg_admin_apiuid}"
+    instance_role             = "management"
+    instance_name             = "management"
+    admin_user                = "${var.context.admin_user}"
+    admin_password            = "${var.context.admin_pwd}"
+    admin_apiuid              = "${var.context.admin_apiuid}"
+    admin_multiuser           = true
+    enable_autoreg_admin      = true
+    autoreg_admin_apiuid      = "${var.context.autoreg_admin_apiuid}"
+    aws_cloudwatch_monitoring = "${var.context.aws_cloudwatch_monitoring}"
   })
+
+  iam_instance_profile = aws_iam_instance_profile.management.name
 
   tags = {
     Name               = "${var.context.name_prefix} management"
     RSWAF_Cluster_Name = var.context.cluster_name
   }
+}
+
+resource "aws_iam_instance_profile" "management" {
+  name = "RS-WAF-Cloud-management-profile"
+  role = aws_iam_role.management.name
+}
+
+resource "aws_iam_role" "management" {
+  name = "RS-WAF-Cloud-management-role"
+  path = "/"
+
+  assume_role_policy = data.aws_iam_policy_document.assume_management.json
+}
+
+data "aws_iam_policy_document" "assume_management" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "cloudwatch_management" {
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+      "ec2:DescribeTags",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "management" {
+  name   = "RS-WAF-Cloud-management-policy"
+  policy = data.aws_iam_policy_document.cloudwatch_management.json
+}
+
+resource "aws_iam_role_policy_attachment" "management" {
+  role       = aws_iam_role.management.name
+  policy_arn = aws_iam_policy.management.arn
 }
 
 output "private_ip" {
@@ -93,4 +137,3 @@ output "private_ip" {
 output "public_ip" {
   value = aws_instance.management.public_ip
 }
-
