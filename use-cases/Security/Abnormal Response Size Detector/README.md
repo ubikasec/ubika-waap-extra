@@ -36,7 +36,7 @@ By using this **SWF - Abnormal Response Size Detector** Sub-Workflow, you can mo
 So there is a kind of mandatory learning step, to fill the datastore with all responses size for every legitimate URLs. Then, when the URL have a size already recorded in the datastore, the `Content-Length` header of the response will be compared to this size, with a ratio you can set.
 
 If your web application is vulnerable and for many reasons, a hacker could succeeded to fetch a lot of (sensitive) data. This Sub-Workflow is able to alert and/or block the response because its size is abnormal, compared to the recorded one.
-to alert or block
+
 For performances reasons, it’s not necessary to monitor statics items (javascript, images, ...). You can set a particular directory to monitor.
 
 ### Sub-workflow settings
