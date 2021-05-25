@@ -8,12 +8,11 @@ Cross-Site Request Forgery protection
 * 5 [How to prevent CSRF attacks?](#how-to-prevent-csrf-attacks)
     * 5.1 [Tokens](#tokens)
     * 5.2 [Verify Referer and Origin headers](#verify-referer-and-origin-headers)
-    * 5.3 [SameSite Cookie attribute](#samesite-cookie-attribute)
+    * 5.3 [Set-Cookie security attributes](#set-cookie-security-attributes)
 * 6 [Limitations](#limitations)
 * 7 [Rohde & Schwarz’s solution](#rohde-schwarzs-solution)
     * 7.1 [SWF - CSRF Protection](#swf-csrf-protection)
-    * 7.2 [SWF - Add SameSite in Set-Cookies](#swf-add-samesite-in-set-cookies)
-    * 7.3 [Recommendations for complete protection against CSRF](#recommendations-for-complete-protection-against-csrf)
+    * 7.2 [Recommendations for complete protection against CSRF](#recommendations-for-complete-protection-against-csrf)
 
 
 Presentation
@@ -33,7 +32,7 @@ For more details, see:
 Backup
 ------
 
-Sub-Workflows can be downloaded here: [SWF - CSRF Protection.backup](./backup/SWF%20-%20CSRF%20Protection.backup) and [SWF - Add SameSite on Set-Cookies.backup](./backup/SWF%20-%20Add%20SameSite%20on%20Set-Cookies.backup)
+Sub-Workflow can be downloaded here: [SWF - CSRF Protection.backup](./backup/SWF%20-%20CSRF%20Protection.backup).
 
 Context
 -------
@@ -62,17 +61,10 @@ A secondary solution is to pay attention to _Referer_ and _Origin_ headers. Thes
 
 This solution can be implemented on the WAF, since it is not directly dependent on the web application’s code and structure (see next parts).
 
-### SameSite Cookie attribute
+### Set-Cookie security attributes
 
-The _SameSite_ cookie attribute allows declaring if the cookie is restricted to a first-party or same-site context.
-
-For example, if a user is on `www.app.com` and requests an image from `images.app.com` then that is a **same-site** request. If a user is on `www.app.com` and requests an image from `images.otherapp.com` then that is a **cross-site** request.
-
-Forbidding cookies to be sent along cross-site requests would help to mitigation some CSRF attacks by avoiding the authentication when going on the third party (if authentication is linked).
-
-For more details, see [https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie/SameSite](https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
-
-The solution can be implemented on the WAF (see next parts).
+To add more security against CSRF attacks, you can add **SWF - Secure cookies** sub-workflow to your workflows to secure cookies sent by server.
+More information about it and the backup file can be found here: [Secure Cookies](../Secure%20Cookies)
 
 Limitations
 -----------
@@ -118,21 +110,15 @@ The SWF has also other security modes:
 *   Block and log when not matching (lax): default mode. Requests will not be blocked when headers are not in the request.
 *   Log only when not matching (log).
 
-### SWF - Add SameSite in Set-Cookies
+### SWF - Secure cookies
 
-This node must be placed after the proxy request to work on the _Set-Cookie_ headers from the backend responses.
+To add more security against CSRF attacks, you can add **SWF - Secure Cookies** sub-workflow to your workflows.
+More informations about it and the backup file can be found here: [SWF - Secure Cookies](../SecureCookies)
 
-![](./attachments/swf-same-cookie.png)
-
-Different _SameSite_ policies can be configured:
-
-*   **Lax** (default): cookies are not sent on normal cross-site sub-requests but will be sent when a user is navigating to the origin site;
-*   **Strict**: cookies will only be sent in a first-party context and not be sent along with requests initiated by third party websites;
-*   **None**: cookies will be sent in all contexts (Secure flag will be added).
-
-#### How does this Workflow node operate?
-
-The SWF will iterate over the response cookies table. If the _SameSite_ attribute does not exist in _Set-Cookie_ headers, it will be added with the specified policy configured in the SWF.
+In this sub-workflow, you will find the SameSite cookie attribute. It allows to declare if the cookie is restricted to a first-party or same-site context.
+For example, if a user is on www.app.com and requests an image from images.app.com then that is a same-site request. If a user is on www.app.com and requests an image from images.otherapp.com then that is a cross-site request.
+Forbidding cookies to be sent along cross-site requests would help to mitigation some CSRF attacks by avoiding the authentication when going on the third party (if authentication is linked).
+For more details, see https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie/SameSite
 
 ### Recommendations for complete protection against CSRF
 
@@ -140,4 +126,4 @@ The SWF will iterate over the response cookies table. If the _SameSite_ attribut
 *   Avoid using HTTP GET method to perform actions or sent data. This technique will naturally eliminate simple attacks based on images but will let attacks using JavaScript, since they are capable of launching HTTP POST requests very easily.
 *   Use validity tokens in forms. Ensure that a posted form is accepted only if it has been produced a few minutes earlier; the validity token serves as proof. Hence it must be sent as a parameter and verified on the server-side.
 *   Verify the Referer in sensitive pages.
-*   Implement the R&S WAF "SWF - CSRF Protection" and "SWF - Add SameSite in Set-Cookies" node.
+*   Implement the R&S WAF "SWF - CSRF Protection" and "SWF - Secure Cookies" node.
