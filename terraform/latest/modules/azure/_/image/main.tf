@@ -1,4 +1,4 @@
-variable "product_version" { default = "6.5.600" }
+variable "product_version" { default = "6.6.0" }
 
 variable "management_mode" {}
 variable "managed_mode" {}
@@ -9,8 +9,8 @@ locals {
   offer         = "rs-web-application-firewall"
   image_version = replace(var.product_version, "/-.*$/", "")
   skus = {
-    byol = "rs-waf_byol"
-    payg = "rs-waf_payg"
+    byol = "r-s-waf-latest-byol"
+    payg = "r-s-waf-latest-payg"
   }
   ids = {
     byol = ""

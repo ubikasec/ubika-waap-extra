@@ -8,7 +8,7 @@ variable "region" {
 }
 
 variable "name_prefix" {
-  default = "RS_WAF_Cloud"
+  default = "RS_WAF_Cloud_Autoscaled"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -66,7 +66,7 @@ module "lb" {
 }
 
 module "rswaf" {
-  source = "../../modules/azure/basic"
+  source = "../../modules/azure/autoscaled"
 
   # Azure resource group and subnets ids where the WAF will be deployed
   resource_group = azurerm_resource_group.rg
@@ -83,7 +83,7 @@ module "rswaf" {
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6.5.702" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.6.0" # product version to select instance images, changing it will recreate all instances
 
   management_mode          = "byol"          # WAF licence type of the management instance ("payg" or "byol")
   management_instance_type = "Standard_B4ms" # management AWS instance type
@@ -94,6 +94,32 @@ module "rswaf" {
   managed_disk_size     = 30             # size of the managed disk in GiB (default to 30GiB)
 
   nb_managed = 2 # number of managed instances
+
+  # autoscaled instances will be in payg mode
+  autoscaled_disk_size    = 15          # size of the autoscaled instances disk in GiB (default to 15GiB)
+  autoscaled_clone_source = "managed_0" # name of the managed instance that will be cloned by autoscaled instances
+
+  autoscaler_current_size = 1 # current or initial number of autoscaled instances
+}
+
+# add autscaling policy to the autoscaling part of the RS WAF cluster
+module "policy" {
+  source = "../../modules/azure/policy"
+
+  prefix = "rswaf" # name prefix for resources created by this module
+
+  resource_group = azurerm_resource_group.rg
+
+  # RS WAF cluster informations
+  scale_set_id = module.rswaf.scale_set_id # id of the scale set where the policies will be added
+  managed_ids  = module.rswaf.managed_ids  # ids of the managed instances
+
+  autoscaler_min_size = 0  # minimum number of autoscaled instances (should be 0)
+  autoscaler_max_size = 10 # maximum number of autoscaled instances
+
+  target             = 40      # CPU usage of managed instances that will trigger autoscaled instance creation
+  scale_out_cooldown = "PT5M"  # the amount of time to wait since the last scaling up action before a next action occurs(should be tuned to your configuration)
+  scale_in_cooldown  = "PT30M" # the amount of time to wait since the last scaling down action before a next action occurs(should be tuned to your configuration)
 }
 
 output "Administration_host" {

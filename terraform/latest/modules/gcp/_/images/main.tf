@@ -1,16 +1,16 @@
-variable "product_version" { default = "6-5-6-patch2-f767e70-b16507" }
+variable "product_version" { default = "6-6-0-23fe72b79d-b22398" }
 
 variable "management_mode" { default = "" }
 variable "managed_mode" { default = "" }
 variable "autoscaled_mode" { default = "" }
 
 data "google_compute_image" "byol" {
-  name    = "r-s-web-application-firewall-byol-${var.product_version}"
+  name    = "r-s-waf-latest-byol-${var.product_version}"
   project = "rohde-schwarz-cs-sas-public"
 }
 
 data "google_compute_image" "payg" {
-  name    = "r-s-web-application-firewall-payg-${var.product_version}"
+  name    = "r-s-waf-latest-payg-${var.product_version}"
   project = "rohde-schwarz-cs-sas-public"
 }
 

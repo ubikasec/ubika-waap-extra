@@ -126,7 +126,7 @@ module "rswaf" {
 
   aws_cloudwatch_monitoring = false # Enable AWS Cloudwatch agent metrics.
 
-  product_version = "6.5.7-patch2" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.6.0" # product version to select instance images, changing it will recreate all instances
 
   management_mode          = "byol"      # WAF licence type of the management instance ("payg" or "byol")
   management_instance_type = "m5.xlarge" # management AWS instance type

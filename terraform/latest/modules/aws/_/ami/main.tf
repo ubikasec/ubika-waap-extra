@@ -13,7 +13,7 @@ data "aws_ami" "byol" {
   owners      = ["aws-marketplace"]
   filter {
     name   = "name"
-    values = ["*${local.ami_version}*51ccfbfd-99a5-402d-90c3-427dd2bc23c5*"]
+    values = ["*${local.ami_version}*2ec64903-39cf-44c2-b4f1-04388ab164ac*"]
   }
 }
 
@@ -22,7 +22,7 @@ data "aws_ami" "payg" {
   owners      = ["aws-marketplace"]
   filter {
     name   = "name"
-    values = ["*${local.ami_version}*8f8b8e5f-331f-4d1d-ae38-4a68f04f25be*"]
+    values = ["*${local.ami_version}*8d98a8b1-aba2-459f-aa08-109cd5a67a47*"]
   }
 }
 
