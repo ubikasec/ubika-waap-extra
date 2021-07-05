@@ -8,10 +8,11 @@ IP Reputation
 	* 3.2 [Setup database updates](#setup-database-updates)
 * 4 [SWF - IP Reputation](#swf-ip-reputation)
 	* 4.1 [Settings](#settings)
-	* 4.2 [Provided attributes](#provided-attributes)
-	* 4.3 [Usage](#usage)
-		* 4.3.1 [To block any potentially dangerous source IP address](#to-block-any-potentially-dangerous-source-ip-address)
-		* 4.3.2 [To sort requests depending on the score or threats](#to-sort-requests-depending-on-the-score-or-threats)
+	* 4.2 [IP Reputation score threshold example](#ip-reputation-score-threshold-example)
+	* 4.3 [Provided attributes](#provided-attributes)
+	* 4.4 [Usage](#usage)
+		* 4.4.1 [To block any potentially dangerous source IP address](#to-block-any-potentially-dangerous-source-ip-address)
+		* 4.4.2 [To sort requests depending on the score or threats](#to-sort-requests-depending-on-the-score-or-threats)
 
 Presentation
 ------------
@@ -72,7 +73,7 @@ This Sub-Workflow allows to check for potential threats related to the request's
 
 ![](./attachments/swf_settings.png)
 
-* The field **IP Reputation score threshold** allows to select a threshold score, which will force the Sub-Workflow to validate requests where source IP addresses have a higher score than this threshold.
+* The field **IP Reputation score threshold** allows to select a threshold score, which will force the Sub-Workflow to validate requests where source IP addresses have a higher score than this threshold. Default value is set to 80.
 * Then, in the **Threat categories** section, there is a list of different fields with radio buttons allowing to disable or enable the monitoring of some threat categories:
 
 |Threat catgory|Description|
@@ -93,6 +94,22 @@ This Sub-Workflow allows to check for potential threats related to the request's
 
 |:warning: Note that by default every category is enabled except for **spamSources** and **proxy**, blocking these categories can lead to many false positives|
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+### IP Reputation score threshold example
+
+IP Reputation score threshold parameter will make any request coming from an IP address with a score higher than the threshold automatically accepted.
+
+The IP reputation score ranges from 0 to 100 and the lower the score is, the hazardous the source is. Webroot sorts IP addresses in different categories depending on the score:
+
+* **00-20**: These are high risk IP addresses. There is a high predictive risk that these IPs will deliver attacks – such as malicious payloads, DoS attacks, or others – to your infrastructure and endpoints.
+* **21-40**: These are suspicious IPs. There is a higher than average predictive risk that these IPs will deliver attacks to your infrastructure and endpoints.
+* **41-60**: These are generally benign IPs but have exhibited some potential risk characteristics. There is some predictive risk that these IPs will deliver attacks to your infrastructure and endpoints.
+* **61-80**: These are benign IPs and rarely exhibit characteristics that expose your infrastructure andendpoints to security risks. There is a low predictive risk of attack.
+* **81-100**: These are clean IPs that have not been tied to a security risk. There is very low predictive risk that your infrastructure and endpoints will be exposed to attack.
+
+By default, **IP Reputation score threshold** is 80, so every request coming from an IP address with 80+ score will be validated by the Sub-Workflow with no listing of threat categories, because an address with a score above 80 is generally considered trustworthy.
+
+You can select another value between 0 and 100 for this threshold, but a value too low can reduce the interest of this Sub-Workflow. You can also select an empty value to verify threat categories for every source IP address independently of the **reputation score**.
 
 ### Provided attributes
 
