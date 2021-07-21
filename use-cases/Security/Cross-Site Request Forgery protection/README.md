@@ -34,6 +34,8 @@ Backup
 
 Sub-Workflow can be downloaded here: [SWF - CSRF Protection.backup](./backup/SWF%20-%20CSRF%20Protection.backup).
 
+The Sub-Workflow is available by default since the 6.7.0 version.
+
 Context
 -------
 
@@ -88,7 +90,7 @@ This node must be configured by entering the domain name that the headers _Refer
 
 ![](./attachments/swf-csrf-protection.png)
 
-*   There is no need to enter the '_https://_' scheme before, nor the final '_/_'. The SWF will check HTTP and HTTPS at the same time
+*   There is no need to enter the '_https://_' scheme before, nor the final '_/_'. If the application uses a custom port (not 80 or 443), the port has to be added in the domain name parameter. The SWF will check HTTP and HTTPS at the same time. For example: 'www.app.com', 'www.app.com:8443';
 *   The security mode allows to block and log, or only log, requests that do not match the domain name;
 *   There is the possibility to enable checks for one of the two headers, both of them, and for the specified methods;
 *   GET method check is disabled by default to avoid the risk of false positives. Enable checks on GET method with a log only security mode will allow checking for false positives without blocking.
