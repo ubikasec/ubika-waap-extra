@@ -32,7 +32,7 @@ Backup can be downloaded here: [SWF - reCAPTCHA v3](./backup/SWF%20-%20reCAPTCHA
 This backup contains three Sub-Workflows:
 * **SWF - reCAPTCHA v3 - API**: this Sub-Workflow implements reCAPTCHA v3 API, and is used inside following Sub-Workflows.
 * **SWF - reCAPTCHA v3 - Redirect**: this Sub-Workflows implements reCAPTCHA v3 with an automatic redirection.
-* **SWF - reCAPTCHA v3 - No redirect**: this SUb-Workflow implements reCAPTCHA v3 without an automatic redirection.
+* **SWF - reCAPTCHA v3 - No redirect**: this Sub-Workflow implements reCAPTCHA v3 without an automatic redirection.
 
 Prerequisites
 -------------
