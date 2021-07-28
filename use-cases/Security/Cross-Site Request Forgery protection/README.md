@@ -71,7 +71,7 @@ More information about it and the backup file can be found here: [Secure Cookies
 Limitations
 -----------
 
-Here, we chose providing a protection based on the _Referer_ and _Origin_ headers verification, with the usage of the _SameSite_ attribute on application cookies.
+Here, we chose providing a protection based on the _Referer_ and _Origin_ headers verification, with the usage of the security attribute on Set-Cookies.
 
 The solution can protect against attacks derived from POST requests. However, attacks derived from GET requests cannot be stopped without risking false positives, especially on the first request (possibly no _Referer_ header yet).
 
@@ -112,20 +112,11 @@ The SWF has also other security modes:
 *   Block and log when not matching (lax): default mode. Requests will not be blocked when headers are not in the request.
 *   Log only when not matching (log).
 
-### SWF - Secure cookies
-
-To add more security against CSRF attacks, you can add **SWF - Secure Cookies** sub-workflow to your workflows.
-More informations about it and the backup file can be found here: [SWF - Secure Cookies](../SecureCookies)
-
-In this sub-workflow, you will find the SameSite cookie attribute. It allows to declare if the cookie is restricted to a first-party or same-site context.
-For example, if a user is on www.app.com and requests an image from images.app.com then that is a same-site request. If a user is on www.app.com and requests an image from images.otherapp.com then that is a cross-site request.
-Forbidding cookies to be sent along cross-site requests would help to mitigation some CSRF attacks by avoiding the authentication when going on the third party (if authentication is linked).
-For more details, see https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Set-Cookie/SameSite
-
 ### Recommendations for complete protection against CSRF
 
 *   Ask for confirmations from the user for critical actions, at the risk of weighing down the progression of the forms.
 *   Avoid using HTTP GET method to perform actions or sent data. This technique will naturally eliminate simple attacks based on images but will let attacks using JavaScript, since they are capable of launching HTTP POST requests very easily.
 *   Use validity tokens in forms. Ensure that a posted form is accepted only if it has been produced a few minutes earlier; the validity token serves as proof. Hence it must be sent as a parameter and verified on the server-side.
 *   Verify the Referer in sensitive pages.
-*   Implement the R&S WAF "SWF - CSRF Protection" and "SWF - Secure Cookies" node.
+*   Implement the R&S WAF "SWF - CSRF Protection".
+*   Add the [SWF - Secure Cookies](../Secure%20Cookies) to forbid cookies to be sent along cross-site requests would help to mitigation some CSRF attacks by avoiding the authentication when going on the third party (if authentication is linked).
