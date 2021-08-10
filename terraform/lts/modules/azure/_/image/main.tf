@@ -1,4 +1,4 @@
-variable "product_version" { default = "6.5.600" }
+variable "product_version" {}
 
 variable "management_mode" {}
 variable "managed_mode" {}
