@@ -76,7 +76,7 @@ SWF - reCAPTCHA v3 - API
 
 ![](./attachments/subworkflow_settings.png)
 
-* The field **reCAPTCHA Site secret** is the secret key for your application generated earlier in your reCAPTCHA admin page.
+* The field **reCAPTCHA secret key** is the secret key for your application generated earlier in your reCAPTCHA admin page.
 * The field **Session Cache** is the **Session Cache Profile** to use to store reCAPTCHA's results for the users, it can be created from this menu or from **Policies > Workflows > Sessions Cache Profiles**.
 * The field **reCAPTCHA subrequest host header** should contain the **Host** header for the subrequest made to check user's token.
 * The field **reCAPTCHA subrequest IP/hostname** should contain the IP address or the hostname of the target for the subrequest made to check user's token.
@@ -118,14 +118,14 @@ This examples will show you how to use the **SWF - reCAPTCHA v3 - API** Sub-Work
 
 ### Settings
 
+![](./attachments/subworkflow_settings2.png)
+
 For both Sub-Workflows, settings are the same:
 * The field **reCAPTCHA site key** is the site key previously created on your reCAPTCHA admin page.
 * The field **reCAPTCHA secret key** is the secret key previously created on your reCAPTCHA admin page.
 * The field **Session Cache** is the **Session Cache Profile** that will store users reCAPTCHA's results. You can create one from this settings menu or in **Policies > Workflows > Sessions Cache Profiles**.
-* The field **reCAPTCHA subrequest hostname** is the hostname used in the subrequest sent to connect to reCAPTCHA service.
-* The field **reCAPTCHA subrequest IP/host** is the value of the header **host** used in the subrequest sent to connect to reCAPTCHA service.
-
-![](./attachments/subworkflow_settings.png)
+* The field **reCAPTCHA subrequest host header** should contain the **Host** header for the subrequest made to check user's token.
+* The field **reCAPTCHA subrequest IP/hostname** should contain the IP address or the hostname of the target for the subrequest made to check user's token.
 
 ### Provided attribute
 
