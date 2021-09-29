@@ -4,11 +4,17 @@ Implementing SSL authentication using X509-PKI certificates
 * 1 [Presentation](#presentation)
 * 2 [Enabling the SSL protocol for Tunnels](#enabling-the-ssl-protocol-for-tunnels)
 	* 2.1 [Incoming settings](#incoming-settings)
+* 3 [Authentication on a specific path](#authentication-on-a-specific-path)
+	* 3.1 [Cipher Profile](#cipher-profile)
+	* 3.2 [Configuration of the Tunnel](#configuration-of-the-tunnel)
+	* 3.3 [Advanced Parameters](#advanced-parameters)
 
 Presentation
 ------------
 
-Rohde & Schwarz's WAF lets you perform mutual client-server SSL authentications via X509 certificates managed by a PKI. The next part of this document shows you the configuration to follow for authenticating via X509 certificate.
+Rohde & Schwarz's WAF lets you perform mutual client-server SSL authentications via X509 certificates managed by a PKI. The next part of this document shows you the configuration to follow for authenticating via X509 certificate. It will also show you how to perform SSL authentication with x509 certificates on a specific path different from **/**.
+
+You can find more information about the installation of certificates for clients here: [Installing X509 certificates on clients and CA on the WAF](../Installing%20X509%20certificates%20on%20clients%20and%20CA%20on%20the%20WAF)
 
 Enabling the SSL protocol for Tunnels
 -------------------------------------
@@ -44,3 +50,58 @@ Specifies the SSL parameters on the listening interface of the Tunnel – that i
 For the **Catch SSL verify Errors** parameter you can use a **Decision** node like this to handle it via the Workflow:
 
 ![](./attachments/ssl_verify_example.png)
+
+Authentication on a specific path
+---------------------------------
+
+To use the SSL authentication with x509 certificates on a specific path, we will need to use **Advanced Parameters** for the Tunnel. Indeed, on the **SSL** tab of the Tunnel's settings menu, the **Verify client certificate** parameter does not allow to choose a specific path for the certificate authentication.
+
+### Cipher Profile
+
+Firstly, for this use case, we need to create a **Cipher Profile** that will not use ciphers for **TLSv1.3**, because authentication with certificates using this version is not managed by browsers.
+
+For this, we need to go to **Setup > SSL > SSL Cipher Profile**, press **Add**, select a name for this **SSL Cipher Profile** and a list of ciphers to use. In this example we have selected few ciphers used by Mozilla Firefox for TLSv1.2.
+
+![](./attachlents/cipher_profile.png)
+
+### Configuration of the Tunnel
+
+After that, we need to configure the Tunnel:
+
+* Go to **Applications**, select your Tunnel, press **Modify**, and go to the **SSL** tab.
+* In the **SSL Cipher Profile** field of the **Incoming** section, select the **SSL Cipher Profile** we have created earlier.
+* Enable the parameter **Verify client certificate**.
+* Then, in the **CA/CRL Certificates** field, select the **Certificates Bundle** you want to use to validate clients certificates.
+* And, set the field **Verification Type** at **none**.
+
+![](./attachments/tunnel_ssl_settings.png)
+
+### Advanced Parameters
+
+Now, we need to setup a specific path for the authentication with certificates. To achieve this, go to **Setup > Reverse Proxies > Advanced Parameters Profiles**. Then press **Add**, select a **Name** and fot the **Type** select **Tunnel**.
+
+![](./attachments/advanced_parameters_creation.png)
+
+Now, select the new **Advanced Parameters Profile** and click on **Modify**. Next, between the lines **### START - ADD CUSTOM DIRECTIVES HERE ###** and **### END - ADD CUSTOM DIRECTIVES HERE ###**, write the following lines: 
+
+```
+SSLVerifyClient none
+
+<Location /example/path>
+     SSLVerifyClient require
+     SSLOptions +OptRenegotiate
+ </Location>
+```
+
+| You will have to replace **/example/path** with the path where the authentication using certificates will be located.|
+|----------------------------------------------------------------------------------------------------------------------|
+
+![](./attachments/advanced_parameters.png)
+
+Note that you can also use regular expressions in the path given in the **Location** tag. For this, you will have to add a **~** between **Location** and the path. For example: **<Location ~ /dvwa/vulnerabilities/(brute|captcha)/>**.
+
+After having created this **Advanced Parameters Profile**, go to the Tunnel's settings, in the **Advanced** tab, and in the **Advanced Parameters Profile** select the one we have just created.
+
+![](./attachments/advanced_tab.png)
+
+Finally, **Apply** every changes made and try to access the tunnel with a valid user certificate.
