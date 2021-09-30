@@ -24,7 +24,7 @@ Firstly, we will start by creating a Tunnel, from the **Applications** menu, to 
 
 * The parameter **Verify client certificate** must be checked to allow the verification of the certificate and the authentication.
 * The **Verification Type** parameter has to be set as **optional**, in order to verify x509 authentication at the level of the Workflow, and not at the level of the Tunnel.
-* You should also check the **Catch SSL verify Errors** parameters to deal with errors inside the Workflow and not in the Tunnel.
+* You have to enable the **Catch SSL verify Errors** parameter to deal with errors inside the Workflow and not in the Tunnel. It will also allow to avoid a "Technical Problem" page when the tunnel requires a certificate and the client certificate is rejected.
 
 ![](./attachments/tunnel_ssl_setup.png)
 
