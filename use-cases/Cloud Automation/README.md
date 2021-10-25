@@ -39,7 +39,7 @@ Usage
 
 ### Pre-requisites
 
-Download and install **Terraform**, with a version greater than 0.12.1, on a local computer.
+Download and install **Terraform**, with a version greater than 0.14, on a local computer.
 
 See https://learn.hashicorp.com/terraform/getting-started/install for more informations on how to install Terraform.
 

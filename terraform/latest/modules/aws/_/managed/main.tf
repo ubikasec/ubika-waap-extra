@@ -65,10 +65,10 @@ resource "aws_instance" "managed" {
   user_data = jsonencode({
     instance_role             = "managed"
     instance_name             = "managed_${count.index}"
-    linkto_ip                 = "${var.management_private_ip}"
+    linkto_ip                 = var.management_private_ip
     linkto_port               = "3001"
-    linkto_apikey             = "${var.context.autoreg_admin_apikey}"
-    aws_cloudwatch_monitoring = "${var.context.aws_cloudwatch_monitoring}"
+    linkto_apikey             = var.context.autoreg_admin_apikey
+    aws_cloudwatch_monitoring = var.context.aws_cloudwatch_monitoring
   })
 
   iam_instance_profile = aws_iam_instance_profile.managed.name

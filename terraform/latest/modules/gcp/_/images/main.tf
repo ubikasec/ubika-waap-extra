@@ -1,4 +1,4 @@
-variable "product_version" { default = "6-6-0-23fe72b79d-b22398" }
+variable "product_version" { default = "" }
 
 variable "management_mode" { default = "" }
 variable "managed_mode" { default = "" }

@@ -11,10 +11,9 @@ resource "azurerm_public_ip" "public_ip" {
 }
 
 resource "azurerm_network_interface" "primary" {
-  name                      = "management-nic"
-  location                  = var.context.resource_group.location
-  resource_group_name       = var.context.resource_group.name
-  network_security_group_id = var.context.management_nsg
+  name                = "management-nic"
+  location            = var.context.resource_group.location
+  resource_group_name = var.context.resource_group.name
 
   ip_configuration {
     name                          = "management_ip"
@@ -24,9 +23,13 @@ resource "azurerm_network_interface" "primary" {
   }
 }
 
+resource "azurerm_network_interface_security_group_association" "nsg_associations" {
+  network_interface_id      = azurerm_network_interface.primary.id
+  network_security_group_id = var.context.management_nsg
+}
+
 resource "azurerm_network_interface_application_security_group_association" "asg_associations" {
   network_interface_id          = azurerm_network_interface.primary.id
-  ip_configuration_name         = "management_ip"
   application_security_group_id = var.context.management_asg
 }
 
@@ -65,12 +68,12 @@ resource "azurerm_virtual_machine" "management" {
     custom_data = jsonencode({
       instance_role        = "management"
       instance_name        = "management"
-      admin_user           = "${var.context.admin_user}"
-      admin_password       = "${var.context.admin_pwd}"
-      admin_apiuid         = "${var.context.admin_apiuid}"
+      admin_user           = var.context.admin_user
+      admin_password       = var.context.admin_pwd
+      admin_apiuid         = var.context.admin_apiuid
       admin_multiuser      = true
       enable_autoreg_admin = true
-      autoreg_admin_apiuid = "${var.context.autoreg_admin_apiuid}"
+      autoreg_admin_apiuid = var.context.autoreg_admin_apiuid
     })
   }
   os_profile_linux_config {
@@ -84,6 +87,11 @@ resource "azurerm_virtual_machine" "management" {
     Name               = "${var.context.name_prefix} management"
     RSWAF_Cluster_Name = var.context.cluster_name
   }
+
+  depends_on = [
+    azurerm_network_interface_application_security_group_association.asg_associations,
+    azurerm_network_interface_security_group_association.nsg_associations
+  ]
 }
 
 output "private_ip" {

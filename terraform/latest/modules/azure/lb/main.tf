@@ -14,6 +14,7 @@ resource "random_string" "fqdn" {
   special = false
   upper   = false
   number  = false
+  lower   = true
 }
 
 resource "azurerm_public_ip" "public_ip" {
@@ -39,9 +40,8 @@ resource "azurerm_lb" "lb" {
 }
 
 resource "azurerm_lb_backend_address_pool" "backend_pool" {
-  name                = "backend_pool"
-  resource_group_name = var.resource_group.name
-  loadbalancer_id     = azurerm_lb.lb.id
+  name            = "backend_pool"
+  loadbalancer_id = azurerm_lb.lb.id
 }
 
 resource "azurerm_lb_probe" "lb_probe" {

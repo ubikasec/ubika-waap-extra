@@ -58,10 +58,10 @@ resource "google_compute_instance_template" "autoscaled" {
       instance_role = "managed"
       instance_name = "autoscaled-managed-"
       autoscale     = "true"
-      cloneof_name  = "${var.autoscaled_clone_source}"
-      linkto_ip     = "${var.management_private_ip}"
+      cloneof_name  = var.autoscaled_clone_source
+      linkto_ip     = var.management_private_ip
       linkto_port   = "3001"
-      linkto_apikey = "${var.context.autoreg_admin_apikey}"
+      linkto_apikey = var.context.autoreg_admin_apikey
     })
   }
 

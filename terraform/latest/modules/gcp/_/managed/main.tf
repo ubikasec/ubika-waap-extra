@@ -45,7 +45,7 @@ resource "google_compute_region_instance_group_manager" "managed" {
 
   version {
     name              = "main"
-    instance_template = "${google_compute_instance_template.managed.self_link}"
+    instance_template = google_compute_instance_template.managed.self_link
   }
 
 
@@ -80,9 +80,9 @@ resource "google_compute_instance_template" "managed" {
     user-data = jsonencode({
       instance_role = "managed"
       instance_name = "managed-##"
-      linkto_ip     = "${var.management_private_ip}"
+      linkto_ip     = var.management_private_ip
       linkto_port   = "3001"
-      linkto_apikey = "${var.context.autoreg_admin_apikey}"
+      linkto_apikey = var.context.autoreg_admin_apikey
     })
   }
 

@@ -67,13 +67,13 @@ resource "aws_instance" "management" {
   user_data = jsonencode({
     instance_role             = "management"
     instance_name             = "management"
-    admin_user                = "${var.context.admin_user}"
-    admin_password            = "${var.context.admin_pwd}"
-    admin_apiuid              = "${var.context.admin_apiuid}"
+    admin_user                = var.context.admin_user
+    admin_password            = var.context.admin_pwd
+    admin_apiuid              = var.context.admin_apiuid
     admin_multiuser           = true
     enable_autoreg_admin      = true
-    autoreg_admin_apiuid      = "${var.context.autoreg_admin_apiuid}"
-    aws_cloudwatch_monitoring = "${var.context.aws_cloudwatch_monitoring}"
+    autoreg_admin_apiuid      = var.context.autoreg_admin_apiuid
+    aws_cloudwatch_monitoring = var.context.aws_cloudwatch_monitoring
   })
 
   iam_instance_profile = aws_iam_instance_profile.management.name

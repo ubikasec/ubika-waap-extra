@@ -63,12 +63,12 @@ resource "google_compute_instance" "management" {
     user-data = jsonencode({
       instance_role        = "management"
       instance_name        = "management"
-      admin_user           = "${var.context.admin_user}"
-      admin_password       = "${var.context.admin_pwd}"
-      admin_apiuid         = "${var.context.admin_apiuid}"
+      admin_user           = var.context.admin_user
+      admin_password       = var.context.admin_pwd
+      admin_apiuid         = var.context.admin_apiuid
       admin_multiuser      = true
       enable_autoreg_admin = true
-      autoreg_admin_apiuid = "${var.context.autoreg_admin_apiuid}"
+      autoreg_admin_apiuid = var.context.autoreg_admin_apiuid
     })
   }
 }

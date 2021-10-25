@@ -12,7 +12,23 @@ variable "name_prefix" {
   default = "RS WAF Cloud"
 }
 
+terraform {
 
+  required_version = ">=0.14"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "=2.26"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "=3.0.1"
+    }
+
+  }
+}
 
 ### Setup AWS provider
 
@@ -20,7 +36,6 @@ provider "aws" {
   access_key = var.access_key
   secret_key = var.secret_key
   region     = var.region
-  version    = "= 2.26"
 }
 
 ### Setup a dedicated VPC
@@ -126,7 +141,7 @@ module "rswaf" {
 
   aws_cloudwatch_monitoring = false # Enable AWS Cloudwatch agent metrics.
 
-  product_version = "6.6.0" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.7.0" # product version to select instance images, changing it will recreate all instances
 
   management_mode          = "byol"      # WAF licence type of the management instance ("payg" or "byol")
   management_instance_type = "m5.xlarge" # management AWS instance type

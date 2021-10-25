@@ -1,14 +1,30 @@
 variable "credentials" { default = "account.json" }
 variable "project" {}
 
+terraform {
+
+  required_version = ">=0.14"
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "=3.46"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "=3.0.1"
+    }
+
+  }
+}
 
 ### Setup GCP provider
 
 provider "google" {
-  credentials = "${file(var.credentials)}"
+  credentials = file(var.credentials)
   project     = var.project
   region      = "us-central1"
-  version     = "= 3.46"
 }
 
 ### Setup a dedicated VPC
@@ -62,7 +78,7 @@ module "rswaf" {
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6-6-0-23fe72b79d-b22398" # product version to select instance images, changing it will recreate all instances
+  product_version = "6-7-0-8c31c04cc4-b25466" # product version to select instance images, changing it will recreate all instances
 
   management_mode = "byol" # WAF licence type of the management instance ("payg" or "byol")
   managed_mode    = "byol" # WAF licence type of the managed instance ("payg" or "byol")

@@ -59,11 +59,11 @@ resource "aws_launch_configuration" "managed" {
     instance_role             = "managed"
     instance_name             = "autoscaled_managed_"
     autoscale                 = "true"
-    cloneof_name              = "${var.autoscaled_clone_source}"
-    linkto_ip                 = "${var.management_private_ip}"
+    cloneof_name              = var.autoscaled_clone_source
+    linkto_ip                 = var.management_private_ip
     linkto_port               = "3001"
-    linkto_apikey             = "${var.context.autoreg_admin_apikey}"
-    aws_cloudwatch_monitoring = "${var.context.aws_cloudwatch_monitoring}"
+    linkto_apikey             = var.context.autoreg_admin_apikey
+    aws_cloudwatch_monitoring = var.context.aws_cloudwatch_monitoring
   })
 
   iam_instance_profile = aws_iam_instance_profile.autoscaled_managed.name
