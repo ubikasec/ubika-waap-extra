@@ -20,19 +20,19 @@ You can import a backup file through the R&S®WAF Administration Interface. Go t
 
 Click on "Upload":
 
-![](doc/readme_img/1.png "Backup menu")
+![](attachments/readme_img/1.png "Backup menu")
 
 Choose the backup file and import it:
 
-![](doc/readme_img/2.png "Upload a backup")
+![](attachments/readme_img/2.png "Upload a backup")
 
 Right click on the imported backup file and click on "Restore":
 
-![](doc/readme_img/3.png "Restore the backup")
+![](attachments/readme_img/3.png "Restore the backup")
 
 Select all the elements (here there is one sub-workflow, but it could contain multiple subworkflows, ICX rules, static bundles...), and click on "OK":
 
-![](doc/readme_img/4.png "Select objects to restore")
+![](attachments/readme_img/4.png "Select objects to restore")
 
 Now, in your workflow list, you can use your imported sub-workflow.
 
@@ -40,4 +40,4 @@ Now, in your workflow list, you can use your imported sub-workflow.
 Rohde and Schwarz documentation
 -------------
 
-For more information, see the official documentation at https://documentation.appsec.rohde-schwarz.com/pages/viewpage.action?pageId=4004929
+For more information, see the official documentation at https://documentation.appsec.rohde-schwarz.com/x/QRw9
