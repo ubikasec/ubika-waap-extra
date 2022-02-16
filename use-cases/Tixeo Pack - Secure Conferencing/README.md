@@ -34,7 +34,7 @@ Pre-requisite:
 
 ## Architecture
 
-Tixeo is using standard HTTPS only for the TMMS (Tixeo Meeting Management Server) which includes the webapp and API, the TCS (Tixeo Communication Server) is using proprietary protocol inside a TCP socket on port 443 and must not be connected to the WAF.
+Tixeo is using standard HTTPS only for the TMMS (Tixeo Meeting Management Server) which includes the webapp and API, the TCS (Tixeo Communication Server) is using proprietary protocol inside a TCP socket on port 443 and must not be connected to the WAF. The TCC (Tixeo Communication Client) is the client to organize and join meetings.
 
 ![](./attachments/tixeo-pack-waf-integration.png)
 
