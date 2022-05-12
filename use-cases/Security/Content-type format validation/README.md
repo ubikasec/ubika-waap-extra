@@ -42,7 +42,7 @@ The first condition allows us to (A) check if the content-type header is present
 if (B) the content-type is empty or (C) is malformed (eg. `content-type : xxxx` or  `content-type : àpplication/x-www-form-urlencoded`) then the decision node will return `true`.
 Herein the used regexp for malformed content-types:
 ```
-(?i:^\s*(?:a(?:pplication|udio)|example|font|image|m(?:essage|odel|ultipart)|text|video)\s*\/\s*(?:\*|[\w\.\+\-]{3,100})\s*(?:\;\s*(?:charset\s*\=\s*"?\s*[\w\-\:\.\(\)]{2,100}\s*"?)?)?$)
+(?i:^\s*(?:a(?:pplication|udio)|example|font|image|m(?:essage|odel|ultipart)|text|video)\s*\/\s*(?:\*|[\w\.\+\-]{3,100})\s*(?:\;\s*(?:\w{2,100}\s*\=\s*"?\s*[\w\-\:\.\(\)]{2,100}\s*"?)?)?$)
 ```
 Then, we check if the request is POST or GET to apply the adequate processing on the request. If the request is POST then we block it, else if GET then we check the selected `Action for HTTP GET with body` mode, if `drop body ?` is true than we remove the `body` (the removed body is logged by `User Log`), the `content-type` and the `content-length` else we handle the GET request as a POST request.
 
