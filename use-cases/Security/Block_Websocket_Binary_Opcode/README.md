@@ -11,7 +11,10 @@ With version 6.9.0 of the WAF, we can filter, detect and block attacks injected 
 
 However _binary_ frames are not handled by the WAF. Therefore the latter doesn't have any control on what is transmitted as `Websocket` _binary_ data.
 
-To overcome this issue, this use-case is created to block all the _binary_ frames by exploiting their `Opcode` header value. 
+To overcome this issue, this use-case is created to block all the _binary_ frames by exploiting their `Opcode` header value.
+
+You can also see another use case: [Block the Binary-based Websocket using the SWF UTF-8 valid checker](../Block_Websocket_Binary_Regexp)
+
 
 # SWF Block Websocket Binary Opcode
 Each `Websocket` frame has a header called the `opcode`, the latter can have the following values: 
