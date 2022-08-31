@@ -9,6 +9,7 @@ Installing X509 certificates on clients and CA on the WAF
 	* 2.4 [Generating a PKCS#12 certificate](#generating-a-pkcs12-certificate)
 * 3 [Integrating the PKCS#12 certificate into the browser](#integrating-the-pkcs12-certificate-into-the-browser)
 * 4 [Installing public CA certificate into the WAF](#installing-public-ca-certificate-into-the-waf)
+* 5 [Client authentication and tunnel error logs](#client-authentication-and-tunnel-error-logs)
 
 Presentation
 ------------
@@ -93,6 +94,65 @@ Recover **public key certificates** of the CA and the sub-CAs on their support s
 
 ![](./attachments/upload_certificate.png)
 
-The Certificate Bundle can now be linked to the HTTPS tunnel. Go to SSL tab, enable **Verify client certificate** and in the **CA/CRL Certificates** option, select the Certificate Bundle where the public key certificate has been uploaded.
+CA files can be stored in **Certificates bundle** in 2 different ways:
+- A chain file containing all the necessary CA files
+- Each CA file uploaded separately
 
-To finish, apply the tunnel and try to connect to the tunnel with the browser using the pkcs12 file. The WAF will verify it against the public key certificate and validate the authentication.
+### Unique chain file
+When uploading a chain file in a **Certificates bundle**, the order of the CA files is crucial. Inside the chain file, the CA at the top must be the one that signed the client certificate, then, each intermediary CA file and the root CA file at the bottom. An error will occur while validating client certificates if any other order is used in the chain file and authenticating with a client certificate will be impossible on the tunnel.
+
+The chain file must look like this:
+
+--------- BEGIN CERTIFICATE ---------
+Subject: Intermediate 1
+Issuer: Intermediaite 2
+--------- END CERTIFICATE ---------
+--------- BEGIN CERTIFICATE ---------
+Subject: Intermediate 2
+Issuer: root CA
+--------- END CERTIFICATE ---------
+--------- BEGIN CERTIFICATE ---------
+Subject: root CA
+Issuer: root CA
+--------- END CERTIFICATE ---------
+
+In the above example, the root CA signed the *Intermediate 2* authority which signed the *Intermediate 1* authority. A valid client certificate would be signed by *Intermediate 1* authority to be accepted by this chain file.
+
+### Distinct CA files
+When uploading different CA files, the order is not important. All the uploaded CA files are stored in a directory and the verification of the client certificate is done by checking all the CA until a valid order is found. If one CA file is missing (intermediate or root), the client certificate validation fails and the user is rejected.
+
+### Setting up a Certificates bundle in a tunnel
+The Certificate Bundle can now be linked to the HTTPS tunnel. 
+Visit the following page to get details about the tunnel configuration: [https://gitlab.int.ubika.io/github-rs/r-s-waf-extra/-/tree/main/use-cases/SSL%20and%20Confidentiality/Implementing%20SSL%20authentication%20using%20X509-PKI%20certificates]
+
+Client authentication and error logs
+------------------------------------
+
+When the configuration is complete and the tunnel is running, a valid client certificate must be sent by the clients with their requests. You can see below frequents errors from the tunnel error logs in debug mode to help understand the root of the problems.
+
+### Request without client certificate
+When the user doesn't provide any client certificate, the error logs contain the following message:
+```
+SSL Library Error: error:1417C0C7:SSL routines:tls_process_client_certificate:peer did not return a certificate -- No CAs known to server for verification?
+```
+In this situation, the problem comes from the configuration of the browser used to send requests to the tunnel. Check that the client certificate has been correctly imported in the certificate store of the user's browser.
+
+
+### Request with incorrect client certificate
+If the user send a client certificate that is not signed by a CA from the **Certificates bundle** configured in the tunnel, an error related to the validation of the client certificate is logged in the error logs of the tunnel:
+```
+[client 172.29.80.5:48520] AH02275: Certificate Verification, depth 0, CRL checking mode: none (0) [subject: CN=Bad Client,OU=DenyAll QA,O=DenyAll,L=Paris,ST=France,C=FR / issuer: CN=subCA,OU=DenyAll QA Certificate Authority,O=DenyAll,ST=France,C=FR / serial: 1008 / notbefore: Mar 10 09:43:19 2016 GMT / notafter: Nov 17 09:43:19 2029 GMT]
+[client 172.29.80.5:48520] AH02276: Certificate Verification: Error (20): unable to get local issuer certificate [subject: CN=Bad Client,OU=DenyAll QA,O=DenyAll,L=Paris,ST=France,C=FR / issuer: CN=subCA,OU=DenyAll QA Certificate Authority,O=DenyAll,ST=France,C=FR / serial: 1008 / notbefore: Mar 10 09:43:19 2016 GMT / notafter: Nov 17 09:43:19 2029 GMT]
+```
+For the client certificate with CN *Bad Client*, the expected CA is named *subCA* which is not present in the chain file imported in the bundle of the tunnel. This leads to the error message *unable to get local issuer certificate*. The CA that signed the client certificate is not present in the bundle and the client certificate verification fails.
+This problem can appear if the chain file is incomplete and the issuer certificate is missing. It can also occur if the client try to send a certificate for a different website.
+
+### Request with valid client certificate
+When a user send a valid client certificate to a tunnel, a message is also logged in the error logs of the tunnel to display the result of the validation. It allows to confirm that the client certificate successfully passed the verification and that the chain file is complete.
+```
+AH02275: Certificate Verification, depth 3, CRL checking mode: none (0) [subject: CN=rootCA,OU=DenyAll QA Certificate Authority,O=DenyAll,L=Paris,ST=France,C=FR / issuer: CN=rootCA,OU=DenyAll QA Certificate Authority,O=DenyAll,L=Paris,ST=France,C=FR / serial: 86DA8668E3D86EE2 / notbefore: Nov  5 14:03:59 2015 GMT / notafter: Oct 31 14:03:59 2035 GMT]
+AH02275: Certificate Verification, depth 2, CRL checking mode: none (0) [subject: CN=interm2CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=rootCA,OU=DenyAll QA Certificate Authority,O=DenyAll,L=Paris,ST=France,C=FR / serial: 1007 / notbefore: Aug 18 15:21:25 2022 GMT / notafter: Aug 13 15:21:25 2042 GMT]
+AH02275: Certificate Verification, depth 1, CRL checking mode: none (0) [subject: CN=interm1CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=interm2CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / serial: 1000 / notbefore: Aug 18 15:32:23 2022 GMT / notafter: Aug 13 15:32:23 2042 GMT]
+AH02275: Certificate Verification, depth 0, CRL checking mode: none (0) [subject: emailAddress=interm1ca.client01@qa.test,CN=interm1ca-client01,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=interm1CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / serial: 1000 / notbefore: Aug 18 15:56:44 2022 GMT / notafter: Nov 23 15:56:44 2032 GMT]
+```
+Here, we can see that the verification was successful for client certificate and all the CA files in the chain. The client certificate is validated by its issuer *interm1CA* and each CA is validated by its own issuer up to the root CA which is self-signed and ends the verification process.
