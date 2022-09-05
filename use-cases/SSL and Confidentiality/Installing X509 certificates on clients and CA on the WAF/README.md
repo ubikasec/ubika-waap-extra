@@ -104,11 +104,11 @@ When uploading a chain file in a **Certificates bundle**, the order of the CA fi
 The chain file must look like this:
 
 --------- BEGIN CERTIFICATE ---------
-Subject: Intermediate 1
-Issuer: Intermediaite 2
+Subject: Signing CA
+Issuer: Intermediaite CA
 --------- END CERTIFICATE ---------
 --------- BEGIN CERTIFICATE ---------
-Subject: Intermediate 2
+Subject: Intermediate CA
 Issuer: root CA
 --------- END CERTIFICATE ---------
 --------- BEGIN CERTIFICATE ---------
@@ -116,7 +116,7 @@ Subject: root CA
 Issuer: root CA
 --------- END CERTIFICATE ---------
 
-In the above example, the root CA signed the *Intermediate 2* authority which signed the *Intermediate 1* authority. A valid client certificate would be signed by *Intermediate 1* authority to be accepted by this chain file.
+In the above example, the *root CA* signed the *Intermediate CA* authority which signed the *Signing CA* authority. A valid client certificate would be signed by *Signing CA* authority to be accepted by this chain file.
 
 ### Distinct CA files
 When uploading different CA files, the order is not important. All the uploaded CA files are stored in a directory and the verification of the client certificate is done by checking all the CA until a valid order is found. If one CA file is missing (intermediate or root), the client certificate validation fails and the user is rejected.
@@ -151,8 +151,8 @@ This problem can appear if the chain file is incomplete and the issuer certifica
 When a user send a valid client certificate to a tunnel, a message is also logged in the error logs of the tunnel to display the result of the validation. It allows to confirm that the client certificate successfully passed the verification and that the chain file is complete.
 ```
 AH02275: Certificate Verification, depth 3, CRL checking mode: none (0) [subject: CN=rootCA,OU=DenyAll QA Certificate Authority,O=DenyAll,L=Paris,ST=France,C=FR / issuer: CN=rootCA,OU=DenyAll QA Certificate Authority,O=DenyAll,L=Paris,ST=France,C=FR / serial: 86DA8668E3D86EE2 / notbefore: Nov  5 14:03:59 2015 GMT / notafter: Oct 31 14:03:59 2035 GMT]
-AH02275: Certificate Verification, depth 2, CRL checking mode: none (0) [subject: CN=interm2CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=rootCA,OU=DenyAll QA Certificate Authority,O=DenyAll,L=Paris,ST=France,C=FR / serial: 1007 / notbefore: Aug 18 15:21:25 2022 GMT / notafter: Aug 13 15:21:25 2042 GMT]
-AH02275: Certificate Verification, depth 1, CRL checking mode: none (0) [subject: CN=interm1CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=interm2CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / serial: 1000 / notbefore: Aug 18 15:32:23 2022 GMT / notafter: Aug 13 15:32:23 2042 GMT]
-AH02275: Certificate Verification, depth 0, CRL checking mode: none (0) [subject: emailAddress=interm1ca.client01@qa.test,CN=interm1ca-client01,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=interm1CA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / serial: 1000 / notbefore: Aug 18 15:56:44 2022 GMT / notafter: Nov 23 15:56:44 2032 GMT]
+AH02275: Certificate Verification, depth 2, CRL checking mode: none (0) [subject: CN=intermCA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=rootCA,OU=DenyAll QA Certificate Authority,O=DenyAll,L=Paris,ST=France,C=FR / serial: 1007 / notbefore: Aug 18 15:21:25 2022 GMT / notafter: Aug 13 15:21:25 2042 GMT]
+AH02275: Certificate Verification, depth 1, CRL checking mode: none (0) [subject: CN=signingCA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=intermCA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / serial: 1000 / notbefore: Aug 18 15:32:23 2022 GMT / notafter: Aug 13 15:32:23 2042 GMT]
+AH02275: Certificate Verification, depth 0, CRL checking mode: none (0) [subject: emailAddress=signingca.client01@qa.test,CN=signingca-client01,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / issuer: CN=signingCA,OU=DenyAll QA,O=DenyAll,ST=France,C=FR / serial: 1000 / notbefore: Aug 18 15:56:44 2022 GMT / notafter: Nov 23 15:56:44 2032 GMT]
 ```
-Here, we can see that the verification was successful for client certificate and all the CA files in the chain. The client certificate is validated by its issuer *interm1CA* and each CA is validated by its own issuer up to the root CA which is self-signed and ends the verification process.
+Here, we can see that the verification was successful for client certificate and all the CA files in the chain. The client certificate is validated by its issuer *signingCA* and each CA is validated by its own issuer up to the *root CA* which is self-signed and ends the verification process.
