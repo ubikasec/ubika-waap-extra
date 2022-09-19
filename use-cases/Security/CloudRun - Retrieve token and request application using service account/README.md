@@ -29,10 +29,19 @@ Concerning the SWF parameters and attribute :
 
 # How to use the SWF CloudRun protection
 
+Pre requisites :
 
+- WAF must be on GCP.
+- Your WAF Compute Engine must use a service account that is authorized to access to the Cloud Run application.
+- Your tunnel backend must be your Cloud Run application.
+- The request must have the `Host` as the hostname of the Cloud Run application.
+
+To Use the SWF just add the SWF node in your Workflow : 
+
+![Use case Cloud Run protection](./attachments/use_case.jpg "Use case Cloud Run protection")
 
 # Backup
 
 > Important, in the WAAP version 6.10.0, the SWF `SWF - GCP - Get AccountService token` is integrated by default in the product.
 
-A backup of the explained use case of `SWF - GCP - Get AccountService token` can be downloaded here: [ `Cloud Run Protection use case`](./backup/WAAP%20Normalization.backup).
+A backup of the explained use case of `SWF - GCP - Get AccountService token` can be downloaded here: [ `Cloud Run Protection use case`](./backup/SWF_-_GCP_-_Get_AccountService_token.backup).
