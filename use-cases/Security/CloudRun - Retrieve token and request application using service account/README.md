@@ -36,7 +36,7 @@ Prerequisites :
 - Your tunnel backend must be your Cloud Run application.
 - The request must have the `Host` as the hostname of the Cloud Run application.
 
-To Use the SWF just add the SWF node to your Workflow : 
+To Use the SWF add the SWF node to your Workflow : 
 
 ![Use case Cloud Run protection](./attachments/use_case.jpg "Use case Cloud Run protection")
 
