@@ -31,6 +31,7 @@ Concerning the SWF parameters and attributes :
 
 Prerequisites :
 
+- A working Cloud Run application.
 - WAF must be on GCP.
 - Your WAF Compute Engine must use a service account that is authorized to access the Cloud Run application.
 - Your tunnel backend must be your Cloud Run application.
