@@ -7,7 +7,7 @@
 
 ## Description 
 
-The Rohde & Schwarz Web Application Firewall offers the **"Kerberos Delegation"** functionality based on the Microsoft Service-for-User (S4U) extensions. The user will be able to access an IIS application protected by Kerberos without necessarily being in the domain.
+UBIKA WAAP Gateway & Cloud offers the **"Kerberos Delegation"** functionality based on the Microsoft Service-for-User (S4U) extensions. The user will be able to access an IIS application protected by Kerberos without necessarily being in the domain.
 
 We can create a **"Kerberos Delegation"** application configuration on the WAF by specifying:
 * the information on the delegation account which will be authenticated in the user’s place (login, realm, and keytab);
@@ -15,7 +15,7 @@ We can create a **"Kerberos Delegation"** application configuration on the WAF b
 * the information needed for Kerberos authentication (encryption, dns, domain, etc.).
 
 ![](attachments/KerberosCD1.png)
-_Typical Kerberos architecture, possible with Rohde & Schwarz solutions_
+_Typical Kerberos architecture, possible with UBIKA solutions_
 
 The **"Kerberos Delegation"** functionality is compatible with Windows Server 2008 and upper. The server has to have been configured beforehand with the delegation (delegation user created, keytab generated, application configured).
 

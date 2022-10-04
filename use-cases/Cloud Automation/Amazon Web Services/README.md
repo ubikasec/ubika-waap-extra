@@ -32,19 +32,19 @@ For more details about the authentication of Terraform with AWS see: https://www
 Usage
 -----
 
-Terraform modules for AWS and some examples are provided on [github.com/Rohde-Schwarz](https://github.com/Rohde-Schwarz/r-s-waf-extra/tree/master/terraform).
+Terraform modules for AWS and some examples are provided on [github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/master/terraform).
 
 Modules are located in:
 
-* **modules/aws/autoscaled**: module to deploy an autoscaled R&S®Web Application Firewall cluster.
-* **modules/aws/basic**: module to deploy a basic R&S®Web Application Firewall cluster.
-* **modules/aws/lb**: basic implementation of AWS ELB for an R&S®Web Application Firewall cluster (basic or autoscaled).
-* **modules/aws/policy**: basic implementation of autoscaling policies for an autoscaled R&S®Web Application Firewall cluster.
+* **modules/aws/autoscaled**: module to deploy an autoscaled UBIKA WAAP cluster.
+* **modules/aws/basic**: module to deploy a basic UBIKA WAAP cluster.
+* **modules/aws/lb**: basic implementation of AWS ELB for an UBIKA WAAP cluster (basic or autoscaled).
+* **modules/aws/policy**: basic implementation of autoscaling policies for an autoscaled UBIKA WAAP cluster.
 
 Examples for AWS can be found in:
 
-* **examples/aws_basic**: shows how we deploy a basic R&S®Web Application Firewall cluster with an AWS ELB.
-* **examples/aws_autoscaled**: shows how we deploy an autoscaled R&S®Web Application Firewall cluster with an AWS ELB and some autoscaling policies.
+* **examples/aws_basic**: shows how we deploy a basic UBIKA WAAP cluster with an AWS ELB.
+* **examples/aws_autoscaled**: shows how we deploy an autoscaled UBIKA WAAP cluster with an AWS ELB and some autoscaling policies.
 
 In the main configuration file, **main.tf**, you can edit variables like access and secret key, AWS region and prefix of your future instances. You can also find every configuration needed to deploy your instances.
 

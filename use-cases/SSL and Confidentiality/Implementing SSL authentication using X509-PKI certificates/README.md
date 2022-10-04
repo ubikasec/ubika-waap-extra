@@ -12,7 +12,7 @@ Implementing SSL authentication using X509-PKI certificates
 Presentation
 ------------
 
-Rohde & Schwarz's WAF lets you perform mutual client-server SSL authentications via X509 certificates managed by a PKI. The next part of this document shows you the configuration to follow for authenticating via X509 certificate. It will also show you how to perform SSL authentication with x509 certificates on a specific path different from **/**.
+UBIKA WAAP Gateway & Cloud lets you perform mutual client-server SSL authentications via X509 certificates managed by a PKI. The next part of this document shows you the configuration to follow for authenticating via X509 certificate. It will also show you how to perform SSL authentication with x509 certificates on a specific path different from **/**.
 
 You can find more information about the installation of certificates for clients here: [Installing X509 certificates on clients and CA on the WAF](../Installing%20X509%20certificates%20on%20clients%20and%20CA%20on%20the%20WAF)
 
@@ -45,7 +45,7 @@ Specifies the SSL parameters on the listening interface of the Tunnel – that i
 |Verification depth|This parameter, which is optional, lets you limit the depth of verification of the client certificate. It represents the maximum number of Sub CAs involved in the certificate chain. No value means that no limit is applied to the verification. A value of 0 allows only self-signed certificates. A value of 1 allows only self-signed certificates or certificates signed directly with a Certificate Authority whose certificate is found in the selected Certificates Bundle.|
 |OCSP Profile (In)|Selects an OCSP profile for verifying the client certificate, following the OCSP (Online Certificate Status Protocol). OCSP is an alternative to CRLs. OCSP profiles are managed in: **Setup > SSL > OCSP Profiles**.|
 |Catch SSL verify Errors|If the client's certificate does not correspond, blocking of the request is not done at SSL level and the request is sent directly to the Workflow of the tunnel in question. In this case, the certificate verification error **MUST** be handled. Two request attributes must be used to handle verification errors: **http.request.ssl.verify-error** and **http.request.ssl.verify**. This allows to deal with errors differently than with an SSL error message.|
-|Legacy DN String Format|This parameter influences the value of the DN (Distinguished Name) certificate. Since Apache 2.4, the DN order has changed and is now compliant to the RFC 2253 format, the **CN** is now at the beginning of the DN string instead of the end and delimiters are now commas: `CN=rootCA,OU=QA,O=Rohde-Schwarz,ST=Herault,C=FR`. So, this option allows to keep Apache 2.2 behavior with the DN order inverted: `/C=FR/ST=Herault/O=Rohde-Schwarz/OU=QA/CN=rootCA`, and avoid influencing workflows using this format like **SWF - Extract Login from certificate**.||
+|Legacy DN String Format|This parameter influences the value of the DN (Distinguished Name) certificate. Since Apache 2.4, the DN order has changed and is now compliant to the RFC 2253 format, the **CN** is now at the beginning of the DN string instead of the end and delimiters are now commas: `CN=rootCA,OU=QA,O=UBIKA,ST=Herault,C=FR`. So, this option allows to keep Apache 2.2 behavior with the DN order inverted: `/C=FR/ST=Herault/O=UBIKA/OU=QA/CN=rootCA`, and avoid influencing workflows using this format like **SWF - Extract Login from certificate**.||
 
 For the **Catch SSL verify Errors** parameter you can use a **Decision** node like this to handle it via the Workflow:
 
@@ -82,7 +82,7 @@ Now, we need to setup a specific path for the authentication with certificates. 
 
 ![](./attachments/advanced_parameters_creation.png)
 
-Now, select the new **Advanced Parameters Profile** and click on **Modify**. Next, between the lines **### START - ADD CUSTOM DIRECTIVES HERE ###** and **### END - ADD CUSTOM DIRECTIVES HERE ###**, write the following lines: 
+Now, select the new **Advanced Parameters Profile** and click on **Modify**. Next, between the lines **### START - ADD CUSTOM DIRECTIVES HERE ###** and **### END - ADD CUSTOM DIRECTIVES HERE ###**, write the following lines:
 
 ```
 SSLVerifyClient none

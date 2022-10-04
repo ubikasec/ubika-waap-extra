@@ -88,7 +88,7 @@ To verify that traffic is moving as it should, open your browser and enter the a
   
 ![](./attachments/aimperimeterauthentication-sharepoint.jpg "")
 
-- We have created an "AuthenticationRP" Reverse Proxy dedicated to authentication, to which we will now link our new Tunnel. For all these operations, you can you refer to the Use Case [WAM: LDAP (AD) + HTTP Basic Authentication]("https://github.com/Rohde-Schwarz/r-s-waf-extra/tree/main/use-cases/WAM%20and%20authentication/Implementing%20HTTP%20Basic%20Authentication%20with%20LDAP%20server") (starting with 5.3.1 SP1).
+- We have created an "AuthenticationRP" Reverse Proxy dedicated to authentication, to which we will now link our new Tunnel. For all these operations, you can you refer to the Use Case [WAM: LDAP (AD) + HTTP Basic Authentication]("https://github.com/ubikasec/ubika-waap-extra/tree/main/use-cases/WAM%20and%20authentication/Implementing%20HTTP%20Basic%20Authentication%20with%20LDAP%20server") (starting with 5.3.1 SP1).
 
 ![](./attachments/rp-sharepoint.jpg "")
 

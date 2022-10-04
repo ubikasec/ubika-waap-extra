@@ -12,7 +12,7 @@
 # Description 
 Kerberos has been implemented for perimeter authentication since V4 and for application authentication since 5.3.1-SP2. This document discusses only the second aspect.
 
-The **“Kerberos Constraint Delegation”** functionality is based on the Microsoft Service-for-User (S4U) extensions. The user will be able to access an IIS application protected by Kerberos (or another “Kerberized” application) without necessarily being in the domain. The Rohde & Schwarz WAF is able to generate an access token for the application, on the user’s behalf, thanks to a delegation account associated with the applications. In addition, the WAF can implement a protocol break and authenticate the user at the perimeter using totally different means (x509, form, etc.)
+The **“Kerberos Constraint Delegation”** functionality is based on the Microsoft Service-for-User (S4U) extensions. The user will be able to access an IIS application protected by Kerberos (or another “Kerberized” application) without necessarily being in the domain. The UBIKA WAAP Gateway & Cloud is able to generate an access token for the application, on the user’s behalf, thanks to a delegation account associated with the applications. In addition, the WAF can implement a protocol break and authenticate the user at the perimeter using totally different means (x509, form, etc.)
 
 This implementation is based on the library developed by the [Massachussets Institute of Technology (MIT) version 1.14.4](http://web.mit.edu/kerberos/), which has included Microsoft Service-for-User since its version 1.8.
 

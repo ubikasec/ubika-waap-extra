@@ -27,7 +27,7 @@ Security engine:
 In all cases, an _Extended API security_ license option is required. To verify if your license includes it, go to "Setup > Boxes > Licenses".
 
 Pre-requisite:
-* R&S WAF 6.5.6 or upper,
+* UBIKA WAAP 6.5.6 or upper,
 * Enterprise license,
 * Extended API security license option,
 * 1 tunnel;
@@ -42,7 +42,7 @@ Tixeo is using standard HTTPS only for the TMMS (Tixeo Meeting Management Server
 
 The Tixeo pack is very quick to deploy and mostly configurable using the workflow parameter.
 
-First, import the backup "Tixeo-pack" to your R&S WAF, restore all items then link the Workflow "TIXEO TMMS" to our tunnel.
+First, import the backup "Tixeo-pack" to your UBIKA WAAP, restore all items then link the Workflow "TIXEO TMMS" to our tunnel.
 
 Apply the tunnel linked to the Tixeo workflow.
 

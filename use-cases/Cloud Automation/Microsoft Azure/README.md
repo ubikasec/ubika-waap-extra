@@ -24,19 +24,19 @@ Setup an authentication strategy like explained here: https://www.terraform.io/d
 Usage
 -----
 
-Terraform modules for Microsoft Azure and some examples are provided on [github.com/Rohde-Schwarz](https://github.com/Rohde-Schwarz/r-s-waf-extra/tree/master/terraform)
+Terraform modules for Microsoft Azure and some examples are provided on [github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/master/terraform)
 
 Modules are located in:
 
-* **modules/azure/autoscaled**: Module to deploy an autoscaled R&S®Web Application Firewall cluster.
-* **modules/azure/basic**: Module to deploy a basic R&S®Web Application Firewall cluster.
-* **modules/azure/lb**: Basic implementation of Azure Loadbalancer for an R&S®Web Application Firewall cluster (basic or autoscaled).
-* **modules/azure/policy**: Basic implementation of autoscaling policies for an autoscaled R&S®Web Application Firewall cluster.
+* **modules/azure/autoscaled**: Module to deploy an autoscaled UBIKA WAAP cluster.
+* **modules/azure/basic**: Module to deploy a basic UBIKA WAAP cluster.
+* **modules/azure/lb**: Basic implementation of Azure Loadbalancer for an UBIKA WAAP cluster (basic or autoscaled).
+* **modules/azure/policy**: Basic implementation of autoscaling policies for an autoscaled UBIKA WAAP cluster.
 
 Examples for Azure can be found in:
 
-* **examples/azure_basic**: shows how we deploy a basic R&S®Web Application Firewall cluster with an Azure loadbalancer.
-* **examples/azure_autoscaled**: shows how we deploy an autoscaled R&S®Web Application Firewall cluster with an Azure loadbalancer and some autoscaling capabilities.
+* **examples/azure_basic**: shows how we deploy a basic UBIKA WAAP cluster with an Azure loadbalancer.
+* **examples/azure_autoscaled**: shows how we deploy an autoscaled UBIKA WAAP cluster with an Azure loadbalancer and some autoscaling capabilities.
 
 In the main configuration file, **main.tf**, you can edit variables like Azure region and prefix of your future instances. You can also find every configuration needed to deploy your instances.
 
@@ -46,7 +46,7 @@ In the main configuration file, **main.tf**, you can edit variables like Azure r
 Enable programmatic deployments of our products
 -----------------------------------------------
 
-In Microsoft Azure Portal, go to the Marketplace and search **R&S®Web Application Firewall - Enterprise Edition**.
+In Microsoft Azure Portal, go to the Marketplace and search **UBIKA WAAP - Enterprise Edition**.
 
 Select the software plan **Web Application Firewall Enterprise Edition (BYOL)**, and click on **Want to deploy programmatically? Get started**.
 

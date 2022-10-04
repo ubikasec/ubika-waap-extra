@@ -38,19 +38,19 @@ Setup an authentication strategy like explained here: https://www.terraform.io/d
 Usage
 -----
 
-Terraform modules for Google Cloud Platform and some examples are provided on [github.com/Rohde-Schwarz](https://github.com/Rohde-Schwarz/r-s-waf-extra/tree/master/terraform)
+Terraform modules for Google Cloud Platform and some examples are provided on [https://github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/master/terraform)
 
 Modules are located in:
 
-* **modules/gcp/autoscaled**: module to deploy an autoscaled R&S®Web Application Firewall cluster
-* **modules/gcp/basic**: module to deploy a basic R&S®Web Application Firewall cluster
-* **modules/gcp/lb**: basic implementation of GCP network load balancer for an R&S®Web Application Firewall cluster (basic or autoscaled)
-* **modules/gcp/policy**: basic implementation of autoscaling capabilities for an autoscaled R&S®Web Application Firewall cluster
+* **modules/gcp/autoscaled**: module to deploy an autoscaled UBIKA WAAP cluster
+* **modules/gcp/basic**: module to deploy a basic UBIKA WAAP cluster
+* **modules/gcp/lb**: basic implementation of GCP network load balancer for an UBIKA WAAP cluster (basic or autoscaled)
+* **modules/gcp/policy**: basic implementation of autoscaling capabilities for an autoscaled UBIKA WAAP cluster
 
 Examples for Google Cloud Platform can be found in:
 
-* **examples/gcp_basic**: shows how we deploy a basic R&S®Web Application Firewall cluster with a GCP network load balancer.
-* **examples/gcp_autoscaled**: shows how we deploy an autoscaled R&S®Web Application Firewall cluster with a GCP network load balancer and some autoscaling capabilities.
+* **examples/gcp_basic**: shows how we deploy a basic UBIKA WAAP cluster with a GCP network load balancer.
+* **examples/gcp_autoscaled**: shows how we deploy an autoscaled UBIKA WAAP cluster with a GCP network load balancer and some autoscaling capabilities.
 
 In the main configuration file, **main.tf**, you can edit variables like GCP region and prefix of your future instances. You can also find every configuration needed to deploy your instances.
 

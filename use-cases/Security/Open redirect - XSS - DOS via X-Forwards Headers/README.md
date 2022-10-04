@@ -9,7 +9,7 @@ Open redirect/XSS/DOS via X-Forwards Headers
     * 5.1 [Cache key](#cache-key)
     * 5.2 [Remove useless functionality](#remove-useless-functionality)
 * 6 [Limitations](#limitations)
-* 7 [Rohde & Schwarz’s solution](#rohde-schwarzs-solution)
+* 7 [Solution description](#solution-description)
     * 7.1 [SWF - X-Forwarded headers protection](#swf-x-forwarded-headers-protection)
     * 7.2 [Recommendations for complete protection against X-Forwarded headers cache poisoning](#recommendations-for-complete-protection-against-x-forwarded-headers-cache-poisoning)
 
@@ -19,7 +19,7 @@ Presentation
 
 Application can be vulnerable to cache poisoning which can lead to Open redirect, XSS and DOS.  The poison vectors are HTTP Headers :  X-Forward-Host, X-Forward-Port, X-Forward-Server. These headers can be reflected in the html response from the server so an attacker can submit malicious requests to the server that will be served to future legitimate users requesting the cache of the application.
 
-For more details on attacks : 
+For more details on attacks :
 *   [https://portswigger.net/research/practical-web-cache-
 poisoning](https://portswigger.net/research/practical-web-cache-
 poisoning)
@@ -65,7 +65,7 @@ Limitations
 
 It can be tricky to verify headers inside your application if you need those headers.
 
-Rohde & Schwarz’s solution
+Solution description
 --------------------------
 
 ### SWF - X-Forwarded headers protection
@@ -92,4 +92,4 @@ Then it will set the headers with the values set in the node.
 *   Avoid render caching informations in the response if it is not necesary.
 *   Verify headers values if you know it is used on your application.
 *   Set the headers to a known-safe value or unset the headers completely.
-*   Implement the R&S WAF "SWF - X-Forwarded headers protection".
+*   Implement the UBIKA WAAP "SWF - X-Forwarded headers protection".

@@ -13,7 +13,7 @@ Automatic CRL updating via LDAP
 Presentation
 ------------
 
-Rohde & Schwarz WAF offers the possibility of automatically updating CRLs configured on the product via HTTP requests, but does not include automatic updating of CRLs from an LDAP directory as standard. However, Workflows contain all the necessary nodes for setting up a CRL connector via LDAP.
+UBIKA WAAP Gateway and Cloud offers the possibility of automatically updating CRLs configured on the product via HTTP requests, but does not include automatic updating of CRLs from an LDAP directory as standard. However, Workflows contain all the necessary nodes for setting up a CRL connector via LDAP.
 
 The principle is to configure a CRL auto-update based on a tunnel retrieving the CRL from the LDAP. This specific Tunnel relays the request to the LDAP directory and transforms the LDAP response into the expected format using the CRL auto-update mechanism.
 

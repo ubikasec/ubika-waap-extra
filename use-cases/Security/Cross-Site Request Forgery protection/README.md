@@ -10,7 +10,7 @@ Cross-Site Request Forgery protection
     * 5.2 [Verify Referer and Origin headers](#verify-referer-and-origin-headers)
     * 5.3 [Set-Cookie security attributes](#set-cookie-security-attributes)
 * 6 [Limitations](#limitations)
-* 7 [Rohde & Schwarz’s solution](#rohde-schwarzs-solution)
+* 7 [Solution description](#solution-description)
     * 7.1 [SWF - CSRF Protection](#swf-csrf-protection)
     * 7.2 [Recommendations for complete protection against CSRF](#recommendations-for-complete-protection-against-csrf)
 
@@ -75,7 +75,7 @@ Here, we chose providing a protection based on the _Referer_ and _Origin_ heade
 
 The solution can protect against attacks derived from POST requests. However, attacks derived from GET requests cannot be stopped without risking false positives, especially on the first request (possibly no _Referer_ header yet).
 
-Rohde & Schwarz’s solution
+Solution description
 --------------------------
 
 We currently provide 2 Sub-Workflows to mitigate CSRF attacks: "SWF - CSRF protection" and "SWF - Add SameSite in Set-Cookies"
@@ -118,5 +118,5 @@ The SWF has also other security modes:
 *   Avoid using HTTP GET method to perform actions or sent data. This technique will naturally eliminate simple attacks based on images but will let attacks using JavaScript, since they are capable of launching HTTP POST requests very easily.
 *   Use validity tokens in forms. Ensure that a posted form is accepted only if it has been produced a few minutes earlier; the validity token serves as proof. Hence it must be sent as a parameter and verified on the server-side.
 *   Verify the Referer in sensitive pages.
-*   Implement the R&S WAF "SWF - CSRF Protection".
+*   Implement the UBIKA WAAP "SWF - CSRF Protection".
 *   Add the [SWF - Secure Cookies](../Secure%20Cookies) to forbid cookies to be sent along cross-site requests would help to mitigation some CSRF attacks by avoiding the authentication when going on the third party (if authentication is linked).

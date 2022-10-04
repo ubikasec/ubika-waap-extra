@@ -1,22 +1,22 @@
 Use cases
 =========
 
-This section list use cases for the R&S®Web Application Firewall.
+This section list use cases for the UBIKA WAAP.
 
 Use cases are classified by categories:
  * [Security](./Security)
 
 Documentation:
 * 1 [How to import a subworkflow in the WAF](#how-to-import-a-subworkflow-in-the-waf)
-* 2 [R&S documentation](#rohde-and-schwarz-documentation)
+* 2 [UBIKA WAAP documentation](#ubika-documentation)
 
 
 How to import a subworkflow in the WAF
 --------------------------------------
 
-Use case can provide backups to deploy it on a R&S®WAF.
+Use case can provide backups to deploy it on a UBIKA WAAP.
 
-You can import a backup file through the R&S®WAF Administration Interface. Go to Management > Backup view:
+You can import a backup file through the UBIKA WAAP Administration Interface. Go to Management > Backup view:
 
 Click on "Upload":
 
@@ -37,7 +37,7 @@ Select all the elements (here there is one sub-workflow, but it could contain mu
 Now, in your workflow list, you can use your imported sub-workflow.
 
 
-Rohde and Schwarz documentation
+UBIKA documentation
 -------------
 
-For more information, see the official documentation at https://documentation.appsec.rohde-schwarz.com/x/QRw9
+For more information, see the official documentation at https://documentation.ubikasec.com/x/QRw9

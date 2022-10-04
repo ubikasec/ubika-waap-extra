@@ -1,6 +1,6 @@
-# R&S®Web Application Firewall extra
+# UBIKA WAAP Gateway and Cloud extras
 
-This repository aims to provide content to help R&S®WAF administrator to deploy and manage the WAF, like for example, deploying the WAF using HashiCorp Terraform or improving security policies using provided use-cases.
+This repository aims to provide content to help the administrator to deploy and manage the WAAP Gateway/Cloud, like for example, deploying the WAAP Cloud using HashiCorp Terraform or improving security policies using provided use-cases.
 
 ## License
 

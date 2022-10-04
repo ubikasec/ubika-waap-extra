@@ -17,7 +17,7 @@ Use cases
 Presentation
 ------------
 
-To handle peaks of traffic and reduce infrastructure cost, R&S®Web Application Firewall can automatically scale following the instances workloads. A fast deployment is possible using Terraform.
+To handle peaks of traffic and reduce infrastructure cost, UBIKA WAAP can automatically scale following the instances workloads. A fast deployment is possible using Terraform.
 
 The platform will scale out on peaks of traffic (by creating new Managed instances), and back down when traffic returns back to normal (by removing Managed instances). The administrator can thus benefit a potentially unlimited scalability.
 
@@ -27,8 +27,8 @@ The platform will scale out on peaks of traffic (by creating new Managed instanc
 
 This feature uses the new capability to mix several types of instances :
 
-* **Bring Your Own License (BYOL)** instances available permanently to handle the usual traffic demand (see "R&S®WAF Workers" on the schema above)
-* **Pay as you go (PAYG)** instances created on demand by an auto-scaling group to handle peak loads (see "On demand R&S®WAF Workers" on the schema above).
+* **Bring Your Own License (BYOL)** instances available permanently to handle the usual traffic demand (see "UBIKA WAAP Workers" on the schema above)
+* **Pay as you go (PAYG)** instances created on demand by an auto-scaling group to handle peak loads (see "On demand UBIKA WAAP Workers" on the schema above).
 
 This guarantees the most cost-effective solution as new WAF instances are launched automatically when they are needed but are also terminated when they are not. In addition, the administrator can define a threshold to limit the costs.
 
