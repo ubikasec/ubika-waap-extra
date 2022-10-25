@@ -1,6 +1,6 @@
 variable "instance_group_manager" {}
 
-variable "prefix" { default = "rswaf" }
+variable "prefix" { default = "ubikawaap" }
 
 variable "target" { default = 0.7 }
 

@@ -91,7 +91,7 @@ resource "azurerm_virtual_machine" "managed" {
   }
   tags = {
     Name               = "${var.context.name_prefix} managed ${count.index}"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 
   depends_on = [

@@ -5,12 +5,12 @@ variable "managed_mode" {}
 variable "autoscaled_mode" { default = "" }
 
 locals {
-  publisher     = "rohdeschwarzcybersecuritysas"
-  offer         = "rs-web-application-firewall"
+  publisher     = "ubika"
+  offer         = "ubika-waap-cloud"
   image_version = replace(var.product_version, "/-.*$/", "")
   skus = {
-    byol = "r-s-waf-latest-byol"
-    payg = "r-s-waf-latest-payg"
+    byol = "6-latest-byol"
+    payg = "6-latest-payg"
   }
   ids = {
     byol = ""

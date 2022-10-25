@@ -6,8 +6,8 @@ data "aws_vpc" "vpc" {
 }
 
 resource "aws_security_group" "management_adm" {
-  name        = "management_admin"
-  description = "Enable RS WAF Administration access"
+  name_prefix = "management_admin"
+  description = "Enable WAAP Administration access"
   vpc_id      = var.context.vpc_id
   ingress {
     from_port   = "3001"
@@ -24,13 +24,17 @@ resource "aws_security_group" "management_adm" {
 
   tags = {
     Name               = "${var.context.name_prefix} management_admin"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
 resource "aws_security_group" "management_from_managed" {
-  name        = "management_from_managed"
-  description = "Enable RS WAF Administration access from managed instances for auto-registration"
+  name_prefix = "management_from_managed"
+  description = "Enable WAAP Administration access from managed instances for auto-registration"
   vpc_id      = var.context.vpc_id
   ingress {
     from_port   = "3001"
@@ -39,9 +43,13 @@ resource "aws_security_group" "management_from_managed" {
     cidr_blocks = [data.aws_vpc.vpc.cidr_block]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = {
     Name               = "${var.context.name_prefix} management_from_managed"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 
@@ -80,17 +88,17 @@ resource "aws_instance" "management" {
 
   tags = {
     Name               = "${var.context.name_prefix} management"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 
 resource "aws_iam_instance_profile" "management" {
-  name = "RS-WAF-Cloud-management-profile"
+  name = "UBIKA-WAAP-Cloud-management-profile"
   role = aws_iam_role.management.name
 }
 
 resource "aws_iam_role" "management" {
-  name = "RS-WAF-Cloud-management-role"
+  name = "UBIKA-WAAP-Cloud-management-role"
   path = "/"
 
   assume_role_policy = data.aws_iam_policy_document.assume_management.json
@@ -121,7 +129,7 @@ data "aws_iam_policy_document" "cloudwatch_management" {
 }
 
 resource "aws_iam_policy" "management" {
-  name   = "RS-WAF-Cloud-management-policy"
+  name   = "UBIKA-WAAP-Cloud-management-policy"
   policy = data.aws_iam_policy_document.cloudwatch_management.json
 }
 

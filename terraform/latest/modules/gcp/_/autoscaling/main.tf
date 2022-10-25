@@ -40,7 +40,7 @@ resource "google_compute_instance_template" "autoscaled" {
   instance_description = "${var.context.name_prefix} autoscaled managed"
   machine_type         = var.context.autoscaled_instance_type
 
-  tags = concat(["rswaf-managed", "rswaf-autoscaled"], var.additional_tags)
+  tags = concat(["ubika-waap-managed", "ubika-waap-autoscaled"], var.additional_tags)
 
   disk {
     boot         = true

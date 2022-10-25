@@ -36,7 +36,12 @@ resource "azurerm_lb" "lb" {
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
     public_ip_address_id = azurerm_public_ip.public_ip.id
+    private_ip_address_version = "IPv4"
   }
+
+  lifecycle { 
+      ignore_changes = [ frontend_ip_configuration[0].private_ip_address_version ] 
+      }
 }
 
 resource "azurerm_lb_backend_address_pool" "backend_pool" {

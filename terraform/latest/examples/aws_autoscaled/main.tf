@@ -9,7 +9,7 @@ variable "region" {
 }
 
 variable "name_prefix" {
-  default = "RS WAF Cloud"
+  default = "UBIKA WAAP Cloud"
 }
 
 terraform {
@@ -88,7 +88,7 @@ resource "aws_route_table_association" "rta" {
   route_table_id = aws_route_table.route_table.id
 }
 
-### RS WAF
+### UBIKA WAAP Cloud
 
 # create an AWS ELB in network (TCP) mode for our URL
 # here, only one website in HTTP and HTTPS
@@ -121,10 +121,10 @@ module "lb" {
   enable_deletion_protection = true   # protect this AWS ELB from accidental deletion
 }
 
-module "rswaf" {
+module "ubikawaap" {
   source = "../../modules/aws/autoscaled"
 
-  # AWS VPC and subnets ids where the WAF will be deployed
+  # AWS VPC and subnets ids where the WAAP will be deployed
   vpc_id     = aws_vpc.vpc.id
   subnet_ids = aws_subnet.subnet.*.id
 
@@ -133,21 +133,21 @@ module "rswaf" {
 
   key_name = "mykey" # AWS ssh key name for all created instances
 
-  name_prefix = "My WAF Cluster" # a name prefix for resources created by this module
+  name_prefix = "My WAAP Cluster" # a name prefix for resources created by this module
 
-  admin_location = "1.1.1.1/32" # limit access to the WAF administration from this subnet only
+  admin_location = "1.1.1.1/32" # limit access to the WAAP administration from this subnet only
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
   aws_cloudwatch_monitoring = false # Enable AWS Cloudwatch agent metrics.
 
-  product_version = "6.7.0" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.10.0" # product version to select instance images, changing it will recreate all instances
 
-  management_mode          = "byol"      # WAF licence type of the management instance ("payg" or "byol")
+  management_mode          = "byol"      # WAAP licence type of the management instance ("payg" or "byol")
   management_instance_type = "m5.xlarge" # management AWS instance type
   management_disk_size     = 120         # size of the management disk in GiB (default to 120GiB)
 
-  managed_mode          = "byol"      # WAF licence type of the managed instances ("payg" or "byol")
+  managed_mode          = "byol"      # WAAP licence type of the managed instances ("payg" or "byol")
   managed_instance_type = "t2.medium" # managed AWS instance type
   managed_disk_size     = 30          # size of the managed disk in GiB (default to 30GiB)
 
@@ -160,15 +160,15 @@ module "rswaf" {
   autoscaler_max_size = 10 # maximum number of autoscaled instances
 }
 
-# add autscaling policy to the autoscaling part of the RS WAF cluster
+# add autscaling policy to the autoscaling part of the RS WAAP cluster
 module "policy" {
   source = "../../modules/aws/policy"
 
-  prefix = "rswaf" # name prefix for resources created by this module (must be really short)
+  prefix = "ubikawaap" # name prefix for resources created by this module (must be really short)
 
-  # RS WAF cluster informations
-  autoscaling_group_name = module.rswaf.autoscaling_group_name # name of the AWS AutoScalingGroup where the policies will be added
-  managed_ids            = module.rswaf.managed_ids            # ids of the managed instances
+  # UBIKA WAAP Cloud cluster informations
+  autoscaling_group_name = module.ubikawaap.autoscaling_group_name # name of the AWS AutoScalingGroup where the policies will be added
+  managed_ids            = module.ubikawaap.managed_ids            # ids of the managed instances
 
   target                    = 50    # CPU usage of managed instances that will trigger autoscaled instance creation
   estimated_instance_warmup = 300   # time require to start an instance (should be tuned to your configuration)
@@ -176,8 +176,8 @@ module "policy" {
 }
 
 output "Administration_host" {
-  value       = module.rswaf.management_public_ip
-  description = "Administration access to your WAF"
+  value       = module.ubikawaap.management_public_ip
+  description = "Administration access to your WAAP"
 }
 
 output "Administration_port" {

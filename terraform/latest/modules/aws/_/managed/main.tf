@@ -9,8 +9,8 @@ variable "additional_sgs" {
 }
 
 resource "aws_security_group" "managed_admin" {
-  name        = "managed_admin"
-  description = "Enable RS WAF Administration access from the Management instance"
+  name_prefix = "managed_admin"
+  description = "Enable WAAP Administration access from the Management instance"
   vpc_id      = var.context.vpc_id
   ingress {
     from_port   = "2222"
@@ -37,9 +37,13 @@ resource "aws_security_group" "managed_admin" {
     cidr_blocks = [var.context.admin_location]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = {
     Name               = "${var.context.name_prefix} managed_admin"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 
@@ -75,17 +79,17 @@ resource "aws_instance" "managed" {
 
   tags = {
     Name               = "${var.context.name_prefix} managed ${count.index}"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 
 resource "aws_iam_instance_profile" "managed" {
-  name = "RS-WAF-Cloud-managed-profile"
+  name = "UBIKA-WAAP-Cloud-managed-profile"
   role = aws_iam_role.managed.name
 }
 
 resource "aws_iam_role" "managed" {
-  name = "RS-WAF-Cloud-managed-role"
+  name = "UBIKA-WAAP-Cloud-managed-role"
   path = "/"
 
   assume_role_policy = data.aws_iam_policy_document.assume_managed.json
@@ -116,7 +120,7 @@ data "aws_iam_policy_document" "cloudwatch_managed" {
 }
 
 resource "aws_iam_policy" "managed" {
-  name   = "RS-WAF-Cloud-managed-policy"
+  name   = "UBIKA-WAAP-Cloud-managed-policy"
   policy = data.aws_iam_policy_document.cloudwatch_managed.json
 }
 

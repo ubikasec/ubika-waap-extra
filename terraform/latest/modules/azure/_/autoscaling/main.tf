@@ -82,7 +82,7 @@ resource "azurerm_virtual_machine_scale_set" "managed" {
 
   tags = {
     Name               = "${var.context.name_prefix} autoscaled managed"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 

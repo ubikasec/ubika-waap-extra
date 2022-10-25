@@ -9,12 +9,12 @@ variable "additional_tags" {
 
 resource "google_compute_firewall" "management_adm" {
   name        = "management-admin"
-  description = "Enable RS WAF Administration access"
+  description = "Enable WAAP Administration access"
   network     = var.context.vpc
 
   direction     = "INGRESS"
   source_ranges = [var.context.admin_location]
-  target_tags   = ["rswaf-management"]
+  target_tags   = ["ubika-waap-management"]
 
   allow {
     protocol = "tcp"
@@ -24,12 +24,12 @@ resource "google_compute_firewall" "management_adm" {
 
 resource "google_compute_firewall" "management_from_managed" {
   name        = "management-from-managed"
-  description = "Enable RS WAF Administration access from managed instances for auto-registration"
+  description = "Enable WAAP Administration access from managed instances for auto-registration"
   network     = var.context.vpc
 
   direction   = "INGRESS"
-  source_tags = ["rswaf-managed"]
-  target_tags = ["rswaf-management"]
+  source_tags = ["ubika-waap-managed"]
+  target_tags = ["ubika-waap-management"]
 
   allow {
     protocol = "tcp"
@@ -45,7 +45,7 @@ resource "google_compute_instance" "management" {
   zone         = var.context.zones[0]
   machine_type = var.context.management_instance_type
 
-  tags = concat(["rswaf-management"], var.additional_tags)
+  tags = concat(["ubika-waap-management"], var.additional_tags)
 
   boot_disk {
     initialize_params {

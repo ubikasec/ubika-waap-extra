@@ -1,16 +1,16 @@
-variable "product_version" { default = "" }
+variable "product_version" {}
 
 variable "management_mode" { default = "" }
 variable "managed_mode" { default = "" }
 variable "autoscaled_mode" { default = "" }
 
 data "google_compute_image" "byol" {
-  name    = "r-s-waf-latest-byol-${var.product_version}"
+  name    = "ubika-waap-latest-byol-${var.product_version}"
   project = "rohde-schwarz-cs-sas-public"
 }
 
 data "google_compute_image" "payg" {
-  name    = "r-s-waf-latest-payg-${var.product_version}"
+  name    = "ubika-waap-latest-payg-${var.product_version}"
   project = "rohde-schwarz-cs-sas-public"
 }
 

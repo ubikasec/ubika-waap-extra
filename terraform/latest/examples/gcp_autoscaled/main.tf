@@ -33,11 +33,11 @@ provider "google" {
 ### Setup a dedicated VPC
 
 resource "google_compute_network" "vpc" {
-  name                    = "rswaf-vpc"
+  name                    = "ubika-waap-vpc"
   auto_create_subnetworks = true
 }
 
-### RS WAF
+### UBIKA WAAP Cloud
 
 # create a network loadbalancer in TCP mode for our URLs
 module "lb" {
@@ -68,7 +68,7 @@ module "lb" {
 # generate predictable managed instances names
 data "google_compute_zones" "zones" {}
 
-module "rswaf" {
+module "ubikawaap" {
   source = "../../modules/gcp/autoscaled"
 
   vpc = google_compute_network.vpc.self_link # VPC where resources will be created
@@ -77,35 +77,36 @@ module "rswaf" {
 
   name_prefix = "my-waf" # a name prefix for resources created by this module
 
-  admin_location = "1.1.1.1/32" # limit access to the WAF administration from this subnet only
+  admin_location = "1.1.1.1/32" # limit access to the WAAP administration from this subnet only
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6-7-0-8c31c04cc4-b25466" # product version to select instance images, changing it will recreate all instances
+  product_version = "6-10-0-7b67f64778-b36209" # product version to select instance images, changing it will recreate all instances
 
-  management_mode            = "byol"          # WAF licence type of the management instance ("payg" or "byol")
+  management_mode            = "byol"          # WAAP licence type of the management instance ("payg" or "byol")
   management_instance_type   = "n1-standard-4" # management instance type
   additional_management_tags = []              # list of tags to add to management instance for firewall rules
   management_disk_size       = 120             # size of the management disk in GiB (default to 120GiB)
 
-  managed_mode            = "byol"          # WAF licence type of the managed instance ("payg" or "byol")
+  managed_mode            = "byol"          # WAAP licence type of the managed instance ("payg" or "byol")
   managed_instance_type   = "n1-standard-2" # managed instance type
   additional_managed_tags = []              # list of tags to add to all managed instances for firewall rules
   managed_disk_size       = 30              # size of the managed disk in GiB (default to 30GiB)
 
   nb_managed = 2 # number of managed instances
 
+  autoscaled_product_version = "6-10-0-7b67f64778-b36209"         # product version to select instance images for autoscaled instances
   autoscaled_instance_type   = "n1-standard-2" # managed instance type
   autoscaled_disk_size       = 20              # size of the autoscaled instances disk in GiB (default to 20GiB)
   additional_autoscaled_tags = []              # list of tags to add to all autoscaled managed instances for firewall rules
   autoscaled_clone_source    = ""              # name of the managed instance that will be cloned by autoscaled instances, (an empty string wil disable the autoscaling part, require on cluster initialization)
 }
 
-# add autscaling policy to the autoscaling part of the RS WAF cluster
+# add autscaling policy to the autoscaling part of the RS WAAP cluster
 module "policy" {
   source = "../../modules/gcp/policy"
 
-  instance_group_manager = module.rswaf.instance_group_manager # name of the Instance Group Manager where the policies will be added
+  instance_group_manager = module.ubikawaap.instance_group_manager # name of the Instance Group Manager where the policies will be added
 
   min_size = 0   # minimum number of instances (should be greater that 0)
   max_size = 0   # maximum number of autoscaled instances (0 to disable policy, required on cluster initialization)
@@ -114,8 +115,8 @@ module "policy" {
 }
 
 output "Administration_host" {
-  value       = module.rswaf.management_public_ip
-  description = "Administration access to your WAF"
+  value       = module.ubikawaap.management_public_ip
+  description = "Administration access to your WAAP"
 }
 
 output "Administration_port" {

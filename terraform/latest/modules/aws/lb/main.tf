@@ -2,7 +2,7 @@ variable "vpc_id" {}
 variable "subnet_ids" {}
 variable "mapping" {}
 variable "healthcheck_path" { default = "" }
-variable "lb_name" { default = "rswaf" }
+variable "lb_name" { default = "ubikawaap" }
 variable "enable_deletion_protection" { default = true }
 
 resource "random_id" "healthcheck" {
@@ -57,7 +57,7 @@ resource "aws_lb_target_group" "lb" {
 
 
 resource "aws_security_group" "monitoring" {
-  name        = "lb_monitoring"
+  name_prefix = "lb_monitoring"
   description = "Enable web acces from lb monitoring"
   vpc_id      = var.vpc_id
   dynamic "ingress" {
@@ -69,10 +69,15 @@ resource "aws_security_group" "monitoring" {
       cidr_blocks = [data.aws_vpc.vpc.cidr_block]
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 resource "aws_security_group" "web_input" {
-  name        = "lb_web_input"
+  name_prefix = "lb_web_input"
   description = "Enable web acces from everywhere"
   vpc_id      = var.vpc_id
   dynamic "ingress" {
@@ -84,6 +89,11 @@ resource "aws_security_group" "web_input" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 output "target_group_arns" {

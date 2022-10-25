@@ -32,7 +32,7 @@ resource "aws_autoscaling_group" "managed" {
       propagate_at_launch = true
     },
     {
-      key                 = "RSWAF_Cluster_Name"
+      key                 = "WAAP_Cluster_Name"
       value               = var.context.cluster_name
       propagate_at_launch = true
   }]
@@ -74,12 +74,12 @@ resource "aws_launch_configuration" "managed" {
 }
 
 resource "aws_iam_instance_profile" "autoscaled_managed" {
-  name = "RS-WAF-Cloud-autoscaled-managed-profile"
+  name = "UBIKA-WAAP-Cloud-autoscaled-managed-profile"
   role = aws_iam_role.autoscaled_managed.name
 }
 
 resource "aws_iam_role" "autoscaled_managed" {
-  name = "RS-WAF-Cloud-autoscaled-managed-role"
+  name = "UBIKA-WAAP-Cloud-autoscaled-managed-role"
   path = "/"
 
   assume_role_policy = data.aws_iam_policy_document.assume_autoscaled_managed.json
@@ -110,7 +110,7 @@ data "aws_iam_policy_document" "cloudwatch_autoscaled_managed" {
 }
 
 resource "aws_iam_policy" "autoscaled_managed" {
-  name   = "RS-WAF-Cloud-autoscaled-managed-policy"
+  name   = "UBIKA-WAAP-Cloud-autoscaled-managed-policy"
   policy = data.aws_iam_policy_document.cloudwatch_autoscaled_managed.json
 }
 

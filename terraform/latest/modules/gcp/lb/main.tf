@@ -54,7 +54,7 @@ resource "google_compute_firewall" "lb" {
 
   source_ranges = data.google_compute_lb_ip_ranges.ranges.network
   target_tags = [
-    "rswaf-managed"
+    "ubika-waap-managed"
   ]
 }
 
@@ -68,7 +68,7 @@ resource "google_compute_firewall" "web_input" {
   }
 
   target_tags = [
-    "rswaf-managed"
+    "ubika-waap-managed"
   ]
 }
 
