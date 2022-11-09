@@ -18,7 +18,7 @@ Websocket Securisation
 * [5-Performance consideration](#workflow)
 * [6-FAQ](#faq)
     * [6.1 Give me something ready to use](#give-me-something-ready-to-use)
-    * [6.2 My tunnel does not process Websocket traffic, what happens?](#my-tunnel-does-not-process-websocket-traffic-what-happens)
+    * [6.2 My tunnel does not process Websocket traffic, what happens?](#my-tunnel-does-not-process-websocket-traffic)
     * [6.3 What node can I use on Websocket traffic?](#what-node-can-i-use-on-websocket-traffic)
     * [6.4 What node should not see Websocket traffic?](#what-node-should-not-see-websocket-traffic)
     * [6.5 Where are ping and pong Websocket frames?](#where-are-ping-and-pong-websocket-frames)
@@ -165,7 +165,7 @@ Let's pretend that you want to block Websocket data if the message contains "foo
 
 In case you are using WAM Application Gate, the websocket traffic should not go through it (websocket data won't be proxied if so). 
 
-As a Websocket Connection can not be established without initial HTTP Request, it does not cause access security issue because it means that any websocket traffic has to go first through the HTTP authentication path of the workflow.
+As a Websocket connection can not be established without initial HTTP Request, it does not cause access security issue because it means that any websocket traffic has to go first through the HTTP authentication path of the workflow.
 
 ![](./attachments/wam_and_websocket.png)
 
@@ -207,13 +207,13 @@ Be also aware that the [JSON To Table](https://documentation.ubikasec.com/displa
 
 Use the workflow **HTTP and Websocket**.
 
-### My tunnel does not process Websocket traffic, what happens ? 
+### My tunnel does not process Websocket traffic, what happens ? <a name="my-tunnel-does-not-process-websocket-traffic"></a> 
 
 Make sure you have [enable the websocket upgrade](#enable-websocket-on-tunnel).
 
 Make sure the original HTTP Websocket Upgrade gets proxied via the Proxy HTTP Request.
 
-### What node can I use on Websocket traffic ? 
+### What node can I use on Websocket traffic ? <a name="what-node-can-i-use-on-websocket-traffic"></a>
 
 Every node that are not performing operation related to HTTP Protocol.
 
@@ -328,7 +328,7 @@ Every node that are not performing operation related to HTTP Protocol.
 
 
 
-### What node should not see Websocket traffic ? 
+### What node should not see Websocket traffic ? <a name="what-node-should-not-see-websocket-traffic"></a>
 
 Every node that perform operation specifically on HTTP. They should not be used on branches of workflow dedicated to Websocket handling.
 
@@ -403,7 +403,7 @@ Every node that perform operation specifically on HTTP. They should not be used 
 | Bot Mitigation - Good Bot Detection |	Bot Mitigation - Good Bot Detection	|
 
 
-### Where are ping and pong Websocket frames ?
+### Where are ping and pong Websocket frames ? <a name="where-are-ping-and-pong-websocket-frames"></a>
 I can't see any ping or pong Websocket message in the workflow, yet they are indeed send/receive on client/backup.
 
 Websocket ping and pong message are directly forwarded without going into the workflow. We took that decision as they are not supposed to convey data. 
@@ -412,7 +412,7 @@ It means that you can not act on those Websockets frame types in this release.
 
 Please contact our representative if you are interested by such a feature.
 
-### Can I modify the Websocket message ?
+### Can I modify the Websocket message ? <a name="can-i-modify-the-websocket-message"></a>
 
 Not in this release.
 
@@ -420,7 +420,7 @@ If you set the `websocket.message` attribute, following nodes will see the modif
 
 Please contact our representative if you are interested by such a feature.
 
-### What is a Websocket compressed frame ?
+### What is a Websocket compressed frame ? <a name="what-is-a-websocket-compressed-frame"></a>
 
 It is an extension protocol for Websocket defined in [RFC-7692](https://www.rfc-editor.org/rfc/rfc7692.html)
 
@@ -439,7 +439,7 @@ When data is of type binary, it can be that this binary is itself some higher le
 If you feel that this higher level protocol can be secured via the workflow and would deserve a dedicated feature, 
 please contact our representative.
 
-### How the `close connection` option of Block Websocket Traffic works ?
+### How the `close connection` option of Block Websocket Traffic works ? <a name="how-the-close-connection-option-of-block-websocket-traffic-works"></a>
 
 It sends a websocket close control frame (as per [RFC-6455](https://www.rfc-editor.org/rfc/rfc6455.html#section-5.5.1))  to both client and backend.
 
