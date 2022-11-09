@@ -13,11 +13,12 @@ Websocket Securisation
     * [4.4 Blocking Websocket Data](#blocking-websocket-data)
     * [4.5 ICX and Websocket](#icx-and-websocket)
     * [4.6 Websocket direction](#websocket-direction)
-    * [4.7 Real world scenario](#real-world-scenario)
+    * [4.7 WAM and Websocket](#wam-and-websocket)
+    * [4.8 Real world scenario](#real-world-scenario)
 * [5-Performance consideration](#workflow)
 * [6-FAQ](#faq)
     * [6.1 Give me something ready to use](#give-me-something-ready-to-use)
-    * [6.2 My tunnel does not process Websocket traffic, hat happens?](#my-tunnel-does-not-process-websocket-traffic-what-happens)
+    * [6.2 My tunnel does not process Websocket traffic, what happens?](#my-tunnel-does-not-process-websocket-traffic-what-happens)
     * [6.3 What node can I use on Websocket traffic?](#what-node-can-i-use-on-websocket-traffic)
     * [6.4 What node should not see Websocket traffic?](#what-node-should-not-see-websocket-traffic)
     * [6.5 Where are ping and pong Websocket frames?](#where-are-ping-and-pong-websocket-frames)
@@ -159,6 +160,14 @@ The start node provides **"websocket.from"** attribute to differentiate the dire
 Let's pretend that you want to block Websocket data if the message contains "foo" **AND** it is a frame from backend to client
 
 ![](./attachments/websocket_from_backend_and_contains_foo.png)
+
+### WAM and Websocket
+
+In case you are using WAM Application Gate, the websocket traffic should not go through it (websocket data won't be proxied if so). 
+
+As a Websocket Connection can not be established without initial HTTP Request, it does not cause access security issue because it means that any websocket traffic has to go first through the HTTP authentication path of the workflow.
+
+![](./attachments/wam_and_websocket.png)
 
 ### Real world scenario
 
@@ -327,6 +336,13 @@ Every node that perform operation specifically on HTTP. They should not be used 
 |:------|:------------|
 |OpenAPI3 Validation | Validate a request with a given OpenAPI3 | 
 
+| Authentication | Description
+|:----|:------------|
+| WAM Application Access | WAM Application Access acts as a service provider in front of the application |
+| WAM Perimeter Authentication | A Perimeter Authentication node is used to authenticate users and provide identity to applications |
+| WAM Perimeter Authentication Standalone | A Perimeter Authentication node is used to authenticate users and provide identity to applications (without SSO) |
+| Get KCD Token | Retrieve a Kerberos token for a given user and application, using the Kerberos Constrained Delegation |
+| Log WAM | Enables logging of a request which contains security information concerning authentication. ${params[event-type]} | 
 
 | Data Modification | Description
 |:----|:------------|
