@@ -103,6 +103,7 @@ When uploading a chain file in a **Certificates bundle**, the order of the CA fi
 
 The chain file must look like this:
 
+```
 --------- BEGIN CERTIFICATE ---------
 Subject: Signing CA
 Issuer: Intermediaite CA
@@ -115,6 +116,7 @@ Issuer: root CA
 Subject: root CA
 Issuer: root CA
 --------- END CERTIFICATE ---------
+```
 
 In the above example, the *root CA* signed the *Intermediate CA* authority which signed the *Signing CA* authority. A valid client certificate would be signed by *Signing CA* authority to be accepted by this chain file.
 
@@ -123,7 +125,7 @@ When uploading different CA files, the order is not important. All the uploaded 
 
 ### Setting up a Certificates bundle in a tunnel
 The Certificate Bundle can now be linked to the HTTPS tunnel. 
-Visit the following page to get details about the tunnel configuration: [https://gitlab.int.ubika.io/github-rs/r-s-waf-extra/-/tree/main/use-cases/SSL%20and%20Confidentiality/Implementing%20SSL%20authentication%20using%20X509-PKI%20certificates]
+Visit the following page to get details about the tunnel configuration: [here](../Implementing%20SSL%20authentication%20using%20X509-PKI%20certificates).
 
 Client authentication and error logs
 ------------------------------------
