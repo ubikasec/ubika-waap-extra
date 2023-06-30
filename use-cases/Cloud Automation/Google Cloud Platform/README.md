@@ -21,7 +21,7 @@ Google Cloud Platform provides network load balancers with these characteristics
 
 Read Google Cloud Platform network load balancers [documentation](https://cloud.google.com/load-balancing/docs/network/) for more details.
 
-Tunnels must be created in **routing** mode to listen on the load balancer public IP.
+In the case where the load balancer is not using NAT, tunnels must be created in **routing** mode to listen on the load balancer public IP.
 
 If the **Host** header is not provided in the load balancer health checks, reverse proxies must not block unknown hosts or accept the load balancer public IP as valid hostname.
 
