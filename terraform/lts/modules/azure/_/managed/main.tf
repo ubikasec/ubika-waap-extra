@@ -17,10 +17,9 @@ resource "azurerm_public_ip" "public_ip" {
 resource "azurerm_network_interface" "primary" {
   count = var.context.nb_managed
 
-  name                      = "managed-nic_${count.index}"
-  location                  = var.context.resource_group.location
-  resource_group_name       = var.context.resource_group.name
-  network_security_group_id = var.context.managed_nsg
+  name                = "managed-nic_${count.index}"
+  location            = var.context.resource_group.location
+  resource_group_name = var.context.resource_group.name
 
   ip_configuration {
     name                          = "managed_ip_${count.index}"
@@ -30,10 +29,15 @@ resource "azurerm_network_interface" "primary" {
   }
 }
 
+resource "azurerm_network_interface_security_group_association" "nsg_associations" {
+  count                     = var.context.nb_managed
+  network_interface_id      = azurerm_network_interface.primary[count.index].id
+  network_security_group_id = var.context.managed_nsg
+}
+
 resource "azurerm_network_interface_application_security_group_association" "asg_associations" {
   count                         = var.context.nb_managed
   network_interface_id          = azurerm_network_interface.primary[count.index].id
-  ip_configuration_name         = "managed_ip_${count.index}"
   application_security_group_id = var.context.managed_asg
 }
 
@@ -73,9 +77,9 @@ resource "azurerm_virtual_machine" "managed" {
     custom_data = jsonencode({
       instance_role = "managed"
       instance_name = "managed_${count.index}"
-      linkto_ip     = "${var.management_private_ip}"
+      linkto_ip     = var.management_private_ip
       linkto_port   = "3001"
-      linkto_apikey = "${var.context.autoreg_admin_apikey}"
+      linkto_apikey = var.context.autoreg_admin_apikey
     })
   }
   os_profile_linux_config {
@@ -87,8 +91,14 @@ resource "azurerm_virtual_machine" "managed" {
   }
   tags = {
     Name               = "${var.context.name_prefix} managed ${count.index}"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
+
+  depends_on = [
+    azurerm_network_interface_application_security_group_association.asg_associations,
+    azurerm_network_interface_security_group_association.nsg_associations,
+    azurerm_network_interface_backend_address_pool_association.pool_association
+  ]
 }
 
 # attach managed instances to backend pool

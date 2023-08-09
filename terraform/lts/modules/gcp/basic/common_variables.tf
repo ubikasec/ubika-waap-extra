@@ -5,18 +5,18 @@ variable "region" { default = "" }
 variable "zones" { default = [] }
 variable "target_pools" {}
 
-# RSWAF Settings
+# WAAP Settings
 
 variable "product_version" { default = "" }
 
 variable "name_prefix" {
-  default = "rswaf-cloud"
+  default = "ubika-waap-cloud"
 }
 
 variable "cluster_name" { default = "" }
 
 variable "admin_location" {
-  description = "The IP address range that can be used to administrate the WAF instances"
+  description = "The IP address range that can be used to administrate the WAAP instances"
   default     = "0.0.0.0/0"
 }
 

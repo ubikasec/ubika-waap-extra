@@ -1,6 +1,12 @@
 variable "resource_group" {}
 variable "subnet" {}
 variable "mapping" {}
+variable "healthcheck_path" { default = "" }
+
+resource "random_id" "healthcheck" {
+  prefix      = "lb-health-"
+  byte_length = 16
+}
 
 # Load Balancer
 resource "random_string" "fqdn" {
@@ -8,6 +14,7 @@ resource "random_string" "fqdn" {
   special = false
   upper   = false
   number  = false
+  lower   = true
 }
 
 resource "azurerm_public_ip" "public_ip" {
@@ -29,13 +36,17 @@ resource "azurerm_lb" "lb" {
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
     public_ip_address_id = azurerm_public_ip.public_ip.id
+    private_ip_address_version = "IPv4"
   }
+
+  lifecycle { 
+      ignore_changes = [ frontend_ip_configuration[0].private_ip_address_version ] 
+      }
 }
 
 resource "azurerm_lb_backend_address_pool" "backend_pool" {
-  name                = "backend_pool"
-  resource_group_name = var.resource_group.name
-  loadbalancer_id     = azurerm_lb.lb.id
+  name            = "backend_pool"
+  loadbalancer_id = azurerm_lb.lb.id
 }
 
 resource "azurerm_lb_probe" "lb_probe" {
@@ -46,7 +57,7 @@ resource "azurerm_lb_probe" "lb_probe" {
   name                = "lb_probe-${var.mapping[count.index].dest}"
   port                = var.mapping[count.index].dest
   protocol            = var.mapping[count.index].proto
-  request_path        = "/"
+  request_path        = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
 }
 
 resource "azurerm_lb_rule" "lb_rule" {
@@ -71,3 +82,7 @@ output "public_url" {
   description = "Public acces to your application"
 }
 
+output "healthcheck" {
+  value       = var.healthcheck_path != "" ? var.healthcheck_path : "/${random_id.healthcheck.hex}"
+  description = "Loadbalancers healthchecks path"
+}

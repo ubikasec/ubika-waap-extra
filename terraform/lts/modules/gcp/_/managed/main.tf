@@ -4,12 +4,12 @@ variable "additional_tags" { default = [] }
 
 resource "google_compute_firewall" "managed_from_management" {
   name        = "managed-from-management"
-  description = "Enable RS WAF Administration access from the Management instance"
+  description = "Enable WAAP Administration access from the Management instance"
   network     = var.context.vpc
 
   direction   = "INGRESS"
-  source_tags = ["rswaf-management"]
-  target_tags = ["rswaf-managed"]
+  source_tags = ["ubika-waap-management"]
+  target_tags = ["ubika-waap-managed"]
 
   allow {
     protocol = "tcp"
@@ -18,12 +18,12 @@ resource "google_compute_firewall" "managed_from_management" {
 }
 resource "google_compute_firewall" "managed_admin" {
   name        = "managed-admin"
-  description = "Enable RS WAF Administration access from the admin_location"
+  description = "Enable WAAP Administration access from the admin_location"
   network     = var.context.vpc
 
   direction     = "INGRESS"
   source_ranges = [var.context.admin_location]
-  target_tags   = ["rswaf-managed"]
+  target_tags   = ["ubika-waap-managed"]
 
   allow {
     protocol = "tcp"
@@ -45,7 +45,7 @@ resource "google_compute_region_instance_group_manager" "managed" {
 
   version {
     name              = "main"
-    instance_template = "${google_compute_instance_template.managed.self_link}"
+    instance_template = google_compute_instance_template.managed.self_link
   }
 
 
@@ -63,7 +63,7 @@ resource "google_compute_instance_template" "managed" {
   instance_description = "${var.context.name_prefix} managed"
   machine_type         = var.context.managed_instance_type
 
-  tags = concat(["rswaf-managed"], var.additional_tags)
+  tags = concat(["ubika-waap-managed"], var.additional_tags)
 
   disk {
     boot         = true
@@ -80,9 +80,9 @@ resource "google_compute_instance_template" "managed" {
     user-data = jsonencode({
       instance_role = "managed"
       instance_name = "managed-##"
-      linkto_ip     = "${var.management_private_ip}"
+      linkto_ip     = var.management_private_ip
       linkto_port   = "3001"
-      linkto_apikey = "${var.context.autoreg_admin_apikey}"
+      linkto_apikey = var.context.autoreg_admin_apikey
     })
   }
 

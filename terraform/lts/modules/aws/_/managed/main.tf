@@ -9,8 +9,8 @@ variable "additional_sgs" {
 }
 
 resource "aws_security_group" "managed_admin" {
-  name        = "managed_admin"
-  description = "Enable RS WAF Administration access from the Management instance"
+  name_prefix = "managed_admin"
+  description = "Enable WAAP Administration access from the Management instance"
   vpc_id      = var.context.vpc_id
   ingress {
     from_port   = "2222"
@@ -37,9 +37,13 @@ resource "aws_security_group" "managed_admin" {
     cidr_blocks = [var.context.admin_location]
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = {
     Name               = "${var.context.name_prefix} managed_admin"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 
@@ -63,17 +67,66 @@ resource "aws_instance" "managed" {
     volume_size           = var.context.disk_size.managed
   }
   user_data = jsonencode({
-    instance_role = "managed"
-    instance_name = "managed_${count.index}"
-    linkto_ip     = "${var.management_private_ip}"
-    linkto_port   = "3001"
-    linkto_apikey = "${var.context.autoreg_admin_apikey}"
+    instance_role             = "managed"
+    instance_name             = "managed_${count.index}"
+    linkto_ip                 = var.management_private_ip
+    linkto_port               = "3001"
+    linkto_apikey             = var.context.autoreg_admin_apikey
+    aws_cloudwatch_monitoring = var.context.aws_cloudwatch_monitoring
   })
+
+  iam_instance_profile = aws_iam_instance_profile.managed.name
 
   tags = {
     Name               = "${var.context.name_prefix} managed ${count.index}"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
+}
+
+resource "aws_iam_instance_profile" "managed" {
+  name = "UBIKA-WAAP-Cloud-managed-profile"
+  role = aws_iam_role.managed.name
+}
+
+resource "aws_iam_role" "managed" {
+  name = "UBIKA-WAAP-Cloud-managed-role"
+  path = "/"
+
+  assume_role_policy = data.aws_iam_policy_document.assume_managed.json
+}
+
+data "aws_iam_policy_document" "assume_managed" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "cloudwatch_managed" {
+  statement {
+    actions = [
+      "cloudwatch:PutMetricData",
+      "ec2:DescribeTags",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "managed" {
+  name   = "UBIKA-WAAP-Cloud-managed-policy"
+  policy = data.aws_iam_policy_document.cloudwatch_managed.json
+}
+
+resource "aws_iam_role_policy_attachment" "managed" {
+  role       = aws_iam_role.managed.name
+  policy_arn = aws_iam_policy.managed.arn
 }
 
 # attach managed instances to target groups

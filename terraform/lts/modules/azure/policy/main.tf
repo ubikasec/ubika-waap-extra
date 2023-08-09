@@ -9,7 +9,7 @@ variable "managed_ids" {
 }
 
 variable "prefix" {
-  default = "rswaf"
+  default = "ubikawaap"
 }
 
 variable "autoscaler_min_size" {

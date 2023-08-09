@@ -1,6 +1,24 @@
+terraform {
+
+  required_version = ">=0.14"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=2.46.1"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "=3.0.1"
+    }
+
+  }
+}
+
 # Configure the Azure Provider
 provider "azurerm" {
-  version = "=1.44.0"
+  features {}
 }
 
 variable "region" {
@@ -8,11 +26,11 @@ variable "region" {
 }
 
 variable "name_prefix" {
-  default = "RS_WAF_Cloud"
+  default = "UBIKA_WAAP_Cloud"
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${var.name_prefix}"
+  name     = var.name_prefix
   location = var.region
 }
 
@@ -28,7 +46,7 @@ resource "azurerm_subnet" "subnet" {
   name                 = "subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefix       = "10.0.1.0/24"
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
 variable "lb_mapping" {
@@ -50,7 +68,7 @@ variable "lb_mapping" {
   ]
 }
 
-### RS WAF
+### UBIKA WAAP Cloud
 
 # create an Azure ELB in network (TCP) mode for our URL
 # here, only one website in HTTP and HTTPS
@@ -60,13 +78,15 @@ module "lb" {
   resource_group = azurerm_resource_group.rg
   subnet         = azurerm_subnet.subnet
 
+  # healthcheck_path = "/" # set a custom healthcheck path, defaults to a random path
+
   mapping = var.lb_mapping
 }
 
-module "rswaf" {
+module "ubikawaap" {
   source = "../../modules/azure/basic"
 
-  # Azure resource group and subnets ids where the WAF will be deployed
+  # Azure resource group and subnets ids where the WAAP will be deployed
   resource_group = azurerm_resource_group.rg
   subnet         = azurerm_subnet.subnet
   lb_mapping     = var.lb_mapping
@@ -75,19 +95,19 @@ module "rswaf" {
 
   ssh_key_data = "ssh-rsa YOUR_SSH_PUBLIC_KEY" # SSH key used for all created instances
 
-  name_prefix = "My WAF Cluster" # a name prefix for resources created by this module
+  name_prefix = "My WAAP Cluster" # a name prefix for resources created by this module
 
-  admin_location = "1.1.1.1/32" # limit access to the WAF administration from this subnet only
+  admin_location = "1.1.1.1/32" # limit access to the WAAP administration from this subnet only
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6.5.609" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.11.4" # product version to select instance images, changing it will recreate all instances
 
-  management_mode          = "byol"          # WAF licence type of the management instance ("payg" or "byol")
+  management_mode          = "byol"          # WAAP licence type of the management instance ("payg" or "byol")
   management_instance_type = "Standard_B4ms" # management AWS instance type
   management_disk_size     = 120             # size of the management disk in GiB (default to 120GiB)
 
-  managed_mode          = "byol"         # WAF licence type of the managed instances ("payg" or "byol")
+  managed_mode          = "byol"         # WAAP licence type of the managed instances ("payg" or "byol")
   managed_instance_type = "Standard_B2s" # managed AWS instance type
   managed_disk_size     = 30             # size of the managed disk in GiB (default to 30GiB)
 
@@ -95,8 +115,8 @@ module "rswaf" {
 }
 
 output "Administration_host" {
-  value       = module.rswaf.management_public_ip
-  description = "Administration access to your WAF"
+  value       = module.ubikawaap.management_public_ip
+  description = "Administration access to your WAAP"
 }
 
 output "Administration_port" {
@@ -106,4 +126,9 @@ output "Administration_port" {
 output "Public_URL" {
   value       = module.lb.public_url
   description = "Public acces to your application"
+}
+
+output "Healthcheck" {
+  value       = module.lb.healthcheck
+  description = "Healthcheck URL"
 }

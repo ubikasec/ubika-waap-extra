@@ -5,7 +5,7 @@ variable "managed_ids" {
 }
 
 variable "prefix" {
-  default = "rswaf"
+  default = "ubikawaap"
 }
 
 variable "target" {

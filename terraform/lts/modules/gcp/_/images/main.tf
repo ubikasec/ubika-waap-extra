@@ -5,7 +5,7 @@ variable "managed_mode" { default = "" }
 variable "autoscaled_mode" { default = "" }
 
 data "google_compute_image" "byol" {
-  name    = "r-s-waf-lts-byol-${var.product_version}"
+  name    = "r-s-waf-lts-boyl-${var.product_version}"
   project = "rohde-schwarz-cs-sas-public"
 }
 

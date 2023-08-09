@@ -51,10 +51,10 @@ resource "azurerm_virtual_machine_scale_set" "managed" {
       instance_role   = "managed"
       instance_name   = "autoscaled_managed_"
       autoscale       = "true"
-      cloneof_name    = "${var.autoscaled_clone_source}"
-      linkto_ip       = "${var.management_private_ip}"
+      cloneof_name    = var.autoscaled_clone_source
+      linkto_ip       = var.management_private_ip
       linkto_port     = "3001"
-      linkto_apikey   = "${var.context.autoreg_admin_apikey}"
+      linkto_apikey   = var.context.autoreg_admin_apikey
       datadisk_device = "/dev/disk/azure/scsi1/lun0"
     })
   }
@@ -82,7 +82,7 @@ resource "azurerm_virtual_machine_scale_set" "managed" {
 
   tags = {
     Name               = "${var.context.name_prefix} autoscaled managed"
-    RSWAF_Cluster_Name = var.context.cluster_name
+    WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 

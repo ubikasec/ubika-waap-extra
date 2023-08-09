@@ -126,7 +126,7 @@ resource "azurerm_network_security_rule" "managed-logsinkd-48400" {
 }
 
 resource "azurerm_network_security_rule" "managed-ssh-22" {
-  name                                       = "managed-ssh-"
+  name                                       = "managed-ssh-22"
   priority                                   = 113
   direction                                  = "Inbound"
   access                                     = "Allow"

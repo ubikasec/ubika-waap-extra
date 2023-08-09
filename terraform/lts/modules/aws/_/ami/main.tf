@@ -9,20 +9,30 @@ locals {
 }
 
 data "aws_ami" "byol" {
+  # owners = ["self"]
+  # filter {
+  #   name   = "image-id"
+  #   values = ["ami-0ecefd9acaa8ce3d5"]
+  # }
   most_recent = true
   owners      = ["aws-marketplace"]
   filter {
     name   = "name"
-    values = ["*${local.ami_version}*51ccfbfd-99a5-402d-90c3-427dd2bc23c5*"]
+    values = ["*${local.ami_version}*2c582404-e2f1-4bf5-81e9-ff3412896971*"]
   }
 }
 
 data "aws_ami" "payg" {
+  # owners = ["self"]
+  # filter {
+  #   name   = "image-id"
+  #   values = ["ami-0ecefd9acaa8ce3d5"]
+  # }
   most_recent = true
   owners      = ["aws-marketplace"]
   filter {
     name   = "name"
-    values = ["*${local.ami_version}*8f8b8e5f-331f-4d1d-ae38-4a68f04f25be*"]
+    values = ["*${local.ami_version}*b53b4621-53d7-4af3-9cb8-b04307945861*"]
   }
 }
 

@@ -1,5 +1,4 @@
-Cloud Automation
-================
+# Cloud Automation
 
 * 1 [Use cases](#use-cases)
 * 2 [Presentation](#presentation)
@@ -7,15 +6,13 @@ Cloud Automation
 	* 3.1 [Pre-requisites](#pre-requisites)
 	* 3.2 [Terraform basic usage](#terraform-basic-usage)
 
-Use cases
----------
+## Use cases for each Cloud provider
 
 * [Amazon Web Services](./Amazon%20Web%20Services)
 * [Google Cloud Platform](./Google%20Cloud%20Platform)
 * [Microsoft Azure](./Microsoft%20Azure)
 
-Presentation
-------------
+## Presentation
 
 To handle peaks of traffic and reduce infrastructure cost, UBIKA WAAP can automatically scale following the instances workloads. A fast deployment is possible using Terraform.
 
@@ -34,8 +31,7 @@ This guarantees the most cost-effective solution as new WAF instances are launch
 
 ![](./attachments/CloudWatch%20Management%20Console.jpg)
 
-Usage
------
+## Usage
 
 ### Pre-requisites
 
@@ -59,9 +55,9 @@ Edit the templates to match your needs and apply your configuration to deploy yo
 terraform apply
 ```
 
-After the deployment of your cluster, a scheduled task named **Remove inactive long time appliance** is created. This task is active only if you have an autoscaled managed in your cluster.
+After the deployment of your cluster, a scheduled task named **Remove inactive long time appliance** is created on the WAAP cluster. This task is active only if you have an autoscaled managed in your cluster.
 
-To destroy the platform run:
+To destroy the platform, run:
 ```
 terraform destroy
 ```

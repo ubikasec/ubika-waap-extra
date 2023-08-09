@@ -1,12 +1,10 @@
-Amazon Web Services
-===================
+# Amazon Web Services
 
 * 1 [Amazon Web Services recommendations and specific behaviours](#amazon-web-services-recommendations-and-specific-behaviours)
 * 2 [Authentication in AWS](#authentication-in-aws)
 * 3 [Usage](#usage)
 
-Amazon Web Services recommendations and specific behaviours
------------------------------------------------------------
+## Amazon Web Services recommendations and specific behaviours
 
 | :warning: Please read this carefully before running our service in production on Amazon Web Services.|
 |:-----------------------------------------------------------------------------------------------------|
@@ -15,8 +13,7 @@ We recommend using a network (level 4) load balancer to allow direct TCP connect
 
 AWS health checks (in **aws_lb_target_group**) cannot provide a **Host** HTTP header, reverse proxies must not block unknown hosts.
 
-Authentication in AWS
----------------------
+## Authentication in AWS
 
 Export AWS parameters for Terraform (access and secret key for your Amazon account):
 
@@ -29,8 +26,7 @@ You can also add them directly in the appropriate **main.tf** file.
 
 For more details about the authentication of Terraform with AWS see: https://www.terraform.io/docs/providers/aws/index.html.
 
-Usage
------
+## Usage
 
 Terraform modules for AWS and some examples are provided on [github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/master/terraform).
 
@@ -50,3 +46,15 @@ In the main configuration file, **main.tf**, you can edit variables like access 
 
 | :warning: Don't forget to edit the template to match your configuration before using it.|
 |:----------------------------------------------------------------------------------------|
+
+You will need at least to:
+* have exported and add your `access_key` and `access_secret` in the `.tf` file.
+* specify the `product_version` you want to use. Available versions can be found on the marketplace offers.
+* specify the ssh `key_name`. It will be use to access the instance via SSH once created.
+* specify a `name_prefix` for resources that will be created.
+* specify a random `autoreg_admin_apiuid` to access to the product API once the instance created.
+
+and apply your configuration to deploy your infrastructure with:
+```
+terraform apply
+```

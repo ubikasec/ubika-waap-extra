@@ -1,6 +1,6 @@
 variable "instance_group_manager" {}
 
-variable "prefix" { default = "rswaf" }
+variable "prefix" { default = "ubikawaap" }
 
 variable "target" { default = 0.7 }
 
@@ -11,7 +11,7 @@ variable "cooldown" { default = 300 }
 
 resource "google_compute_region_autoscaler" "autoscaler" {
   count    = var.max_size == 0 ? 0 : 1
-  provider = "google-beta"
+  provider = google
   name     = "${var.prefix}-autoscaler"
   target   = var.instance_group_manager
 

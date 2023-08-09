@@ -1,16 +1,16 @@
-variable "product_version" {}
+variable "product_version" { default = "6.11.4" }
 
 variable "management_mode" {}
 variable "managed_mode" {}
 variable "autoscaled_mode" { default = "" }
 
 locals {
-  publisher     = "rohdeschwarzcybersecuritysas"
-  offer         = "rs-web-application-firewall"
+  publisher     = "ubika"
+  offer         = "ubika-waap-cloud"
   image_version = replace(var.product_version, "/-.*$/", "")
   skus = {
-    byol = "rs-waf_byol"
-    payg = "rs-waf_payg"
+    byol = "6-lts-byol"
+    payg = "6-lts-byol"
   }
   ids = {
     byol = ""
