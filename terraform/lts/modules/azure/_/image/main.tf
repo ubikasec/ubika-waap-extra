@@ -10,7 +10,7 @@ locals {
   image_version = replace(var.product_version, "/-.*$/", "")
   skus = {
     byol = "6-lts-byol"
-    payg = "6-lts-byol"
+    payg = "6-lts-payg"
   }
   ids = {
     byol = ""
