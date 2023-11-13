@@ -5,12 +5,12 @@ variable "managed_mode" { default = "" }
 variable "autoscaled_mode" { default = "" }
 
 data "google_compute_image" "byol" {
-  name    = "r-s-waf-lts-boyl-${var.product_version}"
+  name    = "ubika-waap-lts-byol-${var.product_version}"
   project = "rohde-schwarz-cs-sas-public"
 }
 
 data "google_compute_image" "payg" {
-  name    = "r-s-waf-lts-payg-${var.product_version}"
+  name    = "ubika-waap-lts-payg-${var.product_version}"
   project = "rohde-schwarz-cs-sas-public"
 }
 
