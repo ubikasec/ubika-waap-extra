@@ -48,7 +48,7 @@ In the main configuration file, **main.tf**, you can edit variables like access 
 |:----------------------------------------------------------------------------------------|
 
 You will need at least to:
-* have exported and add your `access_key` and `access_secret` in the `.tf` file.
+* have exported or added your `access_key` and `access_secret` in the `.tf` file.
 * specify the `product_version` you want to use. Available versions can be found on the marketplace offers.
 * specify the ssh `key_name`. It will be use to access the instance via SSH once created.
 * specify a `name_prefix` for resources that will be created.
