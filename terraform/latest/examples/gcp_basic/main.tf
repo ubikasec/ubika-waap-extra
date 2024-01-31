@@ -50,14 +50,14 @@ module "lb" {
       name         = "HTTP-my-webapplication"
       proto        = "HTTP"
       port         = 80
-      health_check = 80 # HTTP only
+      health_check = 80
     },
     # HTTPS (port 443) on the public side, must be the same in my tunnel configuration
     {
       name         = "HTTPS-my-webapplication"
       proto        = "HTTPS"
       port         = 443
-      health_check = 80 # HTTP only
+      health_check = 443
     },
   ]
 }

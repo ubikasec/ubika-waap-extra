@@ -101,19 +101,19 @@ module "lb" {
   # healthcheck_path = "/" # set a custom healthcheck path, defaults to a random path
 
   mapping = [
-    # HTTP (port 80) on the public side and 1080 in my tunnel configuration
+    # HTTP (port 80) on the public side and 80 in my tunnel configuration
     {
       name  = "HTTP-my-webapplication"
       proto = "HTTP"
       src   = 80
-      dest  = 1080
+      dest  = 80
     },
-    # HTTPS (port 443) on the public side and 1443 in my tunnel configuration
+    # HTTPS (port 443) on the public side and 443 in my tunnel configuration
     {
       name  = "HTTPS-my-webapplication"
       proto = "HTTPS"
       src   = 443
-      dest  = 1443
+      dest  = 443
     },
   ]
 
