@@ -81,7 +81,7 @@ module "ubikawaap" {
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6-11-5-e9aa5880ea-b46709" # product version to select instance images, changing it will recreate all instances
+  product_version = "6-11-7-1d5a891b4c-b50679" # product version to select instance images, changing it will recreate all instances
 
   management_mode            = "byol"          # WAAP licence type of the management instance ("payg" or "byol")
   management_instance_type   = "n1-standard-4" # management instance type
@@ -95,7 +95,7 @@ module "ubikawaap" {
 
   nb_managed = 2 # number of managed instances
 
-  autoscaled_product_version = "6-11-5-e9aa5880ea-b46709"         # product version to select instance images for autoscaled instances
+  autoscaled_product_version = "6-11-7-1d5a891b4c-b50679"         # product version to select instance images for autoscaled instances
   autoscaled_instance_type   = "n1-standard-2" # managed instance type
   autoscaled_disk_size       = 20              # size of the autoscaled instances disk in GiB (default to 20GiB)
   additional_autoscaled_tags = []              # list of tags to add to all autoscaled managed instances for firewall rules
