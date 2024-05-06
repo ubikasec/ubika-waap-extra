@@ -54,7 +54,12 @@ You will need at least to:
 * specify a `name_prefix` for resources that will be created.
 * specify a random `autoreg_admin_apiuid` to access to the product API once the instance created.
 
-and apply your configuration to deploy your infrastructure with:
+Then, test your configuration:
+```
+terraform plan
+```
+
+At last, deploy your infrastructure with:
 ```
 terraform apply
 ```

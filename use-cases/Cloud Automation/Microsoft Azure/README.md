@@ -46,7 +46,12 @@ You will need at least to:
 * specify a random `autoreg_admin_apiuid` to access to the product API once the instance created.
 * accept the marketplace legal terms, see: [Azure marketplace agreements](#azure-marketplace-agreements)
 
-and apply your configuration to deploy your infrastructure with:
+Then, test your configuration:
+```
+terraform plan
+```
+
+At last, deploy your infrastructure with:
 ```
 terraform apply
 ```

@@ -11,6 +11,7 @@
 * [Amazon Web Services](./Amazon%20Web%20Services)
 * [Google Cloud Platform](./Google%20Cloud%20Platform)
 * [Microsoft Azure](./Microsoft%20Azure)
+* [Outscale](./Outscale)
 
 ## Presentation
 
