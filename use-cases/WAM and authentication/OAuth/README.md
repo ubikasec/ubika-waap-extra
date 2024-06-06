@@ -1,5 +1,6 @@
 # OAuth
 
+For the integration or any need of improvements, please contact our Service team.
 
 ## Introduction
 
