@@ -16,6 +16,10 @@ Let's Encrypt certificates usage
 Presentation
 ------------
 
+> [!WARNING]
+> This use case covers a manual deployment of the certificates on the product, which is not very handy.
+> A [newer use case](../SSL%20certificate%20management%20with%20ACME/README.md) is available and describes an automated deployment of the certificates
+
 Let's Encrypt is a CA (Certification Authority) that delivers free certificates using a simple and automated process. Certificates management is made with Certbot tool ( https://certbot.eff.org/ ) that we are going to use in an external way.
 
 Certificates generated this way have a short lifetime (90 days).

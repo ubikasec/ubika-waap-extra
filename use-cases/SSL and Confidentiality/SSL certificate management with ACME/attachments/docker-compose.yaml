@@ -1,0 +1,12 @@
+services:
+  acme.sh:
+    image: neilpang/acme.sh
+    container_name: acme.sh
+    env_file: ".env"
+    volumes:
+      - ./deploy/ubika_waap_gw.sh:/root/.acme.sh/deploy/ubika_waap_gw.sh:ro
+      - ./data:/acme.sh
+    command: daemon
+    stdin_open: true
+    tty: true
+    restart: always
