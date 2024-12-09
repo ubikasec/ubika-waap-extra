@@ -17,6 +17,7 @@ Backup
 ------
 
 Download the use case backup: [Request Limiter.backup](./backup/Request%20Limiter.backup)
+Download the use case with websocket backup : [Request Limiter with Websocket.backup](./backup/Request%20Limiter%20with%20Websocket.backup)
 
 Reminder
 --------
@@ -39,6 +40,11 @@ source IP, session and cookies.
 You can also check for specific information from the request. Here is a configuration with a maximum of 5 requests per second for requests containing a **Location** header.
 
 ![](./attachments/request_limiter_node_example2.png)
+
+For workflows that have to deal with websockets, specifically block websocket traffic: 
+
+![](./attachments/request_limiter_node_example3.png)
+
 
 Benefits
 --------
