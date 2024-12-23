@@ -7,6 +7,8 @@ SSL certificate management with ACME
     * 2.2 [Settings](#setting-environment)
     * 2.3 [Run the stack](#run-the-stack)
     * 2.4 [Certificate management](#cert-management)
+        * 2.4.1 [DNS challenge](cert-management-dns)
+        * 2.4.2 [DNS-alias challenge](cert-management-dns-alias)
 * 3 [External Ressources](#external-resources)
 
 Presentation
@@ -30,7 +32,7 @@ According to [this documentation](https://github.com/acmesh-official/acme.sh/wik
 This use case can be deployed using either the standalone or docker version of acme.sh, but for ease of deployment, **we will cover the Docker deployment only**, using a docker compose stack.
 
 In order to get a certificate from the Certificate Authority (CA), an authentication step is required, known as an ACME challenge.
-There are several types of challenges (which are supported by acme.sh), but for ease of deployment, **we will only cover the DNS based challenge**.
+There are several types of challenges (which are supported by acme.sh), but for ease of deployment, **we will only cover the DNS based challenges (DNS and DNS-alias)**.
 
 Make sure that the docker container is deployed on a machine that can reach the API of the WAAP.
 
@@ -114,6 +116,8 @@ acme.sh   neilpang/acme.sh   "/entry.sh daemon"   acme.sh   2 minutes ago   Up 2
 
 ### Certificate management
 
+#### DNS challenge
+
 Once the stack is running, type this command to issue a new certificate:
 
 ```
@@ -127,7 +131,7 @@ $ docker compose exec -it acme.sh --issue --server letsencrypt --dns dns_ovh -d 
 The newly created certificate can now be deployed on the product:
 
 ```
-$ docker compose exec -it acme.sh --deploy -d toto.cloud-protector.com --deploy-hook ubika_waap_gw
+$ docker compose exec -it acme.sh --deploy -d *.test.com --deploy-hook ubika_waap_gw
 ```
 
 > [!NOTE]
@@ -141,6 +145,29 @@ $ docker compose exec -it acme.sh --deploy -d toto.cloud-protector.com --deploy-
 > [!NOTE]
 > For troubleshooting purposes, the flag `--debug` can be added to the previous commands to get a more comprehensive output.
 > The flag `--output-insecure` can also be added to see secrets/hidden output like passwords or API keys.
+
+#### DNS-alias challenge
+
+The DNS-alias challenge is pretty similar to DNS challenge itself, the only difference is that a another domain is used for the challenge validation. This is useful when the main domain does not support an API access or when such an access is brohibited for security reasons.
+
+It requires two things:
+
+* A secondary domain
+* A CNAME entry in the main domain
+
+For example, given our main domain `test.com` (which does not support API access), we will need another domain (let's say `aliasDomainForValidationOnly.com`), and a CNAME DNS entry like `_acme-challenge.test.com IN CNAME _acme-challenge.aliasDomainForValidationOnly.com.`.
+
+Obviously, the secondary domain has to support API access and the DNS secrets to pass to acme.sh are related to this domain.
+
+Then, the procedure is similar to the DNS challenge, we just need to generate our certificates with the following command:
+
+```
+$ docker compose exec -it acme.sh --deploy -d *.test.com --challenge-alias aliasDomainForValidationOnly.com --deploy-hook ubika_waap_gw
+
+```
+> [!NOTE]
+> Please note the use of the `--challenge-alias` parameter to tell acme.sh to make the challenge on the secondary domain.
+> The official documentation of the implementation of DNS-alias mode in acme.sh can be found [here](https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode).
 
 ### Logging
 
