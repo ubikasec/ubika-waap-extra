@@ -7,8 +7,8 @@ SSL certificate management with ACME
     * 2.2 [Settings](#setting-environment)
     * 2.3 [Run the stack](#run-the-stack)
     * 2.4 [Certificate management](#cert-management)
-        * 2.4.1 [DNS challenge](cert-management-dns)
-        * 2.4.2 [DNS-alias challenge](cert-management-dns-alias)
+        * 2.4.1 [DNS challenge](#cert-management-dns)
+        * 2.4.2 [DNS-alias challenge](#cert-management-dns-alias)
 * 3 [External Ressources](#external-resources)
 
 Presentation
