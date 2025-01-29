@@ -19,6 +19,8 @@ However, it is possible to manage ACME certificates externally and deploy those 
 
 This use case leverages the installation of [acme.sh](https://github.com/acmesh-official/acme.sh) and a dedicated hook to deploy the certificates on the product.
 
+![ACME diagram](./attachments/acme_diagram.png)
+
 Instructions
 ------------
 
