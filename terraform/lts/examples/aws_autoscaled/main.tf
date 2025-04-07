@@ -141,7 +141,7 @@ module "ubikawaap" {
 
   aws_cloudwatch_monitoring = false # Enable AWS Cloudwatch agent metrics.
 
-  product_version = "6.11.12" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.11.13" # product version to select instance images, changing it will recreate all instances
 
   management_mode          = "byol"      # WAAP licence type of the management instance ("payg" or "byol")
   management_instance_type = "m5.xlarge" # management AWS instance type
