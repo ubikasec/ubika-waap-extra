@@ -56,30 +56,30 @@ How to prevent gRPC attacks?
 
 Securing gRPC services requires a combination of protocol-aware inspection, strict input validation, and robust access control. Here are key strategies to prevent gRPC-based attacks:
 
-### Deep Protocol Inspection
+*   Deep Protocol Inspection
 
 Use a WAF or security gateway capable of decoding HTTP/2 and Protobuf messages. This allows inspection of method calls and message fields for malicious patterns, even in binary-encoded traffic.
 
-### Input Validation and Sanitization
+*   Input Validation and Sanitization
 
 Validate all incoming data against expected formats and constraints. Apply strict schema validation on Protobuf messages to prevent injection attacks and malformed payloads.
 
-### Authentication and Authorization
+*   Authentication and Authorization
 
 Enforce strong authentication (e.g., mTLS, OAuth2) and fine-grained authorization for each gRPC method. Avoid exposing internal or sensitive methods to unauthenticated clients.
 
-### Rate Limiting and Resource Controls
+*   Rate Limiting and Resource Controls
 Protect against abuse of streaming and long-lived connections by applying rate limits, timeouts, and maximum message sizes.
 
-### Logging and Monitoring
+*   Logging and Monitoring
 
 Log gRPC method calls and payloads (where possible) for anomaly detection and forensic analysis. Monitor for unusual patterns such as repeated method calls or malformed messages.
 
-### Secure Development Practices
+*   Secure Development Practices
 
 Educate developers on secure coding practices for gRPC, including safe deserialization, avoiding command execution from inputs, and using trusted libraries.
 
-### Regular Testing and Auditing
+*   Regular Testing and Auditing
 
 Perform security testing (e.g., fuzzing, penetration testing) on gRPC endpoints to identify vulnerabilities. Keep dependencies and gRPC libraries up to date.
 
@@ -88,19 +88,19 @@ Limitations
 
 While this sub-workflow provides effective protection against injection-based attacks in gRPC traffic, it is important to understand its scope and boundaries:
 
-### No Authorization Enforcement
+*   No Authorization Enforcement
 
 This workflow does not assess or enforce user permissions or access control. It assumes that authentication and authorization mechanisms are handled upstream or by the application itself. As such, it cannot detect privilege escalation, unauthorized method access, or role-based access violations.
 
-### Injection-Focused Detection
+*   Injection-Focused Detection
 
 The primary focus is on identifying and blocking injection attacks—such as SQL injection, command injection, and unsafe deserialization—within gRPC payloads. Other types of threats, such as business logic abuse or data leakage, are outside the scope of this workflow.
 
-### Protocol-Specific Coverage
+*   Protocol-Specific Coverage
 
 The workflow is tailored for gRPC over HTTP/2 using Protocol Buffers. It may not provide full protection for gRPC implementations using alternative encodings or transport layers.
 
-### Limited Context Awareness
+*   Limited Context Awareness
 
 Detection is based on message content and structure, not on full session or user behavior context. Advanced evasion techniques that rely on multi-step logic or obfuscation may require complementary behavioral analysis tools.
 
