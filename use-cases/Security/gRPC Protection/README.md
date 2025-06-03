@@ -22,13 +22,6 @@ For more details, see:
 *   [https://grpc.io/docs/](https://grpc.io/docs/)
 *   [https://escape.tech/blog/how-to-secure-grpc-apis/](https://escape.tech/blog/how-to-secure-grpc-apis/)
 
-Backup
-------
-
-Sub-Workflow can be downloaded here: [SWF - gRPC Protection.backup](./backup/SWF%20-%20gRPC.backup).
-
-The Sub-Workflow will soon be available by default.
-
 Context
 -------
 
@@ -115,7 +108,7 @@ The "SWF - gRPC Protection" node has to be placed after the start node and befor
 
 ### SWF - gRPC Protection
 
-This node does require any configuration:
+This node does not require any configuration:
 
 ![](./attachments/swf-grpc-protection.jpg)
 
@@ -124,8 +117,13 @@ This node does require any configuration:
 The SWF will first check the method of the request:
 
 *   It checks whether the request contains the Content-Type: grpc header.
-*   It then stores the request body in a new variable to ensure it is processed by the ICX engine.
+*   It then stores the request body in a new query variable to ensure it is processed by the ICX engine.
 
+Backup
+------
 
+Sub-Workflow can be downloaded here: [SWF - gRPC Protection.backup](./backup/SWF%20-%20gRPC.backup).
+
+The Sub-Workflow will soon be available by default.
 
 #### For further assistance or to report any issue with the Sub-Workflow, please contact our support team.
