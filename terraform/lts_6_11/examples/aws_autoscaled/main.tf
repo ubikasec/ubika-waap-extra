@@ -133,7 +133,7 @@ module "ubikawaap" {
 
   key_name = "mykey" # AWS ssh key name for all created instances
 
-  name_prefix = "My WAAP Cluster" # a name prefix for resources created by this module
+  name_prefix = var.name # a name prefix for resources created by this module
 
   admin_location = "1.1.1.1/32" # limit access to the WAAP administration from this subnet only
 
@@ -147,9 +147,9 @@ module "ubikawaap" {
   management_instance_type = "m5.xlarge" # management AWS instance type
   management_disk_size     = 120         # size of the management disk in GiB (default to 120GiB)
 
-  managed_mode          = "byol"      # WAAP licence type of the managed instances ("payg" or "byol")
-  managed_instance_type = "t2.medium" # managed AWS instance type
-  managed_disk_size     = 30          # size of the managed disk in GiB (default to 30GiB)
+  managed_mode          = "byol"       # WAAP licence type of the managed instances ("payg" or "byol")
+  managed_instance_type = "t3a.medium" # managed AWS instance type
+  managed_disk_size     = 30           # size of the managed disk in GiB (default to 30GiB)
 
   nb_managed = 2 # number of managed instances
 

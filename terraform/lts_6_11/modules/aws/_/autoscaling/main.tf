@@ -8,7 +8,10 @@ variable "security_groups" {}
 resource "aws_autoscaling_group" "managed" {
   name                 = "${var.context.name_prefix} Autoscaling group"
   vpc_zone_identifier  = var.context.subnet_ids
-  launch_configuration = aws_launch_configuration.managed.id
+  launch_template {
+    id      = aws_launch_template.managed.id
+    version = "$Latest"
+  }
 
   enabled_metrics = ["GroupTotalInstances"]
 
@@ -42,18 +45,23 @@ resource "aws_autoscaling_group" "managed" {
   }
 }
 
-resource "aws_launch_configuration" "managed" {
+resource "aws_launch_template" "managed" {
   name_prefix       = "${var.context.name_prefix}-"
   image_id          = var.context.amis.autoscaled
   instance_type     = var.context.managed_instance_type
   key_name          = var.context.key_name
-  enable_monitoring = true
-  security_groups   = var.security_groups
+  monitoring {
+    enabled = true
+  }
+  vpc_security_group_ids    = var.security_groups
   # ebs_optimized = true
-  root_block_device {
-    delete_on_termination = true
-    volume_type           = "gp2"
-    volume_size           = var.context.disk_size.autoscaled
+  block_device_mappings  {
+    device_name = "/dev/sda1"
+    ebs {
+      volume_size = var.context.disk_size.autoscaled
+      delete_on_termination = true
+      volume_type           = "gp3"
+    }
   }
   user_data = jsonencode({
     instance_role             = "managed"
@@ -66,7 +74,9 @@ resource "aws_launch_configuration" "managed" {
     aws_cloudwatch_monitoring = var.context.aws_cloudwatch_monitoring
   })
 
-  iam_instance_profile = aws_iam_instance_profile.autoscaled_managed.name
+  iam_instance_profile {
+    name = aws_iam_instance_profile.autoscaled_managed.name
+  }
 
   lifecycle {
     create_before_destroy = true
