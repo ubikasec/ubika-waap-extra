@@ -63,7 +63,7 @@ resource "aws_launch_template" "managed" {
       volume_type           = "gp3"
     }
   }
-  user_data = jsonencode({
+  user_data = "${base64encode(jsonencode({
     instance_role             = "managed"
     instance_name             = "autoscaled_managed_"
     autoscale                 = "true"
@@ -72,7 +72,7 @@ resource "aws_launch_template" "managed" {
     linkto_port               = "3001"
     linkto_apikey             = var.context.autoreg_admin_apikey
     aws_cloudwatch_monitoring = var.context.aws_cloudwatch_monitoring
-  })
+  }))}"
 
   iam_instance_profile {
     name = aws_iam_instance_profile.autoscaled_managed.name
