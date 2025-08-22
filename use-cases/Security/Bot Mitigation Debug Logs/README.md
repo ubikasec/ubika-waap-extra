@@ -19,7 +19,7 @@ We advice to only use this workflow to discover more on Bot Mitigation.
 Backup
 ------
 
-Download the use case backup here: [DemoBotMitigationDebugLog.backup](./backup/DemoBotMitigationDebugLogs.backup)
+Download the use case backup here: [DemoBotMitigationDebugLog.backup](./DemoBotMitigationDebugLogs.backup)
 
 Usage
 -----
