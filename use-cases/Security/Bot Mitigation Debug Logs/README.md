@@ -16,6 +16,8 @@ Logging everything as Security Event consumes resources. In production, you may 
 
 We advice to only use this workflow to discover more on Bot Mitigation.
 
+If you still want to use it, you should analyse it and adapt it to your context and security policy. Also, be aware that this sub workflow sample contains an Proxy HTTP Request node. 
+
 Backup
 ------
 
