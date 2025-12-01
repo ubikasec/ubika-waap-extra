@@ -7,6 +7,7 @@ Use cases:
 
 Backups:
 
+* [SAML-pack-3.1.backup](./attachments/SAML-pack-3.1.backup)
 * [SAML-pack-3.0.backup](./attachments/SAML-pack-3.0.backup)
 * (deprecated) [SAML-pack-2.0.1.backup](./attachments/SAML-pack-2.0.1.backup)
 * (deprecated) [SAML-pack-2.0.1-Samples.backup](./attachments/SAML-pack-2.0.1-Samples.backup)
@@ -15,9 +16,9 @@ In all cases, an **Extended API security license is required**. In certain impl
 
 **For the integration or any need of improvements, please contact our Service team.**
 
-## SAML pack 3.0
+## SAML pack 3.1
 
-This use case requires the backups provided on SAML pack 3.0.
+This use case requires the backups provided on SAML pack 3.1.
 
 ### Provided Sub-Workflows 
 
@@ -157,3 +158,8 @@ v3.0:
 
 * Logout: Logout part is no more delegated to a specific SWF (2.0.1 was "Logout Service") but embedded in "SAML: Request" SWF.
 * Metadata (static) management: need to insert base64 cert.
+
+v3.1:
+
+* Removal of SHA1 algorithm for signing feature
+* Removal of R&S terms
