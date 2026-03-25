@@ -33,7 +33,7 @@ module "managed" {
 ### Security groups
 
 resource "aws_security_group" "accept_all_out" {
-  name   = "accept_all_out"
+  name   = "${var.name_prefix}-accept-all-out"
   vpc_id = var.vpc_id
   egress {
     from_port   = "0"

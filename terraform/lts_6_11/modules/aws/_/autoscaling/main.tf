@@ -84,12 +84,12 @@ resource "aws_launch_template" "managed" {
 }
 
 resource "aws_iam_instance_profile" "autoscaled_managed" {
-  name = "UBIKA-WAAP-Cloud-autoscaled-managed-profile"
+  name = "${var.context.name_prefix}-autoscaled-managed-profile"
   role = aws_iam_role.autoscaled_managed.name
 }
 
 resource "aws_iam_role" "autoscaled_managed" {
-  name = "UBIKA-WAAP-Cloud-autoscaled-managed-role"
+  name = "${var.context.name_prefix}-autoscaled-managed-role"
   path = "/"
 
   assume_role_policy = data.aws_iam_policy_document.assume_autoscaled_managed.json
@@ -120,7 +120,7 @@ data "aws_iam_policy_document" "cloudwatch_autoscaled_managed" {
 }
 
 resource "aws_iam_policy" "autoscaled_managed" {
-  name   = "UBIKA-WAAP-Cloud-autoscaled-managed-policy"
+  name   = "${var.context.name_prefix}-autoscaled-managed-policy"
   policy = data.aws_iam_policy_document.cloudwatch_autoscaled_managed.json
 }
 

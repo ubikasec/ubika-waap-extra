@@ -93,12 +93,12 @@ resource "aws_instance" "management" {
 }
 
 resource "aws_iam_instance_profile" "management" {
-  name = "UBIKA-WAAP-Cloud-management-profile"
+  name = "${var.context.name_prefix}-management-profile"
   role = aws_iam_role.management.name
 }
 
 resource "aws_iam_role" "management" {
-  name = "UBIKA-WAAP-Cloud-management-role"
+  name = "${var.context.name_prefix}-management-role"
   path = "/"
 
   assume_role_policy = data.aws_iam_policy_document.assume_management.json
@@ -129,7 +129,7 @@ data "aws_iam_policy_document" "cloudwatch_management" {
 }
 
 resource "aws_iam_policy" "management" {
-  name   = "UBIKA-WAAP-Cloud-management-policy"
+  name   = "${var.context.name_prefix}-management-policy"
   policy = data.aws_iam_policy_document.cloudwatch_management.json
 }
 

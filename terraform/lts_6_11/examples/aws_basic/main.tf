@@ -9,7 +9,7 @@ variable "region" {
 }
 
 variable "name_prefix" {
-  default = "UBIKA WAAP Cloud"
+  default = "UBIKA-WAAP-Cloud"
 }
 
 terraform {
@@ -120,7 +120,9 @@ module "lb" {
   ]
 
   lb_name                    = "mylb" # name prefix in AWS for my AWS ELB objects (must be really short)
-  enable_deletion_protection = true   # protect this AWS ELB from accidental deletion
+  enable_deletion_protection = false  # set to true to protect this AWS ELB from accidental deletion
+
+  depends_on = [aws_internet_gateway.igw]
 }
 
 module "ubikawaap" {
@@ -134,6 +136,8 @@ module "ubikawaap" {
   additional_managed_sgs = module.lb.security_groups   # list of AWS security groups to add on each managed (require to allow public requests)
 
   key_name = "mykey" # AWS ssh key name for all created instances
+
+  depends_on = [aws_internet_gateway.igw]
 
   name_prefix = var.name_prefix # a name prefix for resources created by this module
 
