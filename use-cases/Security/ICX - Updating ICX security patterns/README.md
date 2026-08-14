@@ -1,6 +1,8 @@
 Updating ICX security patterns
 ==============================
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 * 1 [Context](#context)
 * 2 [Implementation](#implementation)
     * 2.1 [Security Update](#security-update)

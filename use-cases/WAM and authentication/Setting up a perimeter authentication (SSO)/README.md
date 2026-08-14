@@ -1,6 +1,8 @@
 Setting up a perimeter authentication (SSO)
 ===========================================
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 * 1 [Presentation](#presentation)
 * 2 [Positioning of perimeter authentication](#positioning-of-perimeter-authentication)
 	* 2.1 [Single-host environment](#single-host-environment)

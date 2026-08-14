@@ -1,5 +1,7 @@
 # Have versionned ICX and worflow configurations
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 1. [Description](#description)
 2. [How to do this for an ICX Configuration](#how-to-do-this-for-an-icx-configuration)
 3. [How to do this for a Workflow](#how-to-do-this-for-a-Workflow)

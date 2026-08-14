@@ -1,5 +1,7 @@
 # SAMLv2 integration
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 Use cases:
 
 * A: [Implementing a SAMLv2 Service Provider (pack 2.0.1)](./pack_v2/Implementing-a-SAMLv2-Service-Provider.md)

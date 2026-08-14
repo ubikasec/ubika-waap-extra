@@ -1,5 +1,7 @@
 # Block the Binary-based Websocket using UTF-8 validation
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 * 1 [Presentation](#presentation)
 * 2 [How to Block the Binary-based Websocket using the SWF UTF-8 valid checker](#how-to-block-the-binary-based-websocket-using-the-swf-utf-8-valid-checker)
 * 3 [SWF Block Websocket Binary Based on a Regexp](#swf-block-websocket-binary-based-on-a-regexp)

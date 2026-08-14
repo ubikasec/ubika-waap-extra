@@ -1,6 +1,8 @@
 Proxy Chaining
 ==============
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 * 1 [Presentation](presentation#)
 * 2 [Installing the Tunnel](#installing-the-tunnel)
     * 2.1 [Modifying the existing tunnel](#modifying-the-existing-tunnel)

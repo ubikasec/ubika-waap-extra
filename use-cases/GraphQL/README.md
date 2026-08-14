@@ -1,5 +1,7 @@
 # GraphQL Detectors
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 * 1 [Presentation](#presentation)
 * 2 [How to use the SWF GraphQL Detector](#how-to-use-the-swf-graphql-detector)
 * 3 [How to interpreat the reported GraphQL Detector logs](#how-to-interpreat-the-reported-graphql-detector-logs)

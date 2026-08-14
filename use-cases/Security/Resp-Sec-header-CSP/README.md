@@ -1,5 +1,7 @@
 # Security Headers (CSP) in Responses
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 This sub-Workflow is used to implement security mechanisms at the level of the client browser by injecting specific headers into the responses.<br>
 These security mechanisms are mainly aimed at preventing the browser from loading such content as scripts, images, media, styles, etc. from an untrusted domain.<br>
 This sub-Workflow is placed under a Proxy Request to add headers in the application's responses.

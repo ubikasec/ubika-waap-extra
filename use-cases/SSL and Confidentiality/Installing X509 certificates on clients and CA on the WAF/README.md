@@ -1,6 +1,8 @@
 Installing X509 certificates on clients and CA on the WAF
 =========================================================
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 * 1 [Presentation](#presentation)
 * 2 [Creating the X509 certificate](#creating-the-x509-certificate)
 	* 2.1 [Generating a private key for the user](#generating-a-private-key-for-the-user)

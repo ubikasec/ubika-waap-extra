@@ -1,5 +1,7 @@
 # Kerberos Delegation and the WAF
 
+> **Note**: This use case is provided "AS IS", there is no official support by the UBIKA team. Use cases may not work on new versions due to behavior changes. In case of custom deployment, we invite you to contact our Customer Service team at https://my.ubikasec.com/.
+
 1. [Description](#description)
 2. [Configuring the Microsoft Server](#configuring-the-microsoft-server)
 3. [WAF Configuration](#waf-configuration)
