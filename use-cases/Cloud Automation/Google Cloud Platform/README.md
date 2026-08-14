@@ -9,8 +9,9 @@
   * 2.5 [Using Application Default Credentials instead](#using-application-default-credentials-instead)
 * 3 [UBIKA images](#ubika-images)
 * 4 [Usage](#usage)
+  * 4.1 [Autoscaled cluster](#autoscaled-cluster)
 
-## Recommendations and specific behaviours
+## Google Cloud Platform recommendations and specific behaviours
 
 | :warning: Please read this carefully before running our service in production on Google Cloud Platform.|
 |:-------------------------------------------------------------------------------------------------------|
@@ -149,7 +150,7 @@ These roles are granted on **your own** project. The UBIKA images live in a sepa
 ```
 Error: error retrieving image information: googleapi: Error 403: Required
 'compute.images.get' permission for
-'projects/rohde-schwarz-cs-sas-public/global/images/ubika-waap-byol-<version>', forbidden
+'projects/rohde-schwarz-cs-sas-public/global/images/ubika-waap-lts-byol-<product_version>', forbidden
 
   with module.ubikawaap.module.images.data.google_compute_image.byol,
   on ../../modules/gcp/_/images/main.tf line 7, in data "google_compute_image" "byol":
@@ -180,11 +181,11 @@ gcloud auth activate-service-account --key-file=account.json
 gcloud compute images list --project=rohde-schwarz-cs-sas-public --no-standard-images
 
 # does it see the exact image the product_version resolves to?
-gcloud compute images describe ubika-waap-byol-<product_version> \
+gcloud compute images describe ubika-waap-lts-byol-<product_version> \
   --project=rohde-schwarz-cs-sas-public
 ```
 
-If the first command fails or returns nothing, the `roles/compute.imageUser` grant described above is missing. If it succeeds but the second one reports the image as *not found*, the `product_version` value is wrong: run the first command to list the versions actually available to you.
+If the first command fails or returns nothing, the `roles/compute.imageUser` grant described above is missing. If it succeeds but the second one reports the image as *not found*, the `product_version` value is wrong: run the first command to list the versions actually available to you, and see [UBIKA images](#ubika-images) for how `product_version` maps to an image name.
 
 Switch back to your own account afterwards with `gcloud config set account <your-email>`.
 
@@ -201,21 +202,30 @@ Keeping `credentials = file(var.credentials)` while no key file exists makes Ter
 
 ## UBIKA images
 
-Execute to following command to list the available images of UBIKA:
+Execute the following command to list the available images of UBIKA:
 
 ```
 gcloud compute images list --project=rohde-schwarz-cs-sas-public --no-standard-images
 ```
 
+The images are named `ubika-waap-lts-byol-<product_version>` and `ubika-waap-lts-payg-<product_version>`. Unlike on the other providers, the `product_version` variable is not a dotted version but the whole dashed suffix of the image name, build identifier included, for example:
+
+```
+image name:      ubika-waap-lts-byol-6-16-3-cf54a9da70-b86038
+product_version: 6-16-3-cf54a9da70-b86038
+```
+
 ## Usage
 
-Terraform modules for Google Cloud Platform and some examples are provided on [https://github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/master/terraform)
+Terraform modules for Google Cloud Platform and some examples are provided on [github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/main/terraform)
+
+The `terraform` directory is split by product version (`6_11` for the LTS, `6_16` for the latest); the paths below are relative to the version directory you picked, as explained in [Cloud Automation](..).
 
 Modules are located in:
 
 * `modules/gcp/autoscaled`: module to deploy an autoscaled UBIKA WAAP cluster
 * `modules/gcp/basic`: module to deploy a basic UBIKA WAAP cluster
-* `modules/gcp/lb`: basic implementation of GCP network load balancer for an UBIKA WAAP cluster (basic or autoscaled)
+* `modules/gcp/lb`: basic implementation of GCP network load balancer for a UBIKA WAAP cluster (basic or autoscaled)
 * `modules/gcp/policy`: basic implementation of autoscaling capabilities for an autoscaled UBIKA WAAP cluster
 
 Examples for Google Cloud Platform can be found in:
@@ -228,7 +238,34 @@ In the main configuration file, `main.tf`, you can edit variables like GCP regio
 | :warning: Don't forget to edit the template to match your configuration before using it.|
 |:----------------------------------------------------------------------------------------|
 
-Autoscaled cluster must be set up in two phases:
+You will need at least to:
+* provide the `project` variable, it has no default (see [The `credentials` variable](#the-credentials-variable)).
+* have the `credentials` variable pointing to your service account key file, or use Application Default Credentials instead.
+* specify the `product_version` you want to use. Available versions can be listed as explained in [UBIKA images](#ubika-images).
+* specify a `name_prefix` for resources that will be created.
+* specify the `admin_location` subnet allowed to reach the WAAP administration.
+* specify a random `autoreg_admin_apiuid` to access to the product API once the instance created.
+
+The GCP examples do not take an SSH key: SSH access to the instances is managed by Compute Engine metadata, not by the modules.
+
+Then, test your configuration:
+```
+terraform plan
+```
+
+At last, deploy your infrastructure with:
+```
+terraform apply
+```
+
+### Autoscaled cluster
+
+| :warning: On Google Cloud Platform, and only there, an autoscaled cluster must be set up in two phases.|
+|:-------------------------------------------------------------------------------------------------------|
 
 * The first one, to create a basic cluster and configure it (with `autoscaled_clone_source` set to an empty string and autoscaling policy `max_size` set to 0).
 * The second, to add the autoscaling part based on the configuration of the basic cluster (with `autoscaled_clone_source` set to a managed box name and autoscaling policy `max_size` greater than 0).
+
+This is a consequence of the behaviour described in [Google Cloud Platform recommendations and specific behaviours](#google-cloud-platform-recommendations-and-specific-behaviours): a GCP instance group cannot be empty, so the autoscaled instance group would start cloning a managed instance that does not exist yet. Setting `autoscaled_clone_source` to an empty string is what disables the autoscaling part during the first phase.
+
+On [Amazon Web Services](../Amazon%20Web%20Services) and [Microsoft Azure](../Microsoft%20Azure) the autoscaling group can stay empty, so a single `terraform apply` is enough and this two-phase setup does not apply.

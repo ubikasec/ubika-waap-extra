@@ -1,10 +1,11 @@
 # Cloud Automation
 
-* 1 [Use cases](#use-cases)
+* 1 [Use cases for each Cloud provider](#use-cases-for-each-cloud-provider)
 * 2 [Presentation](#presentation)
 * 3 [Usage](#usage)
 	* 3.1 [Pre-requisites](#pre-requisites)
-	* 3.2 [Terraform basic usage](#terraform-basic-usage)
+	* 3.2 [Where the Terraform files are](#where-the-terraform-files-are)
+	* 3.3 [Terraform basic usage](#terraform-basic-usage)
 
 ## Use cases for each Cloud provider
 
@@ -17,7 +18,7 @@
 
 To handle peaks of traffic and reduce infrastructure cost, UBIKA WAAP can automatically scale following the instances workloads. A fast deployment is possible using Terraform.
 
-The platform will scale out on peaks of traffic (by creating new Managed instances), and back down when traffic returns back to normal (by removing Managed instances). The administrator can thus benefit a potentially unlimited scalability.
+The platform will scale out on peaks of traffic (by creating new Managed instances), and back down when traffic returns back to normal (by removing Managed instances). The administrator can thus benefit from a potentially unlimited scalability.
 
 ![](./attachments/cloud%20automation.png)
 
@@ -36,9 +37,22 @@ This guarantees the most cost-effective solution as new WAF instances are launch
 
 ### Pre-requisites
 
-Download and install **Terraform**, with a version greater than 0.14, on a local computer.
+Download and install **Terraform** 0.14 or greater on a local computer.
 
-See https://learn.hashicorp.com/terraform/getting-started/install for more informations on how to install Terraform.
+See https://developer.hashicorp.com/terraform/install for more information on how to install Terraform.
+
+The examples pin the provider versions they have been tested with (for example `hashicorp/aws` 2.26, `hashicorp/azurerm` 2.46.1, `hashicorp/google` 3.46 or `outscale/outscale` 0.12.0). `terraform init` downloads those exact versions, so do not expect a recent provider release to be used unless you edit the `required_providers` block yourself.
+
+### Where the Terraform files are
+
+The modules and examples live in the [terraform](../../terraform) directory of this repository, split by product version:
+
+* [terraform/6_11](../../terraform/6_11): LTS version
+* [terraform/6_16](../../terraform/6_16): latest version
+
+Each version directory has its own `modules/` and `examples/` sub-directories. **All the module and example paths given on the provider pages are relative to the version directory you picked**: `examples/aws_basic` means `terraform/6_16/examples/aws_basic` if you work with the latest version.
+
+Note that the two versions do not offer the same providers: Outscale is only available in `6_16`.
 
 ### Terraform basic usage
 
@@ -56,7 +70,7 @@ Edit the templates to match your needs and apply your configuration to deploy yo
 terraform apply
 ```
 
-After the deployment of your cluster, a scheduled task named **Remove inactive long time appliance** is created on the WAAP cluster. This task is active only if you have an autoscaled managed in your cluster.
+After the deployment of your cluster, a scheduled task named **Remove inactive long time appliance** is created on the WAAP cluster. This task is active only if you have an autoscaled managed instance in your cluster.
 
 To destroy the platform, run:
 ```

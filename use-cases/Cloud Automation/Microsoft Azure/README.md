@@ -2,8 +2,11 @@
 
 * 1 [Microsoft Azure recommendations and specific behaviours](#microsoft-azure-recommendations-and-specific-behaviours)
 * 2 [Authentication in Azure](#authentication-in-azure)
-* 3 [Usage](#usage)
-* 4 [Enable programmatic deployments of our products](#enable-programmatic-deployments-of-our-products)
+* 3 [UBIKA images](#ubika-images)
+* 4 [Usage](#usage)
+  * 4.1 [Autoscaled cluster](#autoscaled-cluster)
+* 5 [Enable programmatic deployments of our products](#enable-programmatic-deployments-of-our-products)
+* 6 [Azure marketplace agreements](#azure-marketplace-agreements)
 
 ## Microsoft Azure recommendations and specific behaviours
 
@@ -16,17 +19,28 @@ Azure health checks (**azurerm_lb_probe**) cannot provide a **Host** HTTP header
 
 ## Authentication in Azure
 
-Setup an authentication strategy like explained here: https://www.terraform.io/docs/providers/azurerm/index.html.
+Setup an authentication strategy like explained here: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#authenticating-to-azure.
+
+## UBIKA images
+
+Execute the following command to list the available images of UBIKA:
+```
+az vm image list --publisher UBIKA --all --output table
+```
+
+The `product_version` variable is the dotted image version found in that listing, for example `product_version = "6.16.3"`.
 
 ## Usage
 
-Terraform modules for Microsoft Azure and some examples are provided on [github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/master/terraform)
+Terraform modules for Microsoft Azure and some examples are provided on [github.com/ubikasec/ubika-waap-extra](https://github.com/ubikasec/ubika-waap-extra/tree/main/terraform)
+
+The `terraform` directory is split by product version (`6_11` for the LTS, `6_16` for the latest); the paths below are relative to the version directory you picked, as explained in [Cloud Automation](..).
 
 Modules are located in:
 
 * **modules/azure/autoscaled**: Module to deploy an autoscaled UBIKA WAAP cluster.
 * **modules/azure/basic**: Module to deploy a basic UBIKA WAAP cluster.
-* **modules/azure/lb**: Basic implementation of Azure Loadbalancer for an UBIKA WAAP cluster (basic or autoscaled).
+* **modules/azure/lb**: Basic implementation of Azure Loadbalancer for a UBIKA WAAP cluster (basic or autoscaled).
 * **modules/azure/policy**: Basic implementation of autoscaling policies for an autoscaled UBIKA WAAP cluster.
 
 Examples for Azure can be found in:
@@ -40,11 +54,11 @@ In the main configuration file, **main.tf**, you can edit variables like Azure r
 |:----------------------------------------------------------------------------------------|
 
 You will need at least to:
-* specify the `product_version` you want to use. Available versions can be listed using [How to get the list of UBIKA images](#ubika-images).
-* specify the `ssh_key_data`. It will be use to access the instance via SSH once created.
+* specify the `product_version` you want to use. Available versions can be listed as explained in [UBIKA images](#ubika-images).
+* specify the `ssh_key_data`. It will be used to access the instance via SSH once created.
 * specify a `name_prefix` for resources that will be created.
 * specify a random `autoreg_admin_apiuid` to access to the product API once the instance created.
-* accept the marketplace legal terms, see: [Azure marketplace agreements](#azure-marketplace-agreements)
+* accept the marketplace legal terms, see: [Enable programmatic deployments of our products](#enable-programmatic-deployments-of-our-products) and [Azure marketplace agreements](#azure-marketplace-agreements).
 
 Then, test your configuration:
 ```
@@ -55,6 +69,12 @@ At last, deploy your infrastructure with:
 ```
 terraform apply
 ```
+
+### Autoscaled cluster
+
+On Azure the whole cluster is deployed in a single `terraform apply`. The `autoscaled_clone_source` variable names the managed instance that autoscaled instances clone at boot: in the example it is `managed_0`, one of the managed instances created by the same apply. Unlike on [Google Cloud Platform](../Google%20Cloud%20Platform), no two-phase bootstrap is required, because the scale set is created with a capacity of 0 and only grows when the autoscaling policy triggers.
+
+That managed instance must be up and registered on the management instance before the scale set grows, otherwise the autoscaled instances have nothing to clone.
 
 ## Enable programmatic deployments of our products
 
@@ -70,16 +90,7 @@ Then, select **enable** for your subscription, and **Save**.
 
 Do the same operations with the software plan **Web Application Firewall Enterprise Edition (PAYG)**.
 
-## Azure
-
-### UBIKA images
-
-Execute to following command to list the available images of UBIKA:
-```
-az vm image list --publisher UBIKA --all --output table
-```
-
-### Azure marketplace agreements
+## Azure marketplace agreements
 
 If you have an error like the following while applying a `.tf` script to deploy on Azure:
 
