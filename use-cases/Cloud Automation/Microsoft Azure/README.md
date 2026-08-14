@@ -81,35 +81,45 @@ az vm image list --publisher UBIKA --all --output table
 
 ### Azure marketplace agreements
 
-If you have the following error while applying a `.tf` script to deploy on Azure:
+If you have an error like the following while applying a `.tf` script to deploy on Azure:
 
 ```
-│ Error: A resource with the ID "/subscriptions/9972435b-271c-454a-9dcf-199302426087/providers/Microsoft.MarketplaceOrdering/agreements/ubika/offers/ubika-waap-cloud/plans/byol" already exists - to be managed via Terraform this resource needs to be imported into the State. Please see the resource documentation for "azurerm_marketplace_agreement" for more information.
+│ Error: A resource with the ID "/subscriptions/<subscription_id>/providers/Microsoft.MarketplaceOrdering/agreements/ubika/offers/<offer>/plans/<plan>" already exists - to be managed via Terraform this resource needs to be imported into the State. Please see the resource documentation for "azurerm_marketplace_agreement" for more information.
 │   with module.ubikawaap.module.image.azurerm_marketplace_agreement.waf_byol,
 │   on ../../modules/azure/_/image/main.tf line 21, in resource "azurerm_marketplace_agreement" "waf_byol":
 │   21: resource "azurerm_marketplace_agreement" "waf_byol" {
 
-│ Error: A resource with the ID "/subscriptions/9972435b-271c-454a-9dcf-199302426087/providers/Microsoft.MarketplaceOrdering/agreements/ubika/offers/ubika-waap-cloud/plans/hourly" already exists - to be managed via Terraform this resource needs to be imported into the State. Please see the resource documentation for "azurerm_marketplace_agreement" for more information.
+│ Error: A resource with the ID "/subscriptions/<subscription_id>/providers/Microsoft.MarketplaceOrdering/agreements/ubika/offers/<offer>/plans/<plan>" already exists - to be managed via Terraform this resource needs to be imported into the State. Please see the resource documentation for "azurerm_marketplace_agreement" for more information.
 │   with module.ubikawaap.module.image.azurerm_marketplace_agreement.waf_payg,
 |   on ../../modules/azure/_/image/main.tf line 26, in resource "azurerm_marketplace_agreement" "waf_payg":
 │   26: resource "azurerm_marketplace_agreement" "waf_payg" {
 ```
 
-It means that you must accept legal terms. To do so, execute the following commands to import and accept terms of the UBIKA offer:
+It means the marketplace agreement for that offer/plan was already accepted (e.g. from a previous deployment, or manually in the Portal), but Terraform doesn't know about it yet: you need to import it into the state instead of trying to recreate it.
+
+| :warning: The `offer` and `plan` names depend on the `product_version` you deploy (they change over time, e.g. `ubika-waap-cloud-6-16-2025`/`ubika-byol` vs. the older `ubika-waap-cloud`/`6-lts-byol`). Always copy the exact resource ID from **your own error message** rather than reusing an example from this README.|
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+To fix it, run `terraform import` for both resources, using the exact module address and ID given in your error message:
 
 ```
-terraform import module.ubikawaap.module.image.azurerm_marketplace_agreement.waf_byol /subscriptions/9972435b-271c-454a-9dcf-199302426087/providers/Microsoft.MarketplaceOrdering/agreements/ubika/offers/ubika-waap-cloud/plans/byol
-terraform import module.ubikawaap.module.image.azurerm_marketplace_agreement.waf_payg /subscriptions/9972435b-271c-454a-9dcf-199302426087/providers/Microsoft.MarketplaceOrdering/agreements/ubika/offers/ubika-waap-cloud/plans/hourly
+terraform import module.ubikawaap.module.image.azurerm_marketplace_agreement.waf_byol "<id from the error message above>"
+terraform import module.ubikawaap.module.image.azurerm_marketplace_agreement.waf_payg "<id from the error message above>"
 ```
 
-Then accept terms to use our images:
+For example, with the first error above:
 
 ```
-az vm image terms accept --urn ubika:ubika-waap-cloud:6-lts-payg:6.11.3
-az vm image terms accept --urn ubika:ubika-waap-cloud:6-lts-boyl:6.11.3
+terraform import module.ubikawaap.module.image.azurerm_marketplace_agreement.waf_byol "/subscriptions/<subscription_id>/providers/Microsoft.MarketplaceOrdering/agreements/ubika/offers/<offer>/plans/<plan>"
 ```
 
-You can now deploy instances on azure using terraform.
+Then make sure the legal terms are accepted for the images you'll deploy (use the `offer`, `plan` and `image_version` from your module, or list them with `az vm image list --publisher UBIKA --all --output table`):
+
+```
+az vm image terms accept --urn ubika:<offer>:<plan>:<image_version>
+```
+
+You can now run `terraform plan`/`terraform apply` again.
 
 For more details, see the Azure documentation:
 * https://learn.microsoft.com/en-us/marketplace/programmatic-deploy-of-marketplace-products#deploy-vm-from-azure-marketplace-using-terraform

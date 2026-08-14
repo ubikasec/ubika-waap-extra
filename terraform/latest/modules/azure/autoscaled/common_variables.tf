@@ -11,7 +11,7 @@ variable "lb_mapping" {}
 variable "product_version" { default = "" }
 
 variable "name_prefix" {
-  default = "ubika-waap-cloud"
+  default = "ubika-waap-cloud-6-16-2025"
 }
 
 variable "cluster_name" { default = "" }

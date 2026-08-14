@@ -1,4 +1,4 @@
-variable "product_version" { default = "6.13.0" }
+variable "product_version" { default = "6.16.3" }
 
 variable "management_mode" {}
 variable "managed_mode" {}
@@ -6,11 +6,11 @@ variable "autoscaled_mode" { default = "" }
 
 locals {
   publisher     = "ubika"
-  offer         = "ubika-waap-cloud"
+  offer         = "ubika-waap-cloud-6-16-2025"
   image_version = replace(var.product_version, "/-.*$/", "")
   skus = {
-    byol = "6-latest-byol"
-    payg = "6-latest-payg"
+    byol = "ubika-byol"
+    payg = "ubika-payg"
   }
   ids = {
     byol = ""
@@ -21,12 +21,12 @@ locals {
 resource "azurerm_marketplace_agreement" "waf_byol" {
   publisher = local.publisher
   offer     = local.offer
-  plan      = "byol"
+  plan      = local.skus.byol
 }
 resource "azurerm_marketplace_agreement" "waf_payg" {
   publisher = local.publisher
   offer     = local.offer
-  plan      = "hourly"
+  plan      = local.skus.payg
 }
 
 output "publisher" {

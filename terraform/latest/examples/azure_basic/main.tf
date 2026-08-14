@@ -93,15 +93,15 @@ module "ubikawaap" {
 
   backend_pool_id = module.lb.backend_pool_id # Backend pool to put the Managed instances into
 
-  ssh_key_data = "ssh-rsa YOUR_SSH_PUBLIC_KEY" # SSH key used for all created instances
+  ssh_key_data = trimspace(file(pathexpand("/home/user/.ssh/your_ssh_key.pub"))) # SSH key used for all created instances
 
-  name_prefix = "My WAAP Cluster" # a name prefix for resources created by this module
+  name_prefix = var.name_prefix # a name prefix for resources created by this module
 
   admin_location = "1.1.1.1/32" # limit access to the WAAP administration from this subnet only
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6.13.0" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.16.3" # product version to select instance images, changing it will recreate all instances
 
   management_mode          = "byol"          # WAAP licence type of the management instance ("payg" or "byol")
   management_instance_type = "Standard_B4ms" # management AWS instance type
