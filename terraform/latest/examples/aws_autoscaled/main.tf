@@ -131,9 +131,9 @@ module "ubikawaap" {
   target_group_arns      = module.lb.target_group_arns # ARN of the AWS ELB target groups
   additional_managed_sgs = module.lb.security_groups   # list of AWS security groups to add on each managed (require to allow public requests)
 
-  key_name = "mykey" # AWS ssh key name for all created instances
+  key_name = "mykey" # SSH key name used for all created instances
 
-  name_prefix = "My WAAP Cluster" # a name prefix for resources created by this module
+  name_prefix = var.name_prefix # a name prefix for resources created by this module
 
   admin_location = "1.1.1.1/32" # limit access to the WAAP administration from this subnet only
 
@@ -141,15 +141,15 @@ module "ubikawaap" {
 
   aws_cloudwatch_monitoring = false # Enable AWS Cloudwatch agent metrics.
 
-  product_version = "6.13.0" # product version to select instance images, changing it will recreate all instances
+  product_version = "6.16.3" # product version to select instance images, changing it will recreate all instances
 
   management_mode          = "byol"      # WAAP licence type of the management instance ("payg" or "byol")
   management_instance_type = "m5.xlarge" # management AWS instance type
   management_disk_size     = 120         # size of the management disk in GiB (default to 120GiB)
 
-  managed_mode          = "byol"      # WAAP licence type of the managed instances ("payg" or "byol")
-  managed_instance_type = "t2.medium" # managed AWS instance type
-  managed_disk_size     = 30          # size of the managed disk in GiB (default to 30GiB)
+  managed_mode          = "byol"     # WAAP licence type of the managed instances ("payg" or "byol")
+  managed_instance_type = "c5.large" # managed AWS instance type (the 6.16 marketplace listing rejects t2/t3)
+  managed_disk_size     = 60         # size of the managed disk in GiB (default to 60GiB)
 
   nb_managed = 2 # number of managed instances
 
@@ -164,7 +164,7 @@ module "ubikawaap" {
 module "policy" {
   source = "../../modules/aws/policy"
 
-  prefix = "ubikawaap" # name prefix for resources created by this module (must be really short)
+  prefix = var.name_prefix # prefix for the CloudWatch alarm names; must be unique per account and region
 
   # UBIKA WAAP Cloud cluster informations
   autoscaling_group_name = module.ubikawaap.autoscaling_group_name # name of the AWS AutoScalingGroup where the policies will be added

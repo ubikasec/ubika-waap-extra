@@ -1,6 +1,15 @@
 ### Locals
 
 locals {
+  # IAM names are account-global, so they must derive from name_prefix to let
+  # several clusters coexist. IAM only accepts [A-Za-z0-9+=,.@_-] and caps
+  # role/profile names at 64 chars; the longest suffix appended by the
+  # submodules is "-management-profile" (19 chars).
+  iam_prefix_raw = replace(trimspace(var.name_prefix), "/[^a-zA-Z0-9+=,.@_-]+/", "-")
+  iam_prefix     = substr(local.iam_prefix_raw, 0, min(45, length(local.iam_prefix_raw)))
+}
+
+locals {
   context = {
     vpc_id            = var.vpc_id
     subnet_ids        = var.subnet_ids
@@ -9,6 +18,7 @@ locals {
     amis = module.ami
 
     name_prefix  = var.name_prefix
+    iam_prefix   = local.iam_prefix
     cluster_name = var.cluster_name == "" ? var.name_prefix : var.cluster_name
 
     admin_location = var.admin_location

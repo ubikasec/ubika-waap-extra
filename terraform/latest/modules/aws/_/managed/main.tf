@@ -42,7 +42,7 @@ resource "aws_security_group" "managed_admin" {
   }
 
   tags = {
-    Name               = "${var.context.name_prefix} managed_admin"
+    Name              = "${var.context.name_prefix} managed_admin"
     WAAP_Cluster_Name = var.context.cluster_name
   }
 }
@@ -78,18 +78,18 @@ resource "aws_instance" "managed" {
   iam_instance_profile = aws_iam_instance_profile.managed.name
 
   tags = {
-    Name               = "${var.context.name_prefix} managed ${count.index}"
+    Name              = "${var.context.name_prefix} managed ${count.index}"
     WAAP_Cluster_Name = var.context.cluster_name
   }
 }
 
 resource "aws_iam_instance_profile" "managed" {
-  name = "UBIKA-WAAP-Cloud-managed-profile"
+  name = "${var.context.iam_prefix}-managed-profile"
   role = aws_iam_role.managed.name
 }
 
 resource "aws_iam_role" "managed" {
-  name = "UBIKA-WAAP-Cloud-managed-role"
+  name = "${var.context.iam_prefix}-managed-role"
   path = "/"
 
   assume_role_policy = data.aws_iam_policy_document.assume_managed.json
@@ -120,7 +120,7 @@ data "aws_iam_policy_document" "cloudwatch_managed" {
 }
 
 resource "aws_iam_policy" "managed" {
-  name   = "UBIKA-WAAP-Cloud-managed-policy"
+  name   = "${var.context.iam_prefix}-managed-policy"
   policy = data.aws_iam_policy_document.cloudwatch_managed.json
 }
 

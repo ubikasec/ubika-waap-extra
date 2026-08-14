@@ -33,7 +33,12 @@ variable "management_mode" {
   description = "Enter management instance license mode \"Bring Your Own License\" or \"PAYG\". Default is \"byol\"."
   default     = "byol"
 }
-variable "management_instance_type" { default = "t2.xlarge" }
+// The marketplace listing enumerates the instance types it accepts, and the 6.16
+// listing dropped the burstable families that 6.11 allowed: t2/t3/t3a are now
+// rejected with UnsupportedOperation at launch. BYOL accepts c4/c5/c5a/c5n/c6i
+// from .large up and m4/m5/m5a from .xlarge up; PAYG accepts only m4/m5/m5a from
+// .xlarge up. So a managed_instance_type valid for BYOL may be invalid for PAYG.
+variable "management_instance_type" { default = "m5.xlarge" }
 variable "additional_management_sgs" { default = [] }
 variable "management_disk_size" { default = 120 }
 
@@ -42,7 +47,7 @@ variable "managed_mode" {
   description = "Enter managed instance license mode \"Bring Your Own License\" or \"PAYG\". Default is \"byol\"."
   default     = "byol"
 }
-variable "managed_instance_type" { default = "t2.medium" }
+variable "managed_instance_type" { default = "c5.large" }
 variable "additional_managed_sgs" { default = [] }
 variable "managed_disk_size" { default = 30 }
 

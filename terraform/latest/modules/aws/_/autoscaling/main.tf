@@ -6,9 +6,12 @@ variable "security_groups" {}
 # On demand managed instances
 
 resource "aws_autoscaling_group" "managed" {
-  name                 = "${var.context.name_prefix} Autoscaling group"
-  vpc_zone_identifier  = var.context.subnet_ids
-  launch_configuration = aws_launch_configuration.managed.id
+  name                = "${var.context.name_prefix} Autoscaling group"
+  vpc_zone_identifier = var.context.subnet_ids
+  launch_template {
+    id      = aws_launch_template.managed.id
+    version = "$Latest"
+  }
 
   enabled_metrics = ["GroupTotalInstances"]
 
@@ -42,20 +45,25 @@ resource "aws_autoscaling_group" "managed" {
   }
 }
 
-resource "aws_launch_configuration" "managed" {
-  name_prefix       = "${var.context.name_prefix}-"
-  image_id          = var.context.amis.autoscaled
-  instance_type     = var.context.managed_instance_type
-  key_name          = var.context.key_name
-  enable_monitoring = true
-  security_groups   = var.security_groups
-  # ebs_optimized = true
-  root_block_device {
-    delete_on_termination = true
-    volume_type           = "gp2"
-    volume_size           = var.context.disk_size.autoscaled
+resource "aws_launch_template" "managed" {
+  name_prefix   = "${var.context.name_prefix}-"
+  image_id      = var.context.amis.autoscaled
+  instance_type = var.context.managed_instance_type
+  key_name      = var.context.key_name
+  monitoring {
+    enabled = true
   }
-  user_data = jsonencode({
+  vpc_security_group_ids = var.security_groups
+  # ebs_optimized = true
+  block_device_mappings {
+    device_name = "/dev/sda1"
+    ebs {
+      volume_size           = var.context.disk_size.autoscaled
+      delete_on_termination = true
+      volume_type           = "gp3"
+    }
+  }
+  user_data = (base64encode(jsonencode({
     instance_role             = "managed"
     instance_name             = "autoscaled_managed_"
     autoscale                 = "true"
@@ -64,9 +72,11 @@ resource "aws_launch_configuration" "managed" {
     linkto_port               = "3001"
     linkto_apikey             = var.context.autoreg_admin_apikey
     aws_cloudwatch_monitoring = var.context.aws_cloudwatch_monitoring
-  })
+  })))
 
-  iam_instance_profile = aws_iam_instance_profile.autoscaled_managed.name
+  iam_instance_profile {
+    name = aws_iam_instance_profile.autoscaled_managed.name
+  }
 
   lifecycle {
     create_before_destroy = true
@@ -74,12 +84,12 @@ resource "aws_launch_configuration" "managed" {
 }
 
 resource "aws_iam_instance_profile" "autoscaled_managed" {
-  name = "UBIKA-WAAP-Cloud-autoscaled-managed-profile"
+  name = "${var.context.iam_prefix}-autoscaled-managed-profile"
   role = aws_iam_role.autoscaled_managed.name
 }
 
 resource "aws_iam_role" "autoscaled_managed" {
-  name = "UBIKA-WAAP-Cloud-autoscaled-managed-role"
+  name = "${var.context.iam_prefix}-autoscaled-managed-role"
   path = "/"
 
   assume_role_policy = data.aws_iam_policy_document.assume_autoscaled_managed.json
@@ -110,7 +120,7 @@ data "aws_iam_policy_document" "cloudwatch_autoscaled_managed" {
 }
 
 resource "aws_iam_policy" "autoscaled_managed" {
-  name   = "UBIKA-WAAP-Cloud-autoscaled-managed-policy"
+  name   = "${var.context.iam_prefix}-autoscaled-managed-policy"
   policy = data.aws_iam_policy_document.cloudwatch_autoscaled_managed.json
 }
 

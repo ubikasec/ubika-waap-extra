@@ -33,13 +33,24 @@ module "managed" {
 ### Security groups
 
 resource "aws_security_group" "accept_all_out" {
-  name   = "accept_all_out"
-  vpc_id = var.vpc_id
+  # name_prefix, not name: security group names are unique per VPC, so a fixed
+  # name prevents two clusters from sharing a VPC.
+  name_prefix = "accept_all_out"
+  vpc_id      = var.vpc_id
   egress {
     from_port   = "0"
     to_port     = "0"
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name              = "${local.context.name_prefix} accept_all_out"
+    WAAP_Cluster_Name = local.context.cluster_name
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 

@@ -2,8 +2,19 @@ variable "vpc_id" {}
 variable "subnet_ids" {}
 variable "mapping" {}
 variable "healthcheck_path" { default = "" }
-variable "lb_name" { default = "ubikawaap" }
-variable "enable_deletion_protection" { default = true }
+variable "lb_name" {
+  # ELBv2 names are capped at 32 chars and Terraform appends a 26-char unique id
+  # to name_prefix, leaving 6 chars for "${lb_name}-" -- hence 5 for lb_name.
+  # The AWS provider does not check this statically, so without the validation
+  # below an over-long value only fails at apply time.
+  default = "waap"
+
+  validation {
+    condition     = length(var.lb_name) <= 5 && length(regexall("^[0-9A-Za-z]+$", var.lb_name)) == 1
+    error_message = "lb_name must be 1-5 alphanumeric chars: ELBv2 caps names at 32 and Terraform appends a 26-char suffix to \"${"$"}{lb_name}-\"."
+  }
+}
+variable "enable_deletion_protection" { default = false }
 
 resource "random_id" "healthcheck" {
   prefix      = "${var.lb_name}-health-"
@@ -74,6 +85,9 @@ resource "aws_security_group" "monitoring" {
     create_before_destroy = true
   }
 
+  tags = {
+    Name = "${var.lb_name} lb_monitoring"
+  }
 }
 
 resource "aws_security_group" "web_input" {
@@ -94,6 +108,9 @@ resource "aws_security_group" "web_input" {
     create_before_destroy = true
   }
 
+  tags = {
+    Name = "${var.lb_name} lb_web_input"
+  }
 }
 
 output "target_group_arns" {

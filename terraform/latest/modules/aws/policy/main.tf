@@ -5,7 +5,18 @@ variable "managed_ids" {
 }
 
 variable "prefix" {
-  default = "ubikawaap"
+  description = <<-EOT
+    Prefix for the CloudWatch alarm names. Required, with no default on purpose:
+    alarm names are unique per account and region, and aws_cloudwatch_metric_alarm
+    maps to PutMetricAlarm, which is a create-or-update. A shared default would not
+    raise AlreadyExists -- a second cluster would silently overwrite the first
+    cluster's alarms with its own instance ids. Pass the cluster's name_prefix.
+  EOT
+
+  validation {
+    condition     = length(trimspace(var.prefix)) > 0 && length(regexall(":", var.prefix)) == 0
+    error_message = "prefix must be non-empty and must not contain ':' (forbidden in CloudWatch alarm names)."
+  }
 }
 
 variable "target" {
