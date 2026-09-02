@@ -86,7 +86,11 @@ Warning: the content of the internal user-repository will be deleted and replace
 
 2. Activate the option to “handle distributed datastore” on your WAAP (Setup > Box > Modify > Advanced)
 
-3. Apply-all the configurations
+3. If needed, import the complementary backup packs, in this order: [OAuth-Pack-2.8.3-Complementary.backup](./OAuth-Pack-2.8.3-Complementary.backup), then [OAuth-Pack-2.8.3-Tunnels.backup](./OAuth-Pack-2.8.3-Tunnels.backup)
+
+4. Adjust the configuration (tunnel names and parameters, IP or VIP addresses, WAM, certificates) according to your needs
+
+5. Apply-all the configurations
 
 Then you will need to go to this url to initialize the demo-client: [https://oauth-console.u-lab.io/oauth/management/client/reset](http://oauth-console.u-lab.io/oauth/management/client/reset)
 
