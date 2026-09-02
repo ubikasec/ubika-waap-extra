@@ -14,7 +14,9 @@ Use cases:
 * Implement a Ressource Server
 * Delegate Authentication to GoogleConnect, O365/AzureAD, France Connect, ECPS etc 
 
-The various OAuth use cases make use of workflows that are available in the backup files below: [OAuth-Pack-v2.8.3.backup](./OAuth-Pack-v2.8.3.backup) (principal, contains the necessary elements), [OAuth-Pack-2.8.3-Complementary.backup](./OAuth-Pack-2.8.3-Complementary.backup) (contains the complementary/additional elements) and [OAuth-Pack-2.8.3-Tunnels.backup](./OAuth-Pack-2.8.3-Tunnels.backup) (contains the tunnels configuration). The previous [OAuth-Pack-v2.6.backup](./OAuth-Pack-v2.6.backup) is kept for archive purposes only.
+The various OAuth use cases make use of workflows that are available in the backup files below: [OAuth-Pack-v2.8.3.backup](./OAuth-Pack-v2.8.3.backup) (principal, contains the necessary elements), [OAuth-Pack-2.8.3-Complementary.backup](./OAuth-Pack-2.8.3-Complementary.backup) (contains the complementary/additional elements) and [OAuth-Pack-2.8.3-Tunnels.backup](./OAuth-Pack-2.8.3-Tunnels.backup) (contains the tunnels configuration).
+
+⚠️ The previous [OAuth-Pack-v2.6.backup](./OAuth-Pack-v2.6.backup) is kept for archive purposes only.
 
 In all cases, an Extended API security license is required. In certain implementations, the WAM license is also required.
 
@@ -71,6 +73,8 @@ Add the following host information to your system to test the OAuth pack (`C:\\W
 * [oauth-console.u-lab.io](http://oauth-console.u-lab.io): this is the « OAuth Management console » that allow you to create/revoke client and token (this one can be merged with the auth tunnel)
 * [portal.rs.u-lab.io](http://portal.rs.u-lab.io): This is the « OAuth Portal Ressource Server » that allow you to implement WAM using OAuth delegation 
 * [app1-wam.u-lab.io](http://app1-wam.u-lab.io) and [app2-wam.u-lab.io](http://app2-wam.u-lab.io): This is the sample app provided to test the WAM OAuth delegation
+
+Note: the names of the various tunnels above are given as an example, you will need to rename them according to your client's needs.
 
 ## Installation
 
