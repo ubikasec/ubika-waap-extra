@@ -14,7 +14,7 @@ Use cases:
 * Implement a Ressource Server
 * Delegate Authentication to GoogleConnect, O365/AzureAD, France Connect, ECPS etc 
 
-The various OAuth use cases make use of workflows that are available in the backup files below: [OAuth-Pack-v2.6.backup](./OAuth-Pack-v2.6.backup)
+The various OAuth use cases make use of workflows that are available in the backup files below: [OAuth-Pack-v2.8.3.backup](./OAuth-Pack-v2.8.3.backup) (principal, contains the necessary elements), [OAuth-Pack-2.8.3-Complementary.backup](./OAuth-Pack-2.8.3-Complementary.backup) (contains the complementary/additional elements) and [OAuth-Pack-2.8.3-Tunnels.backup](./OAuth-Pack-2.8.3-Tunnels.backup) (contains the tunnels configuration). The previous [OAuth-Pack-v2.6.backup](./OAuth-Pack-v2.6.backup) is kept for archive purposes only.
 
 In all cases, an Extended API security license is required. In certain implementations, the WAM license is also required.
 
@@ -53,24 +53,24 @@ Add the following host information to your system to test the OAuth pack (`C:\\W
 
 ```
 #OAuth Pack
-192.168.220.3 [rs.rscs.com](http://rs.rscs.com) # ressource server
-192.168.220.3 [as.rscs.com](http://as.rscs.com) # authorization server
-192.168.220.3 [auth.rscs.com](http://auth.rscs.com) # authentication url
-192.168.220.3 [mfa.rscs.com](http://mfa.rscs.com) # alias of [auth.rscs.com](http://auth.rscs.com) to have another authentication-url
-192.168.220.3 [oauth-console.rscs.com](http://oauth-console.rscs.com) #management console for oauth client token
-192.168.220.3 [oauth-client.rscs.com](http://oauth-client.rscs.com) #oauth test client
-192.168.220.3 [portal.rs.rscs.com](http://portal.rs.rscs.com) #WAM OAuth integration testing sample pack
-192.168.220.3 [app1.wam.rscs.com](http://app1.wam.rscs.com) # WAM OAuth integration testing sample pack
-192.168.220.3 [app2.wam.rscs.com#](http://app2.wam.rscs.com) WAM OAuth integration testing sample pack
+[YourTunnelIP] [rs.u-lab.io](http://rs.u-lab.io) # ressource server
+[YourTunnelIP] [as.u-lab.io](http://as.u-lab.io) # authorization server
+[YourTunnelIP] [auth.u-lab.io](http://auth.u-lab.io) # authentication url
+[YourTunnelIP] [mfa.u-lab.io](http://mfa.u-lab.io) # alias of [auth.u-lab.io](http://auth.u-lab.io) to have another authentication-url
+[YourTunnelIP] [oauth-console.u-lab.io](http://oauth-console.u-lab.io) #management console for oauth client token
+[YourTunnelIP] [oauth-client.u-lab.io](http://oauth-client.u-lab.io) #oauth test client
+[YourTunnelIP] [portal.rs.u-lab.io](http://portal.rs.u-lab.io) #WAM OAuth integration testing sample pack
+[YourTunnelIP] [app1-wam.u-lab.io](http://app1-wam.u-lab.io) # WAM OAuth integration testing sample pack
+[YourTunnelIP] [app2-wam.u-lab.io#](http://app2-wam.u-lab.io) WAM OAuth integration testing sample pack
 ```
 
-* [oauth-client.rscs.com](http://oauth-client.rscs.com): this is the « OAuth client test » 
-* [rs.rscs.com](http://rs.rscs.com): this is « Oauth Ressource Server » 
-* [as.rscs.com](http://as.rscs.com): this is the « OAuth Authorization Server », which enable the authorize and the token endpoint ; 
-* [auth.rscs.com](http://auth.rscs.com): this is the « OAuth Authentication Server », basically it’s the WAM that handle the authentication, then there is a small OAuth logic added 
-* [oauth-console.rscs.com](http://oauth-console.rscs.com): this is the « OAuth Management console » that allow you to create/revoke client and token (this one can be merged with the auth tunnel)
-* [portal.rs.rscs.com](http://portal.rs.rscs.com): This is the « OAuth Portal Ressource Server » that allow you to implement WAM using OAuth delegation 
-* [app1.wam.rscs.com](http://app1.wam.rscs.com) and [app2.wam.rscs.com](http://app2.wam.rscs.com): This is the sample app provided to test the WAM OAuth delegation
+* [oauth-client.u-lab.io](http://oauth-client.u-lab.io): this is the « OAuth client test » 
+* [rs.u-lab.io](http://rs.u-lab.io): this is « Oauth Ressource Server » 
+* [as.u-lab.io](http://as.u-lab.io): this is the « OAuth Authorization Server », which enable the authorize and the token endpoint ; 
+* [auth.u-lab.io](http://auth.u-lab.io): this is the « OAuth Authentication Server », basically it’s the WAM that handle the authentication, then there is a small OAuth logic added 
+* [oauth-console.u-lab.io](http://oauth-console.u-lab.io): this is the « OAuth Management console » that allow you to create/revoke client and token (this one can be merged with the auth tunnel)
+* [portal.rs.u-lab.io](http://portal.rs.u-lab.io): This is the « OAuth Portal Ressource Server » that allow you to implement WAM using OAuth delegation 
+* [app1-wam.u-lab.io](http://app1-wam.u-lab.io) and [app2-wam.u-lab.io](http://app2-wam.u-lab.io): This is the sample app provided to test the WAM OAuth delegation
 
 ## Installation
 
@@ -84,13 +84,13 @@ Warning: the content of the internal user-repository will be deleted and replace
 
 3. Apply-all the configurations
 
-Then you will need to go to this url to initialize the demo-client: [https://oauth-console.rscs.com/oauth/management/client/reset](http://oauth-console.rscs.com/oauth/management/client/reset)
+Then you will need to go to this url to initialize the demo-client: [https://oauth-console.u-lab.io/oauth/management/client/reset](http://oauth-console.u-lab.io/oauth/management/client/reset)
 
 Admin account is `admin`/`admin`
 
 ## Usage
 
-You can begin the test by going to the client (button « Do authorize » is to initiale the OAuth sequence, it’s the equivalent to the button facebook login, google connect etc) : [http://oauth-client.rscs.com/](http://oauth-client.rscs.com/)
+You can begin the test by going to the client (button « Do authorize » is to initiale the OAuth sequence, it’s the equivalent to the button facebook login, google connect etc) : [http://oauth-client.u-lab.io/](http://oauth-client.u-lab.io/)
 
 Then, you have the three use-cases:
 
@@ -113,7 +113,7 @@ Account: `demo`/`demo`
 
 You can configure the OAuth pack by going to the Management Console using the tunnel: 
 
-[https://oauth-console.rscs.com](http://oauth-console.rscs.com/oauth/management/client/reset)
+[https://oauth-console.u-lab.io](http://oauth-console.u-lab.io/oauth/management/client/reset)
 
 Default account is admin/admin, you must changed the password associated with the admin account in the WAM by going the the GUI, Policies tab and then WAM section and Internal store, you can now set a new password for the admin account : 
 
@@ -127,7 +127,7 @@ The management console will help you to configure:
 
 ### OAuth Console Client management
 
-You can configure the OAuth Client in the "Client Management" section of the OAuth Console [https://oauth-console.rscs.com](http://oauth-console.rscs.com/oauth/management/client/reset) :
+You can configure the OAuth Client in the "Client Management" section of the OAuth Console [https://oauth-console.u-lab.io](http://oauth-console.u-lab.io/oauth/management/client/reset) :
 
 You can list the client authorized to connect to the autorisation server and also revoke old client :
 
@@ -142,19 +142,19 @@ WARNING: Be aware that when a client try to authorize itself, the autorisation s
 
 ### OAuth Console Token management
 
-You can configure the OAuth Token in the "Token Management" section of the OAuth Console [https://oauth-console.rscs.com](http://oauth-console.rscs.com/oauth/management/client/reset) :
+You can configure the OAuth Token in the "Token Management" section of the OAuth Console [https://oauth-console.u-lab.io](http://oauth-console.u-lab.io/oauth/management/client/reset) :
 
 You can list the token that has been delivered by the autorisation server and also revoke a token :
 
-You can also revoke all the token issued by the autorisation server  by going to the [https://oauth-console.rscs.com/oauth/management/t](https://oauth-console.rscs.com/oauth/management/session)oken/reset endpoint 
+You can also revoke all the token issued by the autorisation server  by going to the [https://oauth-console.u-lab.io/oauth/management/t](https://oauth-console.u-lab.io/oauth/management/session)oken/reset endpoint 
 
 ### OAuth Console SSO Session management
 
-You can check the current SSO Session in the OAuth SSO Session in the "Client Management" section of the OAuth Console [https://oauth-console.rscs.com](http://oauth-console.rscs.com/oauth/management/client/reset) :
+You can check the current SSO Session in the OAuth SSO Session in the "Client Management" section of the OAuth Console [https://oauth-console.u-lab.io](http://oauth-console.u-lab.io/oauth/management/client/reset) :
 
 You can list the SSO Session that has been created on the WAM and also revoke a session  :
 
-You can also revoke all the SSO Session issued by the autorisation server by going to the [https://oauth-console.rscs.com/oauth/management/session](https://oauth-console.rscs.com/oauth/management/session)/reset endpoint 
+You can also revoke all the SSO Session issued by the autorisation server by going to the [https://oauth-console.u-lab.io/oauth/management/session](https://oauth-console.u-lab.io/oauth/management/session)/reset endpoint 
 
 ### Customize the OAuth Ressource Server
 
@@ -173,7 +173,7 @@ The workflow parameters will help you to configure :
 
 In order to test the new WAM integration with OAuth, you need to change the IP Address of the backend in the "sample-app" configuration :
 
-And then you can test directly on the [https://oauth-client.rscs.com/](https://oauth-client.rscs.com/) url
+And then you can test directly on the [https://oauth-client.u-lab.io/](https://oauth-client.u-lab.io/) url
 
 ### OAuth Console Authentication Delegation (OpenID Connect integration)
 
@@ -182,14 +182,16 @@ In order to improve the OAuth pack, we offer the possibility to integrate with s
 *   Google connect 
 *   Office 365 connect / Azure AD Connect
 *   France Connect 
-*   ECPS 
+*   ECPS  
+*   Keycloak
+*   Ping (PingFederate)
 *   Custom to implent any Identity Provider compatible with OpenIDConnect
 
 *   A multi-option authentication screen will allow the user to choose how he want to authenticate using a list of Authentication Server:
 
 This is the sequence diagram used in the OpenID Connect Delegation use-case
 
-The customer can configure the delegation using the Management Console using the tunnel : [https://oauth-console.rscs.com](http://oauth-console.rscs.com/oauth/management/client/reset) and select the delegation he want to modify :
+The customer can configure the delegation using the Management Console using the tunnel : [https://oauth-console.u-lab.io](http://oauth-console.u-lab.io/oauth/management/client/reset) and select the delegation he want to modify :
 
 ### Google Connect
 
@@ -254,6 +256,24 @@ You need to instructs the application to be able to mount the authentication con
 
 [https://partenaires.franceconnect.gouv.fr/fcp/fournisseur-service](https://partenaires.franceconnect.gouv.fr/fcp/fournisseur-service)
 
+### Keycloak
+
+To configure Keycloak as an OpenIDConnect delegation provider, you need to go to this url :
+
+[https://www.keycloak.org/securing-apps/oauth-identity-authorization-chaining-across-domains](https://www.keycloak.org/securing-apps/oauth-identity-authorization-chaining-across-domains)
+
+*   You can now use your own client credentials that you have created on your Keycloak realm
+*   Client ID & secret, redirect url and authentication-server
+
+### Ping
+
+To configure Ping (PingFederate) as an OpenIDConnect delegation provider, you need to go to this url :
+
+[https://docs.pingidentity.com/pingfederate/13.1/administrators_reference_guide/pf_configuring_oauth_clients.html](https://docs.pingidentity.com/pingfederate/13.1/administrators_reference_guide/pf_configuring_oauth_clients.html)
+
+*   You can now use your own client credentials that you have created on your PingFederate OAuth client
+*   Client ID & secret, redirect url and authentication-server
+
 ### Custom delegation
 
 This one is to allow you to connect to every Identity Provider compatible with OpenIDConnect.
@@ -310,7 +330,7 @@ This is the authorization code grant required parameter to initialize the OAuth 
 
 * `response_type`: `code`; For authorization code grant-type
 * `client_id`: `85f89l43l8rvqtg88epck3msuxg6k84qxqk35tnm9zexeh9d`; Client-id of the app obtainted during the enrollment
-* `redirect_uri`: `http://oauth-client.rscs.com/usecase/AC/retrieveAT`; Landing-page once the authorization is done
+* `redirect_uri`: `http://oauth-client.u-lab.io/usecase/AC/retrieveAT`; Landing-page once the authorization is done
 * `scope`: `openid profile email`; Authorization requested by the client
 * `state`: `xcoivjuywkdkhvusuye3kch`; UUID to avoid CSRF
 * `PKCE challenge`: `73924932644EE11CE8ABC066C7D4A409AD209EC3DB0445CC7F88FEA6BF515040`; Additionnal security mechanism to prevent token-leakage (Optional defined by client)
@@ -321,7 +341,7 @@ This is the authorization code grant required parameter to initialize the OAuth 
 * `grant_type`: `authorization_code`; For authorization code grant-type
 * `client_id`: `ejajlhjwv9lnep869358bdtgmn3djnaqhjpx5jyd5clcpkvt`; Client-id of the app obtainted during the enrollment
 * `secret`: `srfcgsdpbajbfvcg699gxmhddd4e7fxpdq9myhprv4wy8dhw`; Secret of the app obtainted during the enrollment
-* `redirect_uri`: `http://oauth-client.rscs.com/usecase/AC/retrieveAT`; Landing-page once the authorization is done
+* `redirect_uri`: `http://oauth-client.u-lab.io/usecase/AC/retrieveAT`; Landing-page once the authorization is done
 * `code`: `vb6yvzl86y77a6uznh8byszp6q4tntrykfzsa6ecdvdmm9uu`; Code delivered by the autorisation server
 * `code_verifier`: `MonPetitSecret12345dsfgsdg+`; Additionnal security mechanism to prevent token-leakage (Optional defined by client)
 
@@ -333,7 +353,7 @@ NOTE: when using the test-case included in the OAuth pack, don't forget to chang
 
 * `response_type`: `token`; For implicit grant-type
 * `client_id`: `85f89l43l8rvqtg88epck3msuxg6k84qxqk35tnm9zexeh9d`; Client-id of the app obtainted during the enrollment
-* `redirect_uri`: `http://oauth-client.rscs.com/usecase/implicit/redirecturl`: Landing-page once the authorization is done
+* `redirect_uri`: `http://oauth-client.u-lab.io/usecase/implicit/redirecturl`: Landing-page once the authorization is done
 * `scope`: `openid profile email`; Authorization requested by the client
 * `state`: `xcoivjuywkdkhvusuye3kch`; UUID to avoid CSRF
 
@@ -355,6 +375,33 @@ secret=l7wdt3n5yzzm2s6fjjtlbly8vhady9z9py3mx
 * `scope`: `openid profile email`; Authorization requested by the client
 
 This is the sequence diagram used in the OAuth "Resource Owner Password Credentials" Grant use-case:
+
+### Client Credentials use-case
+
+This is the Client Credentials grant required parameter to obtain an OAuth token directly from the token Endpoint /token (HTTP POST application/x-www-form-urlencoded). This grant-type doesn't involve a user, it's used for Machine to Machine communication where the client is acting on its own behalf:
+
+The call need to be authenticated with basic Authentication, credentials are the one of the client (application):
+```
+client-id=k3mzq7rxb5t92wfhcyupl4vnasgd68o
+secret=xh4jn8pfz2wq1blgmcv75edatouy9skr
+```
+
+* `grant_type`: `client_credentials`; For Client Credentials grant-type
+* `scope`: `api`; Authorization requested by the client
+
+This is the sequence diagram used in the OAuth Client Credentials use-case:
+
+```mermaid
+sequenceDiagram
+    participant C as Client (M2M app)
+    participant AS as Authorization Server
+    participant RS as Ressource Server
+
+    C->>AS: POST /token (grant_type=client_credentials, basic-auth client_id/secret, scope)
+    AS-->>C: 200 OK (access_token, token_type, expires_in)
+    C->>RS: API call (Authorization: Bearer access_token)
+    RS-->>C: API response
+```
 
 ## JWT Token
 
