@@ -78,9 +78,11 @@ Note: the names of the various tunnels above are given as an example, you will n
 
 ## Installation
 
+⚠️ Warning: backup all your configuration before proceeding
+
 The OAuth pack is very quick to deploy and mostly configurable using the workflow parameter
 
-Warning: the content of the internal user-repository will be deleted and replaced by the OAuth Pack
+⚠️ Warning: the content of the internal user-repository will be deleted and replaced by the OAuth Pack
 
 1. You need to import the backup « OAuth-pack » to your UBIKA-WAAP
 
@@ -141,7 +143,7 @@ You can list the client authorized to connect to the autorisation server and als
 
 You can also create a new client, you will need to fulfill the following information :
 
-WARNING: Be aware that when a client try to authorize itself, the autorisation server will check the following.
+⚠️ WARNING: Be aware that when a client try to authorize itself, the autorisation server will check the following.
 
 * `client_id` (secret is only required for the token endpoint) ;
 * callback (the landing page must be the same that is declared) ;
