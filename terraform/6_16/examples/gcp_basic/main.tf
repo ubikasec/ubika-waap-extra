@@ -81,7 +81,7 @@ module "ubikawaap" {
 
   autoreg_admin_apiuid = "6a9f6424ca12dfd25ad4ac82a459e332" # an API key (32 random alphanum chars)
 
-  product_version = "6-16-3-cf54a9da70-b86038" # product version to select instance images, changing it will recreate all instances
+  product_version = "6-16-4-3053176d4f-b93163" # product version to select instance images, changing it will recreate all instances
 
   management_mode = "byol" # WAAP licence type of the management instance ("payg" or "byol")
   managed_mode    = "byol" # WAAP licence type of the managed instance ("payg" or "byol")
