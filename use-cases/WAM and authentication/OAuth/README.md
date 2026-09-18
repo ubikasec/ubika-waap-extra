@@ -435,8 +435,8 @@ Header containing the signature/encryption algorithm:
 Payload contain all the required data:
 ```
 {
-        "iss":"[https://as.rs.com](https://as.rs.com)",
-        "aud":"[https://rs.rs.com](https://rs.rs.com)",
+        "iss":"https://as.u-lab.io",
+        "aud":"https://rs.u-lab.io",
         "sub":"User1@domain.tld",
         "exp": 1515604697,
         "iat": 1515593897,
